@@ -1,65 +1,305 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca-ES">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Para N/A ❤️</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footage Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #0b0b12, #000);
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-direction: row;
+            margin: auto;
+        }
+
+        header img {
+            max-height: 75px;
+            transform: scale(1);
+            transition: transform 0.3s ease;
+            filter: brightness(1.2);
+        }
+
+        header img:hover {
+            transform: scale(1.1);
+        }
+
+        .header-text h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: #fff;
+        }
+
+        .header-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 0 15px;
+            padding: 8px 12px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            border-radius: 10px;
+        }
+
+        nav a:hover {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            border-radius: 10px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 8px 15px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .info-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .info-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-lock {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lock-box {
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 30px 40px;
+            border-radius: 18px;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .lock-box h2 {
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+
+        .lock-box input {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            outline: none;
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .lock-box button {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .lock-error {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #ff6b6b;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 10px; }
+            .header-content { flex-direction: column; }
+            nav { flex-direction: column; gap: 8px; }
+            nav a { margin: 0; width: 90%; text-align: center; }
+            .dropdown-content { position: static; display: none; }
+            .dropdown.active .dropdown-content { display: block; }
+            .info-section { flex-direction: column; }
+            .lock-box { width: 90%; }
+        }
+    </style>
 </head>
+
 <body>
-  <div class="music-control">
-    <button id="toggleMusic">❤️</button>
-  </div>
 
-  <!-- 🎵 Audio -->
-  <audio id="bgMusic" loop autoplay>
-    <source src="" type="audio/mpeg">
-  </audio>
-
-  <!-- ✨ Letras flotantes de fondo -->
-  <div class="floating-letters"></div>
-
-  <!-- 🌌 Estrellas -->
-  <div class="stars"></div>
-
-  <div class="container">
-    <!-- IZQUIERDA -->
-    <div class="side left">
-      <div class="overlay">
-        <p>Esto no es tanto comparado con el otro regalo pero espero que te haya encantado también.</p>
-        <p>""Nuestra dualidad es lo que nos hace únicos, y es lo que me hace amarte tanto.""</p>
-        <p>Lee y disfruta esto, quizás no es lo que esperabas pero lo hice pensando plenamente en ti y en la forma que me amas</p>
-      </div>
+<div id="pageLock" class="page-lock">
+    <div class="lock-box">
+        <h2>Contenido protegido</h2>
+        <input type="password" id="pinInput" placeholder="Introduce el PIN">
+        <button onclick="unlockPage()">Acceder</button>
+        <div id="errorMsg" class="lock-error">PIN incorrecto</div>
     </div>
+</div>
 
-    <!-- CENTRO -->
-    <div class="center">
-      <button id="openLetter">Abrir carta 💌</button>
-          <div id="letter">
-            <div class="letter-content">
-              <button id="closeLetter" class="close-btn">✕</button>
-          <h2>Preciosa</h2>
-          <p>Han pasado cuatro meses desde que comenzamos este vuelo juntos, y en todo este tiempo hemos vivido de todo: risas que se quedan grabadas en la memoria, silencios que a veces pesaban y nos hacían dudar, discusiones que nos enseñaron a entendernos mejor, momentos de distancia que parecían largos pero que nunca rompieron lo que sentimos, y lágrimas compartidas que me hicieron ver tu vulnerabilidad y tu fuerza al mismo tiempo; me has confiado cosas profundas de ti, me has permitido entrar en tu mundo y yo he intentado estar ahí para ti en cada instante, siendo tu apoyo, tu refugio y tu compañero, y siempre he sentido que somos el complemento perfecto, que nos equilibramos en nuestros defectos y nos potenciamos en nuestras virtudes, que incluso cuando algo duele o nos pone a prueba, seguimos avanzando juntos porque tú haces tu mejor esfuerzo siempre, porque me das tu soporte constante, porque hemos aprendido a comunicar lo que sentimos aunque es complejo y a cuidar lo que tenemos, y todo eso, Nohelia, todo lo que somos y lo que hemos construido, me hace sentir que no hay otra persona en este mundo con quien quisiera compartir este viaje, que cada momento, cada detalle, cada mirada y cada gesto de ternura que me das, me hace admirarte y querer seguir construyendo esto contigo día tras día aunque yo muestre inestabilidad pero cada piloto necesita a su pareja de ala, y eso eres tu, y por eso hoy, al cumplir cuatro meses, quiero que sepas que cada instante, incluso los difíciles, han valido la pena porque me han acercado más a ti y me han hecho sentir que juntos podemos con todo, que somos un equipo, que somos complices, que somos nosotros, y que no hay nada más hermoso que sentir que alguien te elige y te confía su mundo, como tú me lo has confiado a mí.</p>
-          <p>[Te amo mucho]</p>
+<header>
+    <div class="header-content">
+        <img src="https://i.imgur.com/3ljxNS8.png" alt="for you">
+        <div class="header-text">
+            <h1>Bienvenida Corazón</h1>
+            <p>09 / 06 / 2025</p>
+            <p>— A & N —</p>
         </div>
-      </div>
-    </div>
 
-    <!-- DERECHA -->
-    <div class="side right">
-      <div class="overlay">
-        <p></p>
-        <p>09 / 10 / 2025</p>
-        <p>— A & N —</p>
-        <div class="photo">
-          <img src="https://i.imgur.com/VzxoAj4.jpeg" alt="yo, what">
-          <p>Cada cosa y cada detalle fueron programados y diseñados por mi para ti, espero te guste.</p>
+        <!-- ✨ Letras flotantes de fondo -->
+          <div class="floating-letters"></div>
+
+          <!-- 🌌 Estrellas -->
+          <div class="stars"></div>
+        
+    </div>
+</header>
+
+<nav>
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Nuestra Historia y Explicaciones</a>
+    <a href="recuerdos.html">Recuerdos</a>
+    <div class="dropdown">
+        <a href="#">Cartas Especiales</a>
+        <div class="dropdown-content">
+            <a href="carta1.html">Primera</a>
+            <a href="carta2.html" data-locked="true" data-date="09/01/2026">09/01/26</a>
+            <a href="carta3.html" data-locked="true" data-date="09/02/2026">09/02/26</a>
         </div>
-      </div>
     </div>
-  </div>
+</nav>
 
-  <script src="script.js"></script>
+<div class="container">
+    <div class="info-section">
+        <div class="info-text"></div>
+        <img src="https://i.imgur.com/vcFk3dY.png" alt="for you">
+        <p>Por cierto antes de todo, ya sabes que tengo poca creatividad así que te dejo a elección que elijas una imagen que reemplace a el corazón 😊</p>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2025 Ren's Archive - Todos los derechos reservados</p>
+</footer>
+
+<script>
+    const PIN_CORRECTO = "0906";
+
+    function unlockPage() {
+        const input = document.getElementById("pinInput").value;
+        const error = document.getElementById("errorMsg");
+
+        if (input === PIN_CORRECTO) {
+            document.getElementById("pageLock").style.display = "none";
+        } else {
+            error.style.display = "block";
+        }
+    }
+
+    document.querySelectorAll('.dropdown > a').forEach(link => {
+        link.addEventListener('click', e => {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                link.parentElement.classList.toggle('active');
+            }
+        });
+    });
+
+    /* 🔒 Aviso para cartas no desbloqueadas */
+    document.querySelectorAll('a[data-locked="true"]').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const fecha = link.getAttribute('data-date');
+            alert(`🔒 Esta carta aún no está desbloqueada.\n\nSe desbloqueará el ${fecha} ❤️`);
+        });
+    });
+</script>
+
+
 </body>
 </html>
+
