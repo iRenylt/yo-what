@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ca-ES">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #0b0b12, #000);
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-content {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        header img {
+            max-height: 75px;
+            transform: scale(1);
+            transition: transform 0.3s ease;
+            filter: brightness(1.2);
+        }
+
+        header img:hover {
+            transform: scale(1.1);
+        }
+
+        .header-text h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: #fff;
+        }
+
+        .header-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 0 15px;
+            padding: 8px 12px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            border-radius: 10px;
+        }
+
+        nav a:hover {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 10px;
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-content a {
+            display: block;
+            color: #fff;
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background: transparent;
+            color: #fff;
+            border-left: 2px solid #fff;
+            padding-left: 13px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            margin: 20px 0;
+            padding: 20px;
+        }
+
+        section img {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+        }
+
+        section h3 {
+            color: #fff;
+        }
+
+        section p {
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .button-container a {
+            display: inline-block;
+            background: transparent;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 5px;
+            border: 1px solid #fff;
+            transition: all 0.4s ease;
+        }
+
+        .button-container a:hover {
+            background: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #fff;
+            border-bottom: 1px solid #fff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tablet */
+        @media (max-width: 768px) {
+            header { padding: 15px; }
+            .header-text h1 { font-size: 1.4rem; }
+            nav { padding: 8px 0; }
+            nav a { font-size: 0.85rem; margin: 5px 10px; padding: 6px 10px; }
+            .container { padding: 0 15px; }
+            section { padding: 15px; margin: 15px 0; }
+        }
+
+        /* Teléfono */
+        @media (max-width: 480px) {
+            body { font-size: 14px; overflow-x: hidden; }
+            header { padding: 12px; }
+            header img { max-height: 60px; }
+            .header-text h1 { font-size: 1.2rem; }
+            nav { padding: 8px 0; flex-wrap: wrap; justify-content: flex-start; overflow-x: auto; }
+            nav a { font-size: 0.75rem; margin: 4px 8px; padding: 5px 8px; white-space: nowrap; }
+            .container { padding: 0 10px; }
+            section { padding: 12px; margin: 10px 0; border-radius: 12px; }
+            section img { border-radius: 12px; }
+            section p { font-size: 0.9rem; }
+            .button-container a { font-size: 0.9rem; padding: 8px 15px; }
+        }
+
+        /* Muy pequeño */
+        @media (max-width: 360px) {
+            header { padding: 10px; }
+            header img { max-height: 50px; }
+            .header-text h1 { font-size: 1rem; }
+            nav a { font-size: 0.7rem; margin: 3px 5px; padding: 4px 6px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="https://i.imgur.com/3ljxNS8.png" alt="for you">
+            <div class="header-text">
+                <h1>Nuestra Historia y Explicaciones</h1>
+                <h2>(Pronto podrás añadir comentarios)</h2>
+                <p>09 / 06 / 2025</p>
+                <p>— A & N —</p>
+               
+            </div>
+        </div>
+    </header>
+
+    <nav>
+            <a href="index.html">Inicio</a>
+            <a href="historia.html">Nuestra Historia y Explicaciones</a>
+            <a href="recuerdos.html">Recuerdos</a>
+    </nav>
+
+    <div class="container">
+        <section class="history-section">
+            <h2>La Primera Luz del Día [El comienzo I]</h2>
+            <h3></h3>
+            <p>No sé exactamente en qué momento empezó lo nuestro. No hubo una fecha clara ni una escena de película. Solo sé que desde el inicio hubo algo distinto contigo. Una vibra que se sentía cómoda, natural, sin esfuerzo. Al principio eran conversaciones normales… hasta que dejaron de serlo. Algo en ti hacía que quisiera quedarme un poco más, hablar un poco más, escuchar un poco más.</p>
+            
+        </section>
+
+
+        <section class="history-section">
+            <h2>Cuando dejó de ser casual [Caminantes II]</h2>
+            <p>Sin darme cuenta, pasamos de hablar por hablar a compartir. Risas, historias, pensamientos que no le cuento a cualquiera. Contigo empezó a existir confianza, esa que no se pide, simplemente aparece. Empecé a sentir que podía ser yo, sin filtros, sin miedo a no ser suficiente. Y eso, hoy lo sé, no pasa con cualquiera.</p>
+            
+            <!-- errores  -->
+        </section>
+
+
+        <section class="history-section">
+            <h2>La conexión [Dualidad III]</h2>
+            <p>Hubo un punto en el que ya no era solo química, era conexión. Nos entendíamos en detalles pequeños, en silencios, en miradas. No era intensidad vacía, era cercanía real. Empezamos a cuidarnos emocionalmente, a estar presentes, a demostrarnos que importábamos. Ahí entendí que lo nuestro no era algo ligero.</p>
+            
+        </section>
+        
+        <section class="history-section">
+            <h2>El momento en que se volvió real [Mi felicidad IV]</h2>
+            <p>Desde el 9 de junio, todo cambió. No porque fuera mágico, sino porque fue consciente. Decidimos tomarnos en serio, elegirnos con intención. Ya no era solo sentir, era construir. Con errores, con aprendizaje, pero con compromiso. Ese día marcó el inicio de algo más profundo y más verdadero.
+            </p>
+            <!-- aqui mas texto -->
+            
+        </section>
+
+        <section class="history-section">
+            <h2>Lo que hemos superado [Problemas Temporales V]</h2>
+            <p>No todo ha sido perfecto, y eso también forma parte de nuestra historia. Hubo dudas, momentos difíciles, emociones intensas. Pero en lugar de huir, hablamos. En lugar de romper, intentamos entender. Aprendimos que amar también es cuidar, escuchar y responsabilizarse del daño que a veces, sin querer, se causa.</p>
+        </section>
+
+        <section class="history-section">
+            <h2>Lo que somos hoy [Presente VI]</h2>
+            <p>Hoy somos complicidad, apoyo y crecimiento. Somos alguien con quien contar al final del día. Somos risas, pero también calma. Somos un lugar seguro. Lo nuestro no se sostiene solo por lo que sentimos, sino por lo que hacemos cada día para que funcione. Y eso vale mucho.</p>
+            
+        </section>
+
+        <section class="history-section">
+            <h2>Lo que viene [Los gatos bajo la lluvia VII]</h2>
+            <p>No sé exactamente qué nos espera, pero sí sé lo que siento. Quiero seguir construyendo contigo, paso a paso, sin prisa pero sin pausa. Quiero seguir eligiéndote, aprendiendo y creciendo juntos. Porque si algo tengo claro es que esta historia no se siente como un capítulo cualquiera… se siente como algo que merece continuar.</p>
+            
+        </section>
+
+        <section class="history-section">
+            <h2>Cuando me di cuenta de que eras especial [Libro II - Capítulo I]</h2>
+            <p>Hubo un momento en el que dejé de verte como alguien más en mi vida y empecé a verte como esa persona. No fue de golpe, fue sutil. Me importaban tus días, tus silencios, cómo estabas incluso cuando no lo decías. Empecé a cuidarte sin pensarlo, porque me nacía. Ahí entendí que lo que sentía por ti no era pasajero, era real.
+            </p>
+        </section>
+
+        <section class="history-section">
+            <h2>Nuestro primer beso [Libro II - Capítulo II]</h2>
+            <p>Nuestro primer beso no fue solo un beso. Fue nervios, fue conexión, fue ese segundo eterno donde todo se siente correcto. Fue confirmar que lo que ya existía emocionalmente también estaba ahí, fuerte, sincero. Ese momento se me quedó grabado porque no fue solo físico, fue una promesa silenciosa de que lo nuestro iba en serio.</p>
+           
+        </section>
+
+        <section class="history-section">
+            <h2>Lo que construimos día a día [Libro II - Capítulo III]</h2>
+            <p>
+            Lo nuestro no vive solo de momentos lindos, vive del esfuerzo diario. De escucharnos, de cuidarnos, de elegirnos incluso cuando las cosas se sienten intensas. Contigo aprendí que amar también es responsabilidad emocional, es presencia, es querer hacerlo bien. Y eso es algo que siempre he querido contigo.</p>
+            
+        </section>
+
+        <section class="history-section">
+            <h2>Por qué tú [Libro II - Capítulo IV]</h2>
+            <p>Porque contigo no tengo que fingir. Porque me siento en casa. Porque me haces crecer, cuestionarme, mejorar. Porque no eres solo mi pareja, eres mi apoyo, mi calma y mi lugar seguro. No te elijo por costumbre, te elijo porque quiero, porque siento, porque contigo veo un futuro que vale la pena.</p>
+        </section>
+
+        <section class="history-section">
+            <h2>Lo que quiero decirte, para que no quede ninguna duda [Libro III - Lo que siento I]</h2>
+             <h3>(Este fragmento se removerá una vez que lo leas así que, son mis palabras sinceras, te amo)</h3>
+            <p>Quiero detenerme aquí, con calma, y explicarte esto bien, porque lo mereces. Lo que se habló ayer, lo que se leyó en esos mensajes, no nació desde la falta de amor, ni desde el miedo a estar contigo. Nació desde todo lo contrario: desde lo mucho que me importas.
+
+                Cuando dije que algo se veía complicado, no estaba diciendo que no te quiero, ni que no te elijo, ni que no te veo en mi vida. Estaba hablando de un contexto, de una realidad externa que no depende solo de nosotros. Y sé que leído rápido, o con el corazón sensible —como el tuyo, que ama de verdad— puede doler. Nunca fue mi intención hacerte sentir que no eras suficiente o que dudaba de nosotros.
+
+                Quiero que entiendas algo muy importante: yo no hablo del futuro contigo desde la duda, hablo desde la responsabilidad. Porque cuando pienso en ti, no pienso en algo temporal, pienso en algo que quiero cuidar bien. Y cuidar bien a alguien también implica no prometer a la ligera, no romantizar obstáculos reales y no hacerte creer que el amor, por sí solo, lo resuelve todo sin trabajo.
+
+                Cuando mencioné a tu familia, no fue para alejarme, fue porque me importa hacerlo bien contigo. Porque quiero que, si algún día damos pasos grandes, sean firmes, sanos y sin que tú tengas que cargar con conflictos que no te mereces. No es “no quiero”, es “te quiero tanto que quiero hacerlo bien”.
+
+                Y duele que en medio de todo eso hayas sentido que no te estaba eligiendo, porque la verdad es esta: yo te elijo todos los días. Te elijo cuando te escucho, cuando te cuido, cuando intento entenderte incluso cuando estamos sensibles. Te elijo cuando me importan tus miedos, cuando me importa cómo te sientes, cuando me duele verte dudar de tu lugar conmigo.
+
+                Si algo quiero que quede claro para siempre es esto: no hay un escenario en el que tú seas reemplazable. No hay un “si no es contigo, es con alguien más”. Eres tú. Con tu forma de amar, con tu intensidad, con tu ternura y con todo lo que somos juntos.
+
+                Yo quiero un futuro contigo, pero no uno improvisado ni frágil. Quiero uno donde te sientas segura, amada y respaldada. Y mientras ese futuro se construye, yo estoy aquí. Contigo. Presente. Eligiéndote.
+
+                No dudes de mi amor por una frase sacada del miedo. Quédate con mis actos, con mi constancia, con todo lo que he demostrado. Porque si algo tengo claro, es que la persona que quiero para mi vida eres tú.</p>
+        </section>
+
+
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Ren's Archive - Todos los derechos reservados</p>
+        <p><a href="" target="_blank">Política de privacidad y protección de datos</a></p>
+    </footer>
+</body>
+</html>
