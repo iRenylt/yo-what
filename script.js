@@ -20,4 +20,17 @@ toggleMusic.addEventListener("click", () => {
     bgMusic.pause();
     toggleMusic.textContent = "💓";
   }
+
+  const menuBtn = document.getElementById("menuBtn");
+  const menu = document.getElementById("menu");
+
+  menuBtn.addEventListener("click", () => {
+    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+  });
+
+  function goTo(section) {
+    document.getElementById(section).scrollIntoView({ behavior: "smooth" });
+    menu.style.display = "none";
+  }
+
 });
