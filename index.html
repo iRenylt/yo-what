@@ -16,6 +16,15 @@
             min-height: 100vh;
         }
 
+        /* 🔒 ANTI-FLASH DEFINITIVO (NO rompe nada) */
+        body.locked > * {
+            visibility: hidden;
+        }
+
+        body.locked .page-lock {
+            visibility: visible;
+        }
+
         header {
             background: rgba(0, 0, 0, 0.5);
             color: #fff;
@@ -231,12 +240,8 @@
             <p>— A & N —</p>
         </div>
 
-        <!-- ✨ Letras flotantes de fondo -->
-          <div class="floating-letters"></div>
-
-          <!-- 🌌 Estrellas -->
-          <div class="stars"></div>
-        
+        <div class="floating-letters"></div>
+        <div class="stars"></div>
     </div>
 </header>
 
@@ -269,12 +274,16 @@
 <script>
     const PIN_CORRECTO = "0906";
 
+    /* 🔒 BLOQUEO INICIAL */
+    document.body.classList.add("locked");
+
     function unlockPage() {
         const input = document.getElementById("pinInput").value;
         const error = document.getElementById("errorMsg");
 
         if (input === PIN_CORRECTO) {
             document.getElementById("pageLock").style.display = "none";
+            document.body.classList.remove("locked");
         } else {
             error.style.display = "block";
         }
@@ -289,7 +298,6 @@
         });
     });
 
-    /* 🔒 Aviso para cartas no desbloqueadas */
     document.querySelectorAll('a[data-locked="true"]').forEach(link => {
         link.addEventListener('click', e => {
             e.preventDefault();
@@ -299,7 +307,5 @@
     });
 </script>
 
-
 </body>
 </html>
-
