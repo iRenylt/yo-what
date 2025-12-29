@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para N/A ❤️</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: radial-gradient(circle at top, #0b0b12, #000);
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* 🌌 Estrellas */
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+      animation: starsMove 200s linear infinite;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    @keyframes starsMove {
+      from {background-position: 0 0;}
+      to {background-position: -2000px 2000px;}
+    }
+
+    /* 🎶 Letras flotantes */
+    .floating-letters {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: rgba(255,255,255,0.08);
+      z-index: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      animation: fadeLetters 5s ease-in-out infinite alternate;
+    }
+
+    .floating-letters::before {
+      content: "";
+    }
+
+    @keyframes fadeLetters {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* 🎵 Botón música */
+    .music-control {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 5;
+      animation: fadeIn 2s ease;
+    }
+
+    .music-control button {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid #fff;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .music-control button:hover {
+      background: #fff;
+      color: #000;
+      transform: scale(1.1);
+    }
+
+    /* 🔳 Contenedor principal */
+    .container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 2.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* ✨ Secciones izquierda y derecha con marco cuadrado */
+    .side.left, .side.right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 15px;
+      background: rgba(255,255,255,0.02);
+      padding: 1rem;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      transition: all 1s ease;
+      animation: pulseBg 6s infinite alternate;
+    }
+
+    .side.right {
+      animation-duration: 8s;
+    }
+
+    @keyframes pulseBg {
+      from {background-position: 0 0;}
+      to {background-position: 100% 100%;}
+    }
+
+    .overlay { text-align: center; padding: 1rem; }
+    .side p { font-size: 1.2rem; opacity: 0.8; margin: 0.5rem 0; animation: floatText 5s ease-in-out infinite alternate; }
+    @keyframes floatText { from {transform: translateY(0);} to {transform: translateY(-10px);} }
+
+    /* Imagen con glow */
+    .photo img {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 15px;
+      border: 1px solid #777;
+      box-shadow: 0 0 20px rgba(255,255,255,0.25);
+      animation: glowPulse 4s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from {box-shadow: 0 0 10px rgba(255,255,255,0.15);}
+      to {box-shadow: 0 0 30px rgba(255,255,255,0.4);}
+    }
+
+    /* Centro */
+    .center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .center button {
+      background: transparent;
+      border: 1px solid #fff;
+      color: #fff;
+      font-size: 1.1rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      animation: fadeIn 3s ease;
+    }
+
+    .center button:hover {
+      background: #fff;
+      color: #000;
+      transform: scale(1.05);
+      }
+
+    /* Carta */
+    #letter {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      display: flex;
+      align-items: flex-start; /* 🔹 parte superior visible */
+      justify-content: center;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+
+      overflow-y: auto; /* permite scroll vertical */
+      -webkit-overflow-scrolling: touch; /* scroll suave en iOS */
+      padding-top: 2rem; /* espacio desde arriba */
+      padding-bottom: 2rem;
+    }
+
+    #letter.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .letter-content {
+      max-width: 600px;
+      width: 90%; /* ancho adaptable en móviles */
+      padding: 2rem;
+      border: 1px solid #555;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(6px);
+      text-align: left;
+      line-height: 1.6;
+      position: relative;
+      animation: fadeIn 1.2s ease;
+      margin: auto; /* centrado horizontal */
+    }
+
+    /* Botón cerrar */
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: transparent;
+      border: 1px solid #fff;
+      color: #fff;
+      border-radius: 50%;
+      width: 35px; height: 35px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover { background: #fff; color: #000; }
+
+    /* Móvil general */
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .side, .center { flex: none; height: 33.3%; }
+      .photo img { width: 100px; height: 100px; }
+      .letter-content { width: 90%; }
+    }
+
+    /* Ajustes para móviles muy pequeños */
+    @media (max-width: 480px) {
+      body { font-size: 14px; overflow: auto; }
+      .floating-letters { font-size: 1rem; top: 10px; }
+      .music-control button { width: 35px; height: 35px; font-size: 0.9rem; }
+      .side.left, .side.right { padding: 0.5rem; border-width: 2px; }
+      .side p { font-size: 1rem; }
+      .center button { font-size: 1rem; padding: 0.5rem 1rem; }
+      .photo img { width: 80px; height: 80px; }
+      .letter-content { padding: 1rem; font-size: 0.9rem; }
+      .close-btn { width: 30px; height: 30px; font-size: 0.85rem; }
+    }
+
+    /* Ajustes generales */
+    img, video, iframe { max-width: 100%; height: auto; }
+    .container, .side, .center { min-width: 0; }
+    .side p { word-break: break-word; }
+    button { white-space: nowrap; }
+    </style>
+</head>
+
+  
+  
+
+
+  
+<body>
+  <div class="music-control">
+    <button id="toggleMusic">❤️</button>
+  </div>
+
+  <!-- 🎵 Audio -->
+  <audio id="bgMusic" loop autoplay>
+    <source src="" type="audio/mpeg">
+  </audio>
+
+  <!-- ✨ Letras flotantes de fondo -->
+  <div class="floating-letters"></div>
+
+  <!-- 🌌 Estrellas -->
+  <div class="stars"></div>
+
+  <div class="container">
+    <!-- IZQUIERDA -->
+    <div class="side left">
+      <div class="overlay">
+        <p>Esto no es tanto comparado con el otro regalo pero espero que te haya encantado también.</p>
+        <p>""Nuestra dualidad es lo que nos hace únicos, y es lo que me hace amarte tanto.""</p>
+        <p>Lee y disfruta esto, quizás no es lo que esperabas pero lo hice pensando plenamente en ti y en la forma que me amas</p>
+      </div>
+    </div>
+
+    <!-- CENTRO -->
+    <div class="center">
+      <button id="openLetter">Abrir carta 💌</button>
+          <div id="letter">
+            <div class="letter-content">
+              <button id="closeLetter" class="close-btn">✕</button>
+          <h2>Preciosa</h2>
+          <p>Han pasado cuatro meses desde que comenzamos este vuelo juntos, y en todo este tiempo hemos vivido de todo: risas que se quedan grabadas en la memoria, silencios que a veces pesaban y nos hacían dudar, discusiones que nos enseñaron a entendernos mejor, momentos de distancia que parecían largos pero que nunca rompieron lo que sentimos, y lágrimas compartidas que me hicieron ver tu vulnerabilidad y tu fuerza al mismo tiempo; me has confiado cosas profundas de ti, me has permitido entrar en tu mundo y yo he intentado estar ahí para ti en cada instante, siendo tu apoyo, tu refugio y tu compañero, y siempre he sentido que somos el complemento perfecto, que nos equilibramos en nuestros defectos y nos potenciamos en nuestras virtudes, que incluso cuando algo duele o nos pone a prueba, seguimos avanzando juntos porque tú haces tu mejor esfuerzo siempre, porque me das tu soporte constante, porque hemos aprendido a comunicar lo que sentimos aunque es complejo y a cuidar lo que tenemos, y todo eso, Nohelia, todo lo que somos y lo que hemos construido, me hace sentir que no hay otra persona en este mundo con quien quisiera compartir este viaje, que cada momento, cada detalle, cada mirada y cada gesto de ternura que me das, me hace admirarte y querer seguir construyendo esto contigo día tras día aunque yo muestre inestabilidad pero cada piloto necesita a su pareja de ala, y eso eres tu, y por eso hoy, al cumplir cuatro meses, quiero que sepas que cada instante, incluso los difíciles, han valido la pena porque me han acercado más a ti y me han hecho sentir que juntos podemos con todo, que somos un equipo, que somos complices, que somos nosotros, y que no hay nada más hermoso que sentir que alguien te elige y te confía su mundo, como tú me lo has confiado a mí.</p>
+          <p>[Te amo mucho]</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DERECHA -->
+    <div class="side right">
+      <div class="overlay">
+        <p></p>
+        <p>09 / 10 / 2025</p>
+        <p>— A & N —</p>
+        <div class="photo">
+          <img src="https://i.imgur.com/VzxoAj4.jpeg" alt="yo, what">
+          <p>Cada cosa y cada detalle fueron programados y diseñados por mi para ti, espero te guste.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
