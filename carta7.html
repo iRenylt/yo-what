@@ -1,1 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Footage Archive</title>
+  <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    body {
+      background: radial-gradient(circle at top, #0b0b12, #000);
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* 🌌 Estrellas */
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+      animation: starsMove 200s linear infinite;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    @keyframes starsMove {
+      from {background-position: 0 0;}
+      to {background-position: -2000px 2000px;}
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 15px 20px;
+      text-align: center;
+      animation: fadeIn 1.5s ease-out;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      z-index: 5;
+    }
+
+    header h1 { font-size: 1.5rem; margin: 0; }
+
+    nav {
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      flex-wrap: wrap;
+      z-index: 5;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin: 5px 12px;
+      padding: 6px 10px;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+      border-radius: 10px;
+    }
+
+    nav a:hover {
+      background: transparent;
+      border: 1px solid #fff;
+      transform: scale(1.05);
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 2.5s ease;
+      padding: 2rem;
+      flex-direction: row;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 15px;
+      background: rgba(255,255,255,0.02);
+      padding: 1.5rem;
+      margin: 10px;
+      text-align: center;
+      min-height: 300px;
+    }
+
+    .media-container {
+      width: 100%;
+      max-width: 250px;
+      margin-top: 15px;
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+      background: #000;
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .media-container img, 
+    .media-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .side p { font-size: 1.1rem; opacity: 0.9; margin: 10px 0; line-height: 1.4; }
+
+    .center {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .center button {
+      background: transparent;
+      border: 1px solid #fff;
+      color: #fff;
+      font-size: 1.1rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .center button:hover {
+      background: #fff;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    body.locked > *:not(.page-lock) {
+        display: none !important;
+    }
+
+    .page-lock {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(15px);
+        z-index: 99999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lock-box {
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 30px 40px;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+    }
+
+    .lock-box h2 { font-weight: 400; margin-bottom: 15px; }
+    .lock-box input {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 10px;
+        outline: none;
+        text-align: center;
+        font-size: 1rem;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    .lock-box button {
+        background: transparent;
+        border: 1px solid #fff;
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 12px;
+        cursor: pointer;
+    }
+    .lock-error { margin-top: 10px; font-size: 0.85rem; color: #ff6b6b; display: none; }
+
+    /* Carta Modal */
+    #letter {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      z-index: 100;
+      overflow-y: auto;
+      padding: 2rem 1rem;
+    }
+
+    .letter-content {
+      max-width: 600px;
+      width: 100%;
+      padding: 2.5rem;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      background: rgba(20, 20, 25, 0.95);
+      backdrop-filter: blur(10px);
+      position: relative;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px; right: 15px;
+      background: transparent;
+      border: 1px solid #fff;
+      color: #fff;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      cursor: pointer;
+    }
+
+    /* Comentarios */
+    .comments-section {
+      width: 100%;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.2);
+      z-index: 5;
+    }
+
+    .comments-section h2 { margin-bottom: 20px; font-weight: 400; text-align: center; }
+
+    #commentForm { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+
+    #commentInput {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 12px;
+      border-radius: 10px;
+      font-family: 'Playfair Display', serif;
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    #commentForm button {
+      align-self: flex-end;
+      background: transparent;
+      border: 1px solid #fff;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #commentForm button:hover { background: #fff; color: #000; }
+
+    .comment-list { display: flex; flex-direction: column; gap: 15px; }
+
+    .comment-item {
+      padding: 15px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      border-left: 3px solid #fff;
+    }
+
+    .comment-date { font-size: 0.8rem; opacity: 0.6; margin-top: 5px; }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column; padding: 1rem; }
+      .side { margin: 10px 0; }
+    }
+
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.2rem; }
+      nav a { font-size: 0.75rem; margin: 4px; padding: 5px 8px; }
+      .side p { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="pageLock" class="page-lock">
+    <div class="lock-box">
+        <h2>Contenido protegido</h2>
+        <input type="password" id="pinInput" placeholder="Introduce el PIN">
+        <button onclick="unlockPage()">Acceder</button>
+        <div id="errorMsg" class="lock-error">PIN incorrecto</div>
+    </div>
+</div>
+  <div class="stars"></div>
+
+  <header>
+    <h1></h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Historia</a>
+    <a href="recuerdos.html">Recuerdos</a>
+  </nav>
+
+  <div class="container">
+    <div class="side">
+      <p>Siete meses desde aquel 9 de junio.</p>
+      <p>Cada día ha sido una nueva aventura a tu lado.</p>
+      <p>Gracias por ser mi paz y mi alegría.</p>
+    </div>
+
+    <div class="center">
+      <button id="openBtn">Abrir Carta de los 7 Meses 💌</button>
+    </div>
+
+    <div class="side">
+      <p>09 / 01 / 2026</p>
+      <p>— A & N —</p>
+      
+      <!-- 📦 CONTENEDOR MULTIMEDIA -->
+      <div class="media-container">
+        <!-- 
+          OPCIONES PARA PONER AQUÍ:
+          
+          1. PARA IMAGEN:
+          <img src="TU_URL_DE_IMAGEN" alt="nosotros">
+          
+          2. PARA VIDEO (YouTube):
+          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DEL_VIDEO" frameborder="0" allowfullscreen></iframe>
+          
+          3. PARA VIDEO DIRECTO (Archivo):
+          <video controls>
+            <source src="TU_URL_DE_VIDEO.mp4" type="video/mp4">
+          </video>
+          
+          4. PARA MÚSICA (Spotify):
+          <iframe src="https://open.spotify.com/embed/track/ID_DE_LA_CANCION" width="100%" height="100%" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        -->
+        
+        <!-- Actualmente con la imagen original: -->
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/iI3_s86CSSA" frameborder="0" allowfullscreen></iframe>
+      </div>
+      
+      <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.5;">El saludo de las alas</p>
+    </div>
+  </div>
+
+  <div id="letter">
+    <div class="letter-content">
+      <button id="closeBtn" class="close-btn">✕</button>
+      <h2 style="margin-bottom: 15px;">Mi Vida,</h2>
+      <p style="line-height: 1.7;">Nohelia,
+
+        Hoy cumplimos siete meses. Siete. Y no es solo un número más en el calendario. Para mí es una pausa consciente, un momento para mirarte con calma y decirte, sin prisas y sin adornos falsos, lo que de verdad vive en mi corazón cuando pienso en nosotros.
+
+        Quiero empezar diciendo algo importante: gracias. Gracias por estar, por quedarte, por elegirme cada día sin ruido, sin exigencias, sin máscaras. Gracias por tu forma de querer, por tu sensibilidad, por tu manera tan tuya de sentir profundo en un mundo que casi siempre va demasiado rápido. Gracias por confiar en mí incluso cuando tu mente se llena de dudas, incluso cuando el miedo toca la puerta. Eso no es poco. Eso es valentía.
+
+        Siete meses contigo no han sido solo momentos bonitos —que los ha habido, y muchos—, sino también momentos reales. Momentos donde aprendimos a escucharnos, a entendernos, a respirar juntos cuando algo pesaba. Y quiero que sepas algo con absoluta claridad: nunca te he visto como una carga, nunca como un problema, nunca como “demasiado”. Lo que tú sientes importa. Tú importas. Siempre.
+
+        Si hoy te escribo así, largo y sin miedo, es porque quiero que tengas estas palabras cuando la ansiedad aparezca, cuando tu cabeza empiece a hacer ruido, cuando dudes de tu lugar o de tu valor. Quiero que recuerdes esto: eres amada. No por lo que haces, no por lo que das, no por lo que aguantas. Eres amada por quien eres. Tal cual. Con tu luz, con tus miedos, con tu ternura y con tu forma tan intensa de sentir la vida.
+
+        Nohelia, tú no eres reemplazable. No porque yo lo diga, sino porque nadie siente como tú, nadie mira como tú, nadie abraza como tú. Tu presencia tiene algo que calma, algo que se queda. Cuando estoy contigo, no siento que tenga que correr, demostrar o fingir. Puedo ser yo. Y eso, hoy en día, es un regalo enorme.
+
+        Quiero que tengas paz respecto a mí. No quiero que vivas preguntándote si mañana voy a cambiar, si te voy a soltar de repente, si tienes que ganarte mi amor. No. Yo estoy aquí porque quiero estar. Porque elijo cuidarte, respetarte y caminar contigo mientras ambos crecemos. No desde el miedo a perder, sino desde el deseo sincero de construir algo sano.
+
+        No te prometo eternidades irreales, pero sí te prometo algo mucho más importante: honestidad, presencia y coherencia. Te prometo no jugar con tus emociones, no decir palabras vacías, no alimentar ilusiones falsas. Te prometo mirarte a los ojos y decirte la verdad, incluso cuando no sea la más cómoda. Porque amarte también es cuidarte.
+
+        Si alguna vez sientes que dudas de ti, apóyate en mí. Si sientes que tu mente se acelera, aquí estoy para ser calma. No tienes que demostrarme nada. No tienes que ser perfecta. No tienes que esconder tus inseguridades. Yo no te quiero por una versión idealizada de ti, te quiero por la real. Y esa versión es suficiente. Más que suficiente.
+
+        Siete meses contigo me han enseñado que el amor no siempre grita, a veces susurra. Que no siempre corre, a veces camina lento pero firme. Y contigo quiero eso: pasos seguros, miradas sinceras, abrazos que no aprietan pero sostienen.
+
+        Gracias por cada detalle, por cada gesto, por cada palabra. Gracias por pensar en mí, por cuidarme, por regalarme no solo cosas, sino partes de ti. Eso no lo tomo a la ligera. Lo valoro. Mucho.
+
+        Hoy, a los siete meses, quiero que te quedes con esta certeza: no estás sola, no estás de más, no estás equivocada por sentir como sientes. Yo te veo. Te elijo. Y estoy aquí, contigo, ahora.
+
+        Con calma, con respeto y con todo el cariño que tengo para darte, te amo infinitamente.</p>
+      <p style="margin-top: 20px; text-align: right;">Siempre tuyo, A.</p>
+    </div>
+  </div>
+
+  
+
+  <section class="comments-section" id="adminSection" style="display: none; border: 2px solid #fff; margin-top: 60px;">
+    <h2 style="color: #fff; font-weight: bold;">💎 Panel de Administración (Solo para ti)</h2>
+    <p style="margin-bottom: 15px; opacity: 0.8;">Aquí aparecerán todos los comentarios que ella te deje en tiempo real.</p>
+    <div id="adminCommentList" class="comment-list">
+      <!-- Los comentarios de ella aparecerán aquí -->
+    </div>
+    <button onclick="clearAllComments()" style="margin-top: 20px; background: rgba(255,0,0,0.2); border: 1px solid #ff4444; color: #ff4444; padding: 5px 15px; border-radius: 5px; cursor: pointer;">Borrar historial</button>
+  </section>
+
+  <script>
+    // PIN de administrador para ver comentarios (puedes cambiarlo)
+    const ADMIN_PIN = "0906"; 
+
+    // Función para mostrar el panel si eres tú
+    function checkAdmin() {
+      const ask = prompt("Introduce el PIN de acceso para ver los comentarios recibidos:");
+      if (ask === ADMIN_PIN) {
+        document.getElementById('adminSection').style.display = 'block';
+        loadComments();
+        alert("¡Acceso concedido! Baja hasta el final de la página para ver los comentarios.");
+      } else {
+        alert("PIN incorrecto.");
+      }
+    }
+
+    // Botón invisible o comando para activar el panel (puedes presionar 'a' en el teclado)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/') checkAdmin(); 
+    });
+
+    function clearAllComments() {
+      if(confirm("¿Seguro que quieres borrar todos los comentarios?")) {
+        localStorage.removeItem('comments_carta7');
+        loadComments();
+      }
+    }
+
+    // Modal Logic
+    const modal = document.getElementById('letter');
+    const openBtn = document.getElementById('openBtn');
+    const closeBtn = document.getElementById('closeBtn');
+
+    openBtn.onclick = () => {
+      modal.style.display = 'flex';
+      document.body.classList.add('modal-open');
+      modal.scrollTop = 0; 
+    };
+
+    closeBtn.onclick = () => {
+      modal.style.display = 'none';
+      document.body.classList.remove('modal-open');
+    };
+
+    window.onclick = (e) => {
+      if(e.target == modal) {
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+      }
+    };
+
+    // Comments Logic
+    const form = document.getElementById('commentForm');
+    const input = document.getElementById('commentInput');
+    const list = document.getElementById('commentList');
+    const adminList = document.getElementById('adminCommentList');
+
+    // URL del servidor de comentarios
+    const API_URL = window.location.origin.replace('5000', '3000') + '/api/comments';
+
+    async function loadComments() {
+      try {
+        const response = await fetch(API_URL);
+        const comments = await response.json();
+        
+        list.innerHTML = '';
+        comments.forEach(c => {
+          const div = document.createElement('div');
+          div.className = 'comment-item';
+          div.innerHTML = `<div>${c.text}</div><div class="comment-date">${c.date}</div>`;
+          list.appendChild(div);
+        });
+
+        if (adminList) {
+          adminList.innerHTML = list.innerHTML;
+        }
+      } catch (err) {
+        console.error('Error cargando comentarios:', err);
+      }
+    }
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if(!text) return;
+
+      const newComment = {
+        text: text,
+        date: new Date().toLocaleString()
+      };
+      
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newComment)
+        });
+        input.value = '';
+        loadComments();
+        alert("¡Comentario enviado con éxito! ❤️");
+      } catch (err) {
+        alert("Hubo un error al enviar el comentario.");
+      }
+    };
+
+    loadComments();
+  </script>
+<script src="Scripts/lock.js"></script>
+</body>
+</html>
