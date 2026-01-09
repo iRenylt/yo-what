@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Para N/A ❤️</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Footage Archive</title>
+  <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -13,11 +13,10 @@
       background: radial-gradient(circle at top, #0b0b12, #000);
       color: #fff;
       font-family: 'Playfair Display', serif;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      flex-direction: column;
+      overflow-x: hidden;
     }
 
     /* 🌌 Estrellas */
@@ -36,66 +35,54 @@
       to {background-position: -2000px 2000px;}
     }
 
-    /* 🎶 Letras flotantes */
-    .floating-letters {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: rgba(255,255,255,0.08);
-      z-index: 0;
-      pointer-events: none;
-      white-space: nowrap;
-      animation: fadeLetters 5s ease-in-out infinite alternate;
-    }
-
-    .floating-letters::before {
-      content: "";
-    }
-
-    @keyframes fadeLetters {
-      0% { opacity: 0; }
-      50% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    /* 🎵 Botón música */
-    .music-control {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 5;
-      animation: fadeIn 2s ease;
-    }
-
-    .music-control button {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid #fff;
+    header {
+      background: rgba(0, 0, 0, 0.5);
       color: #fff;
-      border-radius: 50%;
-      font-size: 1.1rem;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
+      padding: 15px 20px;
+      text-align: center;
+      animation: fadeIn 1.5s ease-out;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      z-index: 5;
+    }
+
+    header h1 { font-size: 1.5rem; margin: 0; }
+
+    nav {
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      flex-wrap: wrap;
+      z-index: 5;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin: 5px 12px;
+      padding: 6px 10px;
       transition: all 0.3s ease;
+      border: 1px solid transparent;
+      border-radius: 10px;
     }
 
-    .music-control button:hover {
-      background: #fff;
-      color: #000;
-      transform: scale(1.1);
+    nav a:hover {
+      background: transparent;
+      border: 1px solid #fff;
+      transform: scale(1.05);
     }
 
-    /* 🔳 Contenedor principal */
     .container {
+      flex: 1;
       display: flex;
       width: 100%;
-      height: 100%;
       position: relative;
       z-index: 2;
       animation: fadeIn 2.5s ease;
+      padding: 2rem;
+      flex-direction: row;
     }
 
     @keyframes fadeIn {
@@ -103,61 +90,53 @@
       to {opacity: 1; transform: translateY(0);}
     }
 
-    /* ✨ Secciones izquierda y derecha con marco cuadrado */
-    .side.left, .side.right {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-radius: 15px;
-      background: rgba(255,255,255,0.02);
-      padding: 1rem;
-      box-shadow: 0 0 15px rgba(255,255,255,0.1);
-      transition: all 1s ease;
-      animation: pulseBg 6s infinite alternate;
-    }
-
-    .side.right {
-      animation-duration: 8s;
-    }
-
-    @keyframes pulseBg {
-      from {background-position: 0 0;}
-      to {background-position: 100% 100%;}
-    }
-
-    .overlay { text-align: center; padding: 1rem; }
-    .side p { font-size: 1.2rem; opacity: 0.8; margin: 0.5rem 0; animation: floatText 5s ease-in-out infinite alternate; }
-    @keyframes floatText { from {transform: translateY(0);} to {transform: translateY(-10px);} }
-
-    /* Imagen con glow */
-    .photo img {
-      width: 160px;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 15px;
-      border: 1px solid #777;
-      box-shadow: 0 0 20px rgba(255,255,255,0.25);
-      animation: glowPulse 4s infinite alternate;
-    }
-
-    @keyframes glowPulse {
-      from {box-shadow: 0 0 10px rgba(255,255,255,0.15);}
-      to {box-shadow: 0 0 30px rgba(255,255,255,0.4);}
-    }
-
-    /* Centro */
-    .center {
+    .side {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 15px;
+      background: rgba(255,255,255,0.02);
+      padding: 1.5rem;
+      margin: 10px;
       text-align: center;
+      min-height: 300px;
+    }
+
+    .media-container {
+      width: 100%;
+      max-width: 250px;
+      margin-top: 15px;
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+      background: #000;
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .media-container img, 
+    .media-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .side p { font-size: 1.1rem; opacity: 0.9; margin: 10px 0; line-height: 1.4; }
+
+    .center {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       padding: 1rem;
-      position: relative;
     }
 
     .center button {
@@ -165,163 +144,360 @@
       border: 1px solid #fff;
       color: #fff;
       font-size: 1.1rem;
-      padding: 0.6rem 1.2rem;
+      padding: 0.8rem 1.5rem;
       border-radius: 10px;
-      transition: all 0.4s ease;
       cursor: pointer;
-      animation: fadeIn 3s ease;
+      transition: all 0.4s ease;
+      font-family: 'Playfair Display', serif;
     }
 
     .center button:hover {
       background: #fff;
       color: #000;
       transform: scale(1.05);
-      }
+    }
 
-    /* Carta */
+    body.locked > *:not(.page-lock) {
+        display: none !important;
+    }
+
+    .page-lock {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(15px);
+        z-index: 99999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lock-box {
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 30px 40px;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+    }
+
+    .lock-box h2 { font-weight: 400; margin-bottom: 15px; }
+    .lock-box input {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 10px;
+        outline: none;
+        text-align: center;
+        font-size: 1rem;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    .lock-box button {
+        background: transparent;
+        border: 1px solid #fff;
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 12px;
+        cursor: pointer;
+    }
+    .lock-error { margin-top: 10px; font-size: 0.85rem; color: #ff6b6b; display: none; }
+
+    /* Carta Modal */
     #letter {
       position: fixed;
       top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       background: rgba(0,0,0,0.95);
-      display: flex;
-      align-items: flex-start; /* 🔹 parte superior visible */
+      display: none;
+      align-items: flex-start;
       justify-content: center;
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.6s ease;
-
-      overflow-y: auto; /* permite scroll vertical */
-      -webkit-overflow-scrolling: touch; /* scroll suave en iOS */
-      padding-top: 2rem; /* espacio desde arriba */
-      padding-bottom: 2rem;
-    }
-
-    #letter.visible {
-      opacity: 1;
-      pointer-events: auto;
+      z-index: 100;
+      overflow-y: auto;
+      padding: 2rem 1rem;
     }
 
     .letter-content {
       max-width: 600px;
-      width: 90%; /* ancho adaptable en móviles */
-      padding: 2rem;
-      border: 1px solid #555;
-      border-radius: 15px;
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(6px);
-      text-align: left;
-      line-height: 1.6;
+      width: 100%;
+      padding: 2.5rem;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      background: rgba(20, 20, 25, 0.95);
+      backdrop-filter: blur(10px);
       position: relative;
-      animation: fadeIn 1.2s ease;
-      margin: auto; /* centrado horizontal */
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
     }
 
-    /* Botón cerrar */
     .close-btn {
       position: absolute;
-      top: 10px; right: 10px;
+      top: 15px; right: 15px;
       background: transparent;
       border: 1px solid #fff;
       color: #fff;
       border-radius: 50%;
-      width: 35px; height: 35px;
-      font-size: 1rem;
+      width: 30px; height: 30px;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
 
-    .close-btn:hover { background: #fff; color: #000; }
+    /* Comentarios */
+    .comments-section {
+      width: 100%;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.2);
+      z-index: 5;
+    }
 
-    /* Móvil general */
+    .comments-section h2 { margin-bottom: 20px; font-weight: 400; text-align: center; }
+
+    #commentForm { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+
+    #commentInput {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 12px;
+      border-radius: 10px;
+      font-family: 'Playfair Display', serif;
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    #commentForm button {
+      align-self: flex-end;
+      background: transparent;
+      border: 1px solid #fff;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #commentForm button:hover { background: #fff; color: #000; }
+
+    .comment-list { display: flex; flex-direction: column; gap: 15px; }
+
+    .comment-item {
+      padding: 15px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      border-left: 3px solid #fff;
+    }
+
+    .comment-date { font-size: 0.8rem; opacity: 0.6; margin-top: 5px; }
+
     @media (max-width: 768px) {
-      .container { flex-direction: column; }
-      .side, .center { flex: none; height: 33.3%; }
-      .photo img { width: 100px; height: 100px; }
-      .letter-content { width: 90%; }
+      .container { flex-direction: column; padding: 1rem; }
+      .side { margin: 10px 0; }
     }
 
-    /* Ajustes para móviles muy pequeños */
     @media (max-width: 480px) {
-      body { font-size: 14px; overflow: auto; }
-      .floating-letters { font-size: 1rem; top: 10px; }
-      .music-control button { width: 35px; height: 35px; font-size: 0.9rem; }
-      .side.left, .side.right { padding: 0.5rem; border-width: 2px; }
-      .side p { font-size: 1rem; }
-      .center button { font-size: 1rem; padding: 0.5rem 1rem; }
-      .photo img { width: 80px; height: 80px; }
-      .letter-content { padding: 1rem; font-size: 0.9rem; }
-      .close-btn { width: 30px; height: 30px; font-size: 0.85rem; }
+      header h1 { font-size: 1.2rem; }
+      nav a { font-size: 0.75rem; margin: 4px; padding: 5px 8px; }
+      .side p { font-size: 0.95rem; }
     }
-
-    /* Ajustes generales */
-    img, video, iframe { max-width: 100%; height: auto; }
-    .container, .side, .center { min-width: 0; }
-    .side p { word-break: break-word; }
-    button { white-space: nowrap; }
-    </style>
+  </style>
 </head>
-
-  
-  
-
-
-  
 <body>
-  <div class="music-control">
-    <button id="toggleMusic">❤️</button>
-  </div>
 
-  <!-- 🎵 Audio -->
-  <audio id="bgMusic" loop autoplay>
-    <source src="" type="audio/mpeg">
-  </audio>
-
-  <!-- ✨ Letras flotantes de fondo -->
-  <div class="floating-letters"></div>
-
-  <!-- 🌌 Estrellas -->
+<div id="pageLock" class="page-lock">
+    <div class="lock-box">
+        <h2>Contenido protegido</h2>
+        <input type="password" id="pinInput" placeholder="Introduce el PIN">
+        <button onclick="unlockPage()">Acceder</button>
+        <div id="errorMsg" class="lock-error">PIN incorrecto</div>
+    </div>
+</div>
   <div class="stars"></div>
 
+  <header>
+    <h1></h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Historia</a>
+    <a href="recuerdos.html">Recuerdos</a>
+  </nav>
+
   <div class="container">
-    <!-- IZQUIERDA -->
-    <div class="side left">
-      <div class="overlay">
-        <p>Esto no es tanto comparado con el otro regalo pero espero que te haya encantado también.</p>
-        <p>""Nuestra dualidad es lo que nos hace únicos, y es lo que me hace amarte tanto.""</p>
-        <p>Lee y disfruta esto, quizás no es lo que esperabas pero lo hice pensando plenamente en ti y en la forma que me amas</p>
-      </div>
+    <div class="side">
+      <p>Esto no es tanto comparado con el otro regalo pero espero que te haya encantado también.</p>
+      <p>""Nuestra dualidad es lo que nos hace únicos, y es lo que me hace amarte tanto.""</p>
+      <p>Lee y disfruta esto, quizás no es lo que esperabas pero lo hice pensando plenamente en ti y en la forma que me amas</p>
     </div>
 
-    <!-- CENTRO -->
     <div class="center">
-      <button id="openLetter">Abrir carta 💌</button>
-          <div id="letter">
-            <div class="letter-content">
-              <button id="closeLetter" class="close-btn">✕</button>
-          <h2>Preciosa</h2>
-          <p>Han pasado cuatro meses desde que comenzamos este vuelo juntos, y en todo este tiempo hemos vivido de todo: risas que se quedan grabadas en la memoria, silencios que a veces pesaban y nos hacían dudar, discusiones que nos enseñaron a entendernos mejor, momentos de distancia que parecían largos pero que nunca rompieron lo que sentimos, y lágrimas compartidas que me hicieron ver tu vulnerabilidad y tu fuerza al mismo tiempo; me has confiado cosas profundas de ti, me has permitido entrar en tu mundo y yo he intentado estar ahí para ti en cada instante, siendo tu apoyo, tu refugio y tu compañero, y siempre he sentido que somos el complemento perfecto, que nos equilibramos en nuestros defectos y nos potenciamos en nuestras virtudes, que incluso cuando algo duele o nos pone a prueba, seguimos avanzando juntos porque tú haces tu mejor esfuerzo siempre, porque me das tu soporte constante, porque hemos aprendido a comunicar lo que sentimos aunque es complejo y a cuidar lo que tenemos, y todo eso, Nohelia, todo lo que somos y lo que hemos construido, me hace sentir que no hay otra persona en este mundo con quien quisiera compartir este viaje, que cada momento, cada detalle, cada mirada y cada gesto de ternura que me das, me hace admirarte y querer seguir construyendo esto contigo día tras día aunque yo muestre inestabilidad pero cada piloto necesita a su pareja de ala, y eso eres tu, y por eso hoy, al cumplir cuatro meses, quiero que sepas que cada instante, incluso los difíciles, han valido la pena porque me han acercado más a ti y me han hecho sentir que juntos podemos con todo, que somos un equipo, que somos complices, que somos nosotros, y que no hay nada más hermoso que sentir que alguien te elige y te confía su mundo, como tú me lo has confiado a mí.</p>
-          <p>[Te amo mucho]</p>
-        </div>
-      </div>
+      <button id="openBtn">Abrir carta 💌</button>
     </div>
 
-    <!-- DERECHA -->
-    <div class="side right">
-      <div class="overlay">
-        <p></p>
-        <p>09 / 10 / 2025</p>
-        <p>— A & N —</p>
-        <div class="photo">
-          <img src="https://i.imgur.com/VzxoAj4.jpeg" alt="yo, what">
-          <p>Cada cosa y cada detalle fueron programados y diseñados por mi para ti, espero te guste.</p>
-        </div>
+    <div class="side">
+      <p>09 / 01 / 2026</p>
+      <p>— A & N —</p>
+
+      <!-- 📦 CONTENEDOR MULTIMEDIA -->
+      <div class="media-container">
+        <!-- 
+          OPCIONES PARA PONER AQUÍ:
+
+          1. PARA IMAGEN:
+          <img src="TU_URL_DE_IMAGEN" alt="nosotros">
+
+          2. PARA VIDEO (YouTube):
+          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DEL_VIDEO" frameborder="0" allowfullscreen></iframe>
+
+          3. PARA VIDEO DIRECTO (Archivo):
+          <video controls>
+            <source src="TU_URL_DE_VIDEO.mp4" type="video/mp4">
+          </video>
+
+          4. PARA MÚSICA (Spotify):
+          <iframe src="https://open.spotify.com/embed/track/ID_DE_LA_CANCION" width="100%" height="100%" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        -->
+
+        <!-- Actualmente con la imagen original: -->
+        <img src="https://i.imgur.com/VzxoAj4.jpeg" alt="nosotros">
       </div>
+
+      <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.5;">Cada cosa y cada detalle fueron programados y diseñados por mi para ti, espero te guste.</p>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <div id="letter">
+    <div class="letter-content">
+      <button id="closeBtn" class="close-btn">✕</button>
+      <h2 style="margin-bottom: 15px;">Preciosa</h2>
+      <p style="line-height: 1.7;">Han pasado cuatro meses desde que comenzamos este vuelo juntos, y en todo este tiempo hemos vivido de todo: risas que se quedan grabadas en la memoria, silencios que a veces pesaban y nos hacían dudar, discusiones que nos enseñaron a entendernos mejor, momentos de distancia que parecían largos pero que nunca rompieron lo que sentimos, y lágrimas compartidas que me hicieron ver tu vulnerabilidad y tu fuerza al mismo tiempo; me has confiado cosas profundas de ti, me has permitido entrar en tu mundo y yo he intentado estar ahí para ti en cada instante, siendo tu apoyo, tu refugio y tu compañero, y siempre he sentido que somos el complemento perfecto, que nos equilibramos en nuestros defectos y nos potenciamos en nuestras virtudes, que incluso cuando algo duele o nos pone a prueba, seguimos avanzando juntos porque tú haces tu mejor esfuerzo siempre, porque me das tu soporte constante, porque hemos aprendido a comunicar lo que sentimos aunque es complejo y a cuidar lo que tenemos, y todo eso, Nohelia, todo lo que somos y lo que hemos construido, me hace sentir que no hay otra persona en este mundo con quien quisiera compartir este viaje, que cada momento, cada detalle, cada mirada y cada gesto de ternura que me das, me hace admirarte y querer seguir construyendo esto contigo día tras día aunque yo muestre inestabilidad pero cada piloto necesita a su pareja de ala, y eso eres tu, y por eso hoy, al cumplir cuatro meses, quiero que sepas que cada instante, incluso los difíciles, han valido la pena porque me han acercado más a ti y me han hecho sentir que juntos podemos con todo, que somos un equipo, que somos complices, que somos nosotros, y que no hay nada más hermoso que sentir que alguien te elige y te confía su mundo, como tú me lo has confiado a mí.</p>
+      <p style="margin-top: 20px; text-align: right;">[Te amo mucho]</p>
+    </div>
+  </div>
+
+
+
+  <section class="comments-section" id="adminSection" style="display: none; border: 2px solid #fff; margin-top: 60px;">
+    <h2 style="color: #fff; font-weight: bold;">💎 Panel de Administración (Solo para ti)</h2>
+    <p style="margin-bottom: 15px; opacity: 0.8;">Aquí aparecerán todos los comentarios que ella te deje en tiempo real.</p>
+    <div id="adminCommentList" class="comment-list">
+      <!-- Los comentarios de ella aparecerán aquí -->
+    </div>
+    <button onclick="clearAllComments()" style="margin-top: 20px; background: rgba(255,0,0,0.2); border: 1px solid #ff4444; color: #ff4444; padding: 5px 15px; border-radius: 5px; cursor: pointer;">Borrar historial</button>
+  </section>
+
+  <script>
+    // PIN de administrador para ver comentarios (puedes cambiarlo)
+    const ADMIN_PIN = "0906"; 
+
+    // Función para mostrar el panel si eres tú
+    function checkAdmin() {
+      const ask = prompt("Introduce el PIN de acceso para ver los comentarios recibidos:");
+      if (ask === ADMIN_PIN) {
+        document.getElementById('adminSection').style.display = 'block';
+        loadComments();
+        alert("¡Acceso concedido! Baja hasta el final de la página para ver los comentarios.");
+      } else {
+        alert("PIN incorrecto.");
+      }
+    }
+
+    // Botón invisible o comando para activar el panel (puedes presionar 'a' en el teclado)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/') checkAdmin(); 
+    });
+
+    function clearAllComments() {
+      if(confirm("¿Seguro que quieres borrar todos los comentarios?")) {
+        localStorage.removeItem('comments_carta7');
+        loadComments();
+      }
+    }
+
+    // Modal Logic
+    const modal = document.getElementById('letter');
+    const openBtn = document.getElementById('openBtn');
+    const closeBtn = document.getElementById('closeBtn');
+
+    openBtn.onclick = () => {
+      modal.style.display = 'flex';
+      document.body.classList.add('modal-open');
+      modal.scrollTop = 0; 
+    };
+
+    closeBtn.onclick = () => {
+      modal.style.display = 'none';
+      document.body.classList.remove('modal-open');
+    };
+
+    window.onclick = (e) => {
+      if(e.target == modal) {
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+      }
+    };
+
+    // Comments Logic
+    const form = document.getElementById('commentForm');
+    const input = document.getElementById('commentInput');
+    const list = document.getElementById('commentList');
+    const adminList = document.getElementById('adminCommentList');
+
+    // URL del servidor de comentarios
+    const API_URL = window.location.origin.replace('5000', '3000') + '/api/comments';
+
+    async function loadComments() {
+      try {
+        const response = await fetch(API_URL);
+        const comments = await response.json();
+
+        list.innerHTML = '';
+        comments.forEach(c => {
+          const div = document.createElement('div');
+          div.className = 'comment-item';
+          div.innerHTML = `<div>${c.text}</div><div class="comment-date">${c.date}</div>`;
+          list.appendChild(div);
+        });
+
+        if (adminList) {
+          adminList.innerHTML = list.innerHTML;
+        }
+      } catch (err) {
+        console.error('Error cargando comentarios:', err);
+      }
+    }
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if(!text) return;
+
+      const newComment = {
+        text: text,
+        date: new Date().toLocaleString()
+      };
+
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newComment)
+        });
+        input.value = '';
+        loadComments();
+        alert("¡Comentario enviado con éxito! ❤️");
+      } catch (err) {
+        alert("Hubo un error al enviar el comentario.");
+      }
+    };
+
+    loadComments();
+  </script>
+<script src="Scripts/lock.js"></script>
 </body>
 </html>
