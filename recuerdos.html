@@ -1,378 +1,415 @@
 <!DOCTYPE html>
-    <html lang="ca-ES">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Footage Archive</title>
-        <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-        <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
+<html lang="ca-ES">
 
-            body {
-                background: radial-gradient(circle at top, #0b0b12, #000);
-                color: #fff;
-                font-family: 'Playfair Display', serif;
-                min-height: 100vh;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ren's Archive // Archivo de Recuerdos</title>
+    <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-            body.locked > *:not(.page-lock) {
-                display: none !important;
-            }
+        body {
+            background: radial-gradient(circle at top, #0b0b12, #000);
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-            .page-lock {
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.95);
-                backdrop-filter: blur(15px);
-                z-index: 99999;
-                display: none;
-                align-items: center;
-                justify-content: center;
-            }
+        /* 🌌 Estrellas y Efecto Blade Runner */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+            animation: starsMove 200s linear infinite;
+            z-index: 1;
+            opacity: 0.3;
+        }
 
-            .lock-box {
-                text-align: center;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                padding: 30px 40px;
-                border-radius: 18px;
-                background: rgba(0, 0, 0, 0.6);
-                color: #fff;
-            }
+        @keyframes starsMove {
+            from {background-position: 0 0;}
+            to {background-position: -2000px 2000px;}
+        }
 
-            .lock-box h2 { font-weight: 400; margin-bottom: 15px; }
-            .lock-box input {
-                background: transparent;
-                border: 1px solid rgba(255, 255, 255, 0.5);
-                color: #fff;
-                padding: 10px 15px;
-                border-radius: 10px;
-                outline: none;
-                text-align: center;
-                font-size: 1rem;
-                margin-bottom: 15px;
-                width: 100%;
-            }
-            .lock-box button {
-                background: transparent;
-                border: 1px solid #fff;
-                color: #fff;
-                padding: 8px 20px;
-                border-radius: 12px;
-                cursor: pointer;
-            }
-            .lock-error { margin-top: 10px; font-size: 0.85rem; color: #ff6b6b; display: none; }
+        /* 🎶 Letras flotantes */
+        .floating-letters {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.05);
+            z-index: 0;
+            pointer-events: none;
+            white-space: nowrap;
+            animation: fadeLetters 5s ease-in-out infinite alternate;
+        }
 
-            header {
-                background: rgba(0, 0, 0, 0.5);
-                color: #fff;
-                padding: 20px;
-                text-align: center;
-                animation: fadeIn 1.5s ease-out;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            }
+        @keyframes fadeLetters {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
 
-            header h1 {
-                font-size: 2.5rem;
-                margin-bottom: 10px;
-            }
-            header-content {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                flex-direction: row;
-                margin: auto;
-            }
-            
-            header img {
-                position: absolute;
-                top: 5px;
-                left: 300px;
-                width: 70px;
-                height: auto;
-                filter: brightness(1.2);
-            }
-            header img:hover {
-                transform: scale(1.1);
-            }
+        /* 🔒 BLOQUEO */
+        body.locked {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
 
-            header-text h1 {
-                font-size: 1.8rem;
-                margin: 0;
-            }
-            nav {
-                background: rgba(0, 0, 0, 0.4);
-                padding: 10px;
-                display: flex;
-                justify-content: center;
-                animation: slideDown 1s ease-out;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-                flex-wrap: wrap;
-            }
+        body.locked > *:not(.page-lock):not(.stars):not(.floating-letters) {
+            display: none !important;
+        }
 
-            nav a {
-                color: #fff;
-                text-decoration: none;
-                font-size: 16px;
-                padding: 10px 20px;
-                border-radius: 10px;
-                margin: 0 10px;
-                transition: all 0.3s ease;
-                border: 1px solid transparent;
-            }
+        .page-lock {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-            nav a:hover {
-                background: transparent;
-                color: #fff;
-                border: 1px solid #fff;
-                transform: scale(1.05);
-            }
+        .lock-box {
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(10, 10, 15, 0.8);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
 
-            .dropdown {
-                position: relative;
-            }
+        .lock-box h2 { font-weight: 400; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
+        .lock-box input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            outline: none;
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .lock-box button {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 10px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .lock-box button:hover { background: #fff; color: #000; }
 
-            .dropdown-content {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(0, 0, 0, 0.8);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-                border-radius: 10px;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                min-width: 200px;
-                z-index: 1000;
-                text-align: center;
-            }
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 80px 20px 40px;
+            text-align: center;
+            animation: fadeIn 2s ease;
+        }
 
-            .dropdown-content a {
-                display: block;
-                padding: 10px 15px;
-                color: #fff;
-                text-decoration: none;
-                transition: all 0.3s ease;
-            }
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
 
-            .dropdown-content a:hover {
-                background: transparent;
-                color: #fff;
-                border-left: 2px solid #fff;
-                padding-left: 13px;
-            }
+        header img {
+            max-height: 80px;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+            margin-bottom: 10px;
+        }
 
-            .dropdown:hover .dropdown-content {
-                display: block;
-                animation: fadeIn 0.5s ease-out;
-            }
+        .header-text h1 {
+            font-size: 2.2rem;
+            font-weight: 400;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-            .products-container {
-                display: flex;
-                justify-content: space-around;
-                flex-wrap: wrap;
-                margin: 30px 10px;
-                animation: fadeIn 1.5s ease-out;
-            }
+        .header-text p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
 
-            .product-card {
-                background: rgba(255, 255, 255, 0.05);
-                border-radius: 15px;
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-                width: 280px;
-                margin: 10px;
-                padding: 15px;
-                text-align: center;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                opacity: 0;
-                transform: translateY(20px);
-                animation: popUp 0.7s ease-out forwards;
-            }
+        nav {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
 
-            .product-card:nth-child(1) {
-                animation-delay: 0.2s;
-            }
+        nav a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: 100%;
+            max-width: 280px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+        }
 
-            .product-card:nth-child(2) {
-                animation-delay: 0.4s;
-            }
+        nav a:hover {
+            color: #fff;
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
 
-            .product-card:nth-child(3) {
-                animation-delay: 0.6s;
-            }
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+            flex: 1;
+        }
 
-            .product-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-            }
+        .products-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
 
-            .product-card img {
-                width: 100%;
-                height: auto;
-                border-radius: 15px;
-                margin-bottom: 15px;
-                transition: transform 0.3s ease;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
-            }
+        .product-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 25px;
+            padding: 25px;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.5s ease;
+        }
 
-            .product-card img:hover {
-                transform: scale(1.05);
-            }
+        .product-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-5px);
+        }
 
-            .product-card h3 {
-                font-size: 1.5rem;
-                color: #fff;
-                margin-bottom: 10px;
-            }
+        .product-card img {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            filter: grayscale(0.5);
+            transition: filter 0.5s;
+        }
 
-            .product-card p {
-                font-size: 1.1rem;
-                color: rgba(255, 255, 255, 0.8);
-                margin-bottom: 15px;
-            }
+        .product-card:hover img {
+            filter: grayscale(0);
+        }
 
-            .product-card .price {
-                font-size: 1.2rem;
-                color: rgba(255, 255, 255, 0.9);
-                margin-bottom: 20px;
-            }
+        .product-card h3 {
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 1px;
+        }
 
-            .product-card button {
-                background: transparent;
-                color: #fff;
-                padding: 10px 20px;
-                border: 1px solid #fff;
-                border-radius: 10px;
-                cursor: pointer;
-                transition: all 0.4s ease;
-                font-family: 'Playfair Display', serif;
-            }
+        .product-card button {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            cursor: default;
+        }
 
-            .product-card button:hover {
-                background: #fff;
-                color: #000;
-                transform: scale(1.05);
-            }
+        footer {
+            position: relative;
+            z-index: 10;
+            padding: 60px 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
 
-            footer {
-                background: rgba(0, 0, 0, 0.6);
-                color: #fff;
-                text-align: center;
-                padding: 15px 0;
-                margin-top: 20px;
-                animation: fadeIn 2s ease-out;
-                border-top: 1px solid rgba(255, 255, 255, 0.3);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-            footer a {
-                color: #fff;
-                text-decoration: none;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-                transition: all 0.3s ease;
-            }
+        @media (max-width: 768px) {
+            .header-text h1 { font-size: 1.8rem; }
+            .product-card { max-width: 100%; }
+        }
+    </style>
+</head>
 
-            footer a:hover {
-                color: #fff;
-                border-bottom: 1px solid #fff;
-            }
+<body>
 
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
+<div class="stars"></div>
+<div class="floating-letters"></div>
 
-            @keyframes slideDown {
-                from { transform: translateY(-100%); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
-            }
+<div id="pageLock" class="page-lock">
+    <div class="lock-box">
+        <h2>REN'S ARCHIVE</h2>
+        <input type="password" id="pinInput" placeholder="CÓDIGO REQUERIDO">
+        <button onclick="unlockPage()">Verificar Identidad</button>
+        <div id="errorMsg" class="lock-error">IDENTIDAD NO VERIFICADA</div>
+    </div>
+</div>
 
-            @keyframes popUp {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-
-            /* Tablet */
-            @media (max-width: 768px) {
-                header { padding: 15px; }
-                header h1 { font-size: 2rem; }
-                nav { padding: 8px; }
-                nav a { font-size: 0.9rem; padding: 8px 15px; margin: 5px; }
-                .products-container { margin: 20px 5px; }
-                .product-card { width: 100%; max-width: 280px; }
-            }
-
-            /* Teléfono */
-            @media (max-width: 480px) {
-                body { font-size: 14px; overflow-x: hidden; }
-                header { padding: 12px; }
-                header h1 { font-size: 1.5rem; }
-                header img { position: relative; top: 0; left: 0; width: 50px; }
-                nav { padding: 8px; flex-wrap: wrap; justify-content: center; }
-                nav a { font-size: 0.75rem; padding: 6px 10px; margin: 4px; white-space: nowrap; }
-                .products-container { margin: 15px 5px; }
-                .product-card { width: 100%; max-width: 100%; margin: 10px 0; padding: 12px; }
-                .product-card h3 { font-size: 1.2rem; }
-                .product-card button { padding: 8px 15px; font-size: 0.9rem; }
-            }
-
-            /* Muy pequeño */
-            @media (max-width: 360px) {
-                header h1 { font-size: 1.2rem; }
-                nav a { font-size: 0.7rem; padding: 4px 8px; }
-                .product-card h3 { font-size: 1rem; }
-            }
-</style>
-    </head>
-    <body>
-        <div id="pageLock" class="page-lock">
-            <div class="lock-box">
-                <h2>Contenido protegido</h2>
-                <input type="password" id="pinInput" placeholder="Introduce el PIN">
-                <button onclick="unlockPage()">Acceder</button>
-                <div id="errorMsg" class="lock-error">PIN incorrecto</div>
-            </div>
+<header>
+    <div class="header-content">
+        <img src="https://i.imgur.com/aoMCu2s.png" alt="ren">
+        <div class="header-text">
+            <h1>Archivos</h1>
+            <p>Almacenamiento // Registros Visuales</p>
         </div>
-        <header>
-            <div class="header-content">
-                <img src="https://i.imgur.com/aoMCu2s.png" alt="for you">
-                <div class="header-text">
-                    <h1>Recuerdos</h1>
-                    <h2>Se actualizará con fotos y regalos futuros</h2>
-                    <p>09 / 06 / 2025</p>
-                    <p>— A & N —</p>
+    </div>
+</header>
 
-                </div>
-            </div>
-        </header>
+<nav>
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Línea de Tiempo</a>
+    <a href="recuerdos.html">Archivo de Recuerdos</a>
+</nav>
 
-    <!-- Navigation -->
-    <nav>
-            <a href="index.html">Inicio</a>
-            <a href="historia.html">Nuestra Historia y Explicaciones</a>
-            <a href="recuerdos.html">Recuerdos</a>
-    </nav>
-
-    <!-- Products Section -->
+<div class="container">
     <div class="products-container">
-        
-        <!-- Product 1 -->
         <div class="product-card">
-
             <img src="https://i.imgur.com/VzxoAj4.jpeg" alt="Nuestra Primera Foto">
-            <img src="" alt="">
             <h3>Nuestra Primera Foto</h3>
             <button>09/09/25</button>
         </div>
     </div>
+</div>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Ren's Archive - Todos los derechos reservados</p>
-        <p><a href="" target="_blank">Política de privacidad y protección de datos</a></p>
-    </footer>
+<footer>
+    <p>// REN'S ARCHIVE 2025-2026 // NÚCLEO DE MEDIOS // ALMACENAMIENTO CIFRADO //</p>
+</footer>
 
-<script src="Scripts/lock.js"></script>
+    <!-- 🔒 SCRIPT AGREGADO (TU CÓDIGO, INTACTO) -->
+    <script>
+    const PIN_CORRECTO = "0906";
+
+    function actualizarUltimaActividad() {
+        localStorage.setItem('lastActivity', Date.now());
+    }
+
+    function verificarBloqueo() {
+        document.body.classList.add("locked");
+        const pageLock = document.getElementById("pageLock");
+        if (pageLock) {
+            pageLock.style.display = "flex";
+        }
+    }
+
+    function showWelcomeAnimation() {
+        const pageLock = document.getElementById("pageLock");
+        if (!pageLock) return;
+
+        const lockBox = pageLock.querySelector('.lock-box');
+
+        lockBox.innerHTML = `
+            <h1 id="welcomeText" style="
+                font-size: 2.5rem;
+                background: linear-gradient(to bottom, #fff, #888);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 1.5s ease;
+                letter-spacing: 2px;
+            ">
+                Bienvenida Nohelia ❤️
+            </h1>
+        `;
+
+        setTimeout(() => {
+            const text = document.getElementById('welcomeText');
+            text.style.opacity = '1';
+            text.style.transform = 'translateY(0)';
+        }, 100);
+
+        setTimeout(() => {
+            pageLock.style.transition = 'opacity 1s ease';
+            pageLock.style.opacity = '0';
+            setTimeout(() => {
+                pageLock.style.display = 'none';
+                document.body.classList.remove("locked");
+                actualizarUltimaActividad();
+            }, 1000);
+        }, 2500);
+    }
+
+    function unlockPage() {
+        const input = document.getElementById("pinInput").value;
+        const error = document.getElementById("errorMsg");
+
+        if (input === PIN_CORRECTO) {
+            sessionStorage.setItem('authenticated', 'true');
+
+            const isIndex =
+                window.location.pathname.endsWith('index.html') ||
+                window.location.pathname === '/' ||
+                window.location.pathname.endsWith('/');
+
+            if (isIndex) {
+                showWelcomeAnimation();
+            } else {
+                const pageLock = document.getElementById("pageLock");
+                if (pageLock) pageLock.style.display = "none";
+                document.body.classList.remove("locked");
+                actualizarUltimaActividad();
+            }
+        } else {
+            if (error) error.style.display = "block";
+        }
+    }
+
+    verificarBloqueo();
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const isHistory = window.location.pathname.endsWith('recuerdos.html');
+        const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
+
+        if (isHistory || !isAuthenticated) {
+            verificarBloqueo();
+        } else {
+            const pageLock = document.getElementById("pageLock");
+            if (pageLock) pageLock.style.display = "none";
+            document.body.classList.remove("locked");
+        }
+    });
+    </script>
 </body>
 </html>
