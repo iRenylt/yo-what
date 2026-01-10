@@ -1,29 +1,58 @@
-
 const PIN_CORRECTO = "0906";
-const TIEMPO_BLOQUEO = 7 * 60 * 1000; // 7 minutos en ms
 
 function actualizarUltimaActividad() {
     localStorage.setItem('lastActivity', Date.now());
 }
 
 function verificarBloqueo() {
-    const lastActivity = localStorage.getItem('lastActivity');
-    const ahora = Date.now();
-    const esIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
-    
-    // Si es index, siempre bloquear al cargar
-    // De lo contrario, verificar tiempo de inactividad
-    if (esIndex || !lastActivity || (ahora - lastActivity > TIEMPO_BLOQUEO)) {
-        document.body.classList.add("locked");
-        if (document.getElementById("pageLock")) {
-            document.getElementById("pageLock").style.display = "flex";
-        }
-    } else {
-        document.body.classList.remove("locked");
-        if (document.getElementById("pageLock")) {
-            document.getElementById("pageLock").style.display = "none";
-        }
+    // Forzamos el bloqueo visual total de inmediato
+    document.body.classList.add("locked");
+    const pageLock = document.getElementById("pageLock");
+    if (pageLock) {
+        pageLock.style.display = "flex";
     }
+}
+
+function showWelcomeAnimation() {
+    const pageLock = document.getElementById("pageLock");
+    if (!pageLock) return;
+
+    // Limpiar el cuadro de bloqueo para la animación
+    const lockBox = pageLock.querySelector('.lock-box');
+
+    lockBox.innerHTML = `
+        <h1 id="welcomeText" style="
+            font-size: 2.5rem;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1.5s ease;
+            letter-spacing: 2px;
+        ">
+            Bienvenida Nohelia ❤️
+        </h1>
+    `;
+
+
+    // Activar animación
+    setTimeout(() => {
+        const text = document.getElementById('welcomeText');
+        text.style.opacity = '1';
+        text.style.transform = 'translateY(0)';
+    }, 100);
+
+    // Desvanecer todo el overlay y mostrar contenido
+    setTimeout(() => {
+        pageLock.style.transition = 'opacity 1s ease';
+        pageLock.style.opacity = '0';
+        setTimeout(() => {
+            pageLock.style.display = 'none';
+            document.body.classList.remove("locked");
+            actualizarUltimaActividad();
+        }, 1000);
+    }, 2500);
 }
 
 function unlockPage() {
@@ -31,20 +60,38 @@ function unlockPage() {
     const error = document.getElementById("errorMsg");
 
     if (input === PIN_CORRECTO) {
-        document.getElementById("pageLock").style.display = "none";
-        document.body.classList.remove("locked");
-        actualizarUltimaActividad();
+        // Guardamos en sessionStorage que el PIN ha sido validado para esta pestaña/sesión
+        sessionStorage.setItem('authenticated', 'true');
+        
+        const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+        if (isIndex) {
+            showWelcomeAnimation();
+        } else {
+            const pageLock = document.getElementById("pageLock");
+            if (pageLock) pageLock.style.display = "none";
+            document.body.classList.remove("locked");
+            actualizarUltimaActividad();
+        }
     } else {
-        error.style.display = "block";
+        if (error) error.style.display = "block";
     }
 }
 
-// Escuchar eventos para mantener la sesión activa mientras navega
-window.addEventListener('mousedown', actualizarUltimaActividad);
-window.addEventListener('keypress', actualizarUltimaActividad);
-window.addEventListener('touchstart', actualizarUltimaActividad);
-window.addEventListener('scroll', actualizarUltimaActividad);
-
-// Verificar al cargar la página
+// Bloqueo inmediato preventivo
 verificarBloqueo();
-actualizarUltimaActividad();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const isHistory = window.location.pathname.endsWith('historia.html');
+    const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
+
+    // Si es historia.html, SIEMPRE pedimos el PIN (ignoramos autenticación previa)
+    // Si es otra página, solo pedimos PIN si no se ha autenticado en esta sesión
+    if (isHistory || !isAuthenticated) {
+        verificarBloqueo();
+    } else {
+        // Ya está autenticado y no es historia.html, desbloqueamos directamente
+        const pageLock = document.getElementById("pageLock");
+        if (pageLock) pageLock.style.display = "none";
+        document.body.classList.remove("locked");
+    }
+});
