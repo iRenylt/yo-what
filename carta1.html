@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Footage Archive</title>
+  <title>Ren's Archive // Registro de Cartas</title>
   <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -157,51 +157,60 @@
       transform: scale(1.05);
     }
 
-    body.locked > *:not(.page-lock) {
+    body.locked {
+        overflow: hidden !important;
+        height: 100vh !important;
+    }
+
+    body.locked > *:not(.page-lock):not(.stars) {
         display: none !important;
     }
 
     .page-lock {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.95);
-        backdrop-filter: blur(15px);
+        background: #000;
         z-index: 99999;
-        display: none;
+        display: flex;
         align-items: center;
         justify-content: center;
     }
 
     .lock-box {
         text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        padding: 30px 40px;
-        border-radius: 18px;
-        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 40px;
+        border-radius: 20px;
+        background: rgba(10, 10, 15, 0.8);
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
         color: #fff;
     }
 
-    .lock-box h2 { font-weight: 400; margin-bottom: 15px; }
+    .lock-box h2 { font-weight: 400; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
     .lock-box input {
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         color: #fff;
-        padding: 10px 15px;
+        padding: 12px;
         border-radius: 10px;
         outline: none;
         text-align: center;
-        font-size: 1rem;
-        margin-bottom: 15px;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
         width: 100%;
     }
     .lock-box button {
         background: transparent;
         border: 1px solid #fff;
         color: #fff;
-        padding: 8px 20px;
-        border-radius: 12px;
+        padding: 10px 30px;
+        border-radius: 30px;
         cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s;
     }
+    .lock-box button:hover { background: #fff; color: #000; }
     .lock-error { margin-top: 10px; font-size: 0.85rem; color: #ff6b6b; display: none; }
 
     /* Carta Modal */
@@ -310,10 +319,10 @@
 
 <div id="pageLock" class="page-lock">
     <div class="lock-box">
-        <h2>Contenido protegido</h2>
-        <input type="password" id="pinInput" placeholder="Introduce el PIN">
-        <button onclick="unlockPage()">Acceder</button>
-        <div id="errorMsg" class="lock-error">PIN incorrecto</div>
+        <h2>REN'S ARCHIVE</h2>
+        <input type="password" id="pinInput" placeholder="CÓDIGO REQUERIDO">
+        <button onclick="unlockPage()">Verificar Identidad</button>
+        <div id="errorMsg" class="lock-error">IDENTIDAD NO VERIFICADA</div>
     </div>
 </div>
   <div class="stars"></div>
@@ -324,8 +333,8 @@
 
   <nav>
     <a href="index.html">Inicio</a>
-    <a href="historia.html">Historia</a>
-    <a href="recuerdos.html">Recuerdos</a>
+    <a href="historia.html">Línea de Tiempo</a>
+    <a href="recuerdos.html">Archivo de Recuerdos</a>
   </nav>
 
   <div class="container">
@@ -340,7 +349,7 @@
     </div>
 
     <div class="side">
-      <p>09 / 06 / 2025</p>
+      <p>09 / 01 / 2026</p>
       <p>— A & N —</p>
 
       <!-- 📦 CONTENEDOR MULTIMEDIA -->
@@ -498,6 +507,99 @@
 
     loadComments();
   </script>
-<script src="Scripts/lock.js"></script>
+  <!-- 🔒 SCRIPT AGREGADO (TU CÓDIGO, INTACTO) -->
+  <script>
+  const PIN_CORRECTO = "0906";
+
+  function actualizarUltimaActividad() {
+      localStorage.setItem('lastActivity', Date.now());
+  }
+
+  function verificarBloqueo() {
+      document.body.classList.add("locked");
+      const pageLock = document.getElementById("pageLock");
+      if (pageLock) {
+          pageLock.style.display = "flex";
+      }
+  }
+
+  function showWelcomeAnimation() {
+      const pageLock = document.getElementById("pageLock");
+      if (!pageLock) return;
+
+      const lockBox = pageLock.querySelector('.lock-box');
+
+      lockBox.innerHTML = `
+          <h1 id="welcomeText" style="
+              font-size: 2.5rem;
+              background: linear-gradient(to bottom, #fff, #888);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              opacity: 0;
+              transform: translateY(20px);
+              transition: all 1.5s ease;
+              letter-spacing: 2px;
+          ">
+              Bienvenida Nohelia ❤️
+          </h1>
+      `;
+
+      setTimeout(() => {
+          const text = document.getElementById('welcomeText');
+          text.style.opacity = '1';
+          text.style.transform = 'translateY(0)';
+      }, 100);
+
+      setTimeout(() => {
+          pageLock.style.transition = 'opacity 1s ease';
+          pageLock.style.opacity = '0';
+          setTimeout(() => {
+              pageLock.style.display = 'none';
+              document.body.classList.remove("locked");
+              actualizarUltimaActividad();
+          }, 1000);
+      }, 2500);
+  }
+
+  function unlockPage() {
+      const input = document.getElementById("pinInput").value;
+      const error = document.getElementById("errorMsg");
+
+      if (input === PIN_CORRECTO) {
+          sessionStorage.setItem('authenticated', 'true');
+
+          const isIndex =
+              window.location.pathname.endsWith('index.html') ||
+              window.location.pathname === '/' ||
+              window.location.pathname.endsWith('/');
+
+          if (isIndex) {
+              showWelcomeAnimation();
+          } else {
+              const pageLock = document.getElementById("pageLock");
+              if (pageLock) pageLock.style.display = "none";
+              document.body.classList.remove("locked");
+              actualizarUltimaActividad();
+          }
+      } else {
+          if (error) error.style.display = "block";
+      }
+  }
+
+  verificarBloqueo();
+
+  document.addEventListener('DOMContentLoaded', () => {
+      const isHistory = window.location.pathname.endsWith('carta1.html');
+      const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
+
+      if (isHistory || !isAuthenticated) {
+          verificarBloqueo();
+      } else {
+          const pageLock = document.getElementById("pageLock");
+          if (pageLock) pageLock.style.display = "none";
+          document.body.classList.remove("locked");
+      }
+  });
+  </script>
 </body>
 </html>
