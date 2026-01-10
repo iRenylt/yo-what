@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Footage Archive</title>
+    <title>Ren's Archive // Inicio</title>
     <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -15,291 +15,362 @@
             color: #fff;
             font-family: 'Playfair Display', serif;
             min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 🌌 Estrellas y Efecto Blade Runner */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+            animation: starsMove 200s linear infinite;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        @keyframes starsMove {
+            from {background-position: 0 0;}
+            to {background-position: -2000px 2000px;}
+        }
+
+        /* 🎶 Letras flotantes */
+        .floating-letters {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.05);
+            z-index: 0;
+            pointer-events: none;
+            white-space: nowrap;
+            animation: fadeLetters 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes fadeLetters {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
         /* 🔒 BLOQUEO */
-        body.locked > *:not(.page-lock) {
+        body.locked {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+
+        body.locked > *:not(.page-lock):not(.stars):not(.floating-letters) {
             display: none !important;
         }
 
         .page-lock {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(15px);
+            background: #000;
             z-index: 99999;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .lock-box {
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 30px 40px;
-            border-radius: 18px;
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(10, 10, 15, 0.8);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
         }
 
-        .lock-box h2 { font-weight: 400; margin-bottom: 15px; }
+        .lock-box h2 { font-weight: 400; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
         .lock-box input {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff;
-            padding: 10px 15px;
+            padding: 12px;
             border-radius: 10px;
             outline: none;
             text-align: center;
-            font-size: 1rem;
-            margin-bottom: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
             width: 100%;
+            transition: border 0.3s;
         }
+        .lock-box input:focus { border-color: rgba(255, 255, 255, 0.5); }
         .lock-box button {
             background: transparent;
             border: 1px solid #fff;
             color: #fff;
-            padding: 8px 20px;
-            border-radius: 12px;
+            padding: 10px 30px;
+            border-radius: 30px;
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
         }
-        .lock-error { margin-top: 10px; font-size: 0.85rem; color: #ff6b6b; display: none; }
+        .lock-box button:hover { background: #fff; color: #000; }
 
         header {
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            position: relative;
+            z-index: 10;
+            padding: 80px 20px 40px;
             text-align: center;
-            animation: fadeIn 1.5s ease-in-out;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeIn 2s ease;
         }
 
         .header-content {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 15px;
-            flex-direction: row;
-            margin: auto;
+            gap: 20px;
         }
 
         header img {
-            max-height: 75px;
-            transform: scale(1);
-            transition: transform 0.3s ease;
-            filter: brightness(1.2);
+            max-height: 100px;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 10px;
         }
 
-        header img:hover {
-            transform: scale(1.1);
-        }
+        header img:hover { transform: scale(1.1) rotate(5deg); }
 
         .header-text h1 {
-            font-size: 1.8rem;
-            margin: 0;
-            color: #fff;
+            font-size: 2.8rem;
+            font-weight: 400;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .header-text p {
-            margin: 0;
             font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 5px;
+            text-transform: uppercase;
         }
 
         nav {
-            background: rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            gap: 10px;
+            gap: 12px;
+            padding: 20px;
+            margin-bottom: 40px;
         }
 
         nav a {
-            color: #fff;
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            font-size: 1rem;
-            width: 80%;
-            max-width: 300px;
-            padding: 10px;
+            font-size: 0.85rem;
+            padding: 12px 30px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: 100%;
+            max-width: 320px;
             text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            white-space: normal;
+            background: rgba(255, 255, 255, 0.02);
         }
 
         nav a:hover {
-            background: rgba(255, 255, 255, 0.1);
             color: #fff;
-            border: 1px solid #fff;
-            transform: scale(1.02);
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            transform: translateY(-2px);
         }
 
         .dropdown {
-            width: 80%;
-            max-width: 300px;
-            position: relative;
-        }
-
-        .dropdown > a {
             width: 100%;
-            margin: 0;
+            max-width: 320px;
+            position: relative;
         }
 
         .dropdown-content {
             display: none;
             position: relative;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 5px 0;
-            margin-top: 5px;
-            border-radius: 10px;
-            z-index: 1000;
+            background: rgba(10, 10, 15, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 10px 0;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 10px;
             width: 100%;
-            left: 0;
-            transform: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-direction: column;
+            gap: 5px;
         }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-content a {
-            width: 90%;
-            margin: 5px auto;
-            font-size: 0.9rem;
-            border: none;
+        .dropdown:hover .dropdown-content { display: flex; }
+        
+        .dropdown-content a { 
+            width: 90%; 
+            margin: 0 auto; 
+            border: none; 
+            font-size: 0.8rem; 
+            padding: 10px;
             background: transparent;
         }
-
+        
         .dropdown-content a:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: none;
+            transform: none;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 20px auto;
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+            margin: 0 auto 60px;
             padding: 0 20px;
-            animation: fadeIn 1.5s ease-in-out;
+            flex: 1;
         }
 
-        .info-section {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 20px;
+        .update-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 50px 40px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.6s ease;
         }
 
-        .info-section img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+        .update-card:hover { 
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .update-card img {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            filter: grayscale(0.8) contrast(1.1);
+            transition: all 0.8s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .update-card:hover img { 
+            filter: grayscale(0) contrast(1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .update-card h2 {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .update-card p {
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.1rem;
+            font-style: italic;
         }
 
         footer {
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
+            position: relative;
+            z-index: 10;
+            padding: 60px 20px;
             text-align: center;
-            padding: 15px 0;
-            margin-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-            header { flex-direction: column; gap: 10px; }
-            .header-content { flex-direction: column; }
-            nav { padding: 20px 10px; }
-            nav a { font-size: 0.95rem; width: 90%; }
-            .dropdown { width: 90%; }
-            .info-section { flex-direction: column; }
-            .lock-box { width: 90%; }
+            header { padding: 60px 20px 30px; }
+            .header-text h1 { font-size: 2.2rem; }
+            nav { gap: 10px; }
+            nav a { font-size: 0.8rem; padding: 12px 20px; }
+            .update-card { padding: 40px 25px; }
+            .update-card p { font-size: 1rem; }
         }
     </style>
 </head>
 
 <body>
 
+<div class="stars"></div>
+<div class="floating-letters"></div>
+
 <div id="pageLock" class="page-lock">
     <div class="lock-box">
-        <h2>Contenido protegido</h2>
-        <input type="password" id="pinInput" placeholder="Introduce el PIN">
-        <button onclick="unlockPage()">Acceder</button>
-        <div id="errorMsg" class="lock-error">PIN incorrecto</div>
+        <h2>REN'S ARCHIVE</h2>
+        <input type="password" id="pinInput" placeholder="CÓDIGO REQUERIDO">
+        <button onclick="unlockPage()">Verificar Identidad</button>
+        <div id="errorMsg" class="lock-error">IDENTIDAD NO VERIFICADA</div>
     </div>
 </div>
 
 <header>
     <div class="header-content">
-        <img src="https://i.imgur.com/aoMCu2s.png" alt="for you">
+        <img src="https://i.imgur.com/aoMCu2s.png" alt="ren">
         <div class="header-text">
-            <h1 id="greeting">Hey, bienvenida de vuelta ❤️</h1>
-            <p>09 / 06 / 2025</p>
-            <p>— A & N —</p>
+            <h1 id="greeting">Bienvenida ❤️</h1>
+            <p>EST. 09 / 06 / 2025 // A & N</p>
         </div>
     </div>
 </header>
 
 <nav>
     <a href="index.html">Inicio</a>
-    <a href="historia.html">Nuestra Historia y Explicaciones</a>
-    <a href="recuerdos.html">Recuerdos</a>
+    <a href="historia.html">Línea de Tiempo</a>
+    <a href="recuerdos.html">Archivo de Recuerdos</a>
     <div class="dropdown">
-        <a href="#">Cartas Especiales</a>
+        <a href="#">Registro de Cartas</a>
         <div class="dropdown-content">
-            <a href="carta1.html">09/11/25</a>
-            <a href="carta7.html" data-locked="false" data-date="09/01/2026">09/01/26</a>
-            <a href="carta3.html" data-locked="true" data-date="09/02/2026">09/02/26</a>
+            <a href="carta1.html">09/10/25</a>
+            <a href="carta7.html">09/01/26</a>
         </div>
     </div>
 </nav>
 
 <div class="container">
-    <div class="info-section">
-        <img src="https://i.imgur.com/qCyAZWD.jpeg" alt="for you">
-        <div class="info-text">
-            <p>Gracias de verdad por el Me 262. Me sorprendió mucho y me gustó un montón, no solo porque está súper bien hecho, sino por el tiempo, la paciencia y el cariño que pusiste en hacerlo para mí. Se nota que lo pensaste, y eso significa mucho para mí. Lo voy a guardar con mucho cuidado y cariño. Gracias por ese detalle tan lindo.</p>
-        </div>
+    <div class="update-card">
+        <img src="https://i.imgur.com/qCyAZWD.jpeg" alt="update">
+        <h2>Última transmisión: 09/01/2026</h2>
+        <p>"Gracias de verdad por el Me 262. Me sorprendió mucho y me gustó un montón, no solo porque está súper bien hecho, sino por el tiempo, la paciencia y el cariño que pusiste en hacerlo para mí. Se nota que lo pensaste, y eso significa mucho para mí. Lo voy a guardar con mucho cuidado y cariño. Gracias por ese detalle tan lindo."</p>
     </div>
 </div>
 
 <footer>
-    <p>&copy; 2025 Ren's Archive - Todos los derechos reservados</p>
+    <p>// REN'S ARCHIVE 2025-2026 // NIVEL DE SEGURIDAD 4 // TODOS LOS DERECHOS RESERVADOS //</p>
 </footer>
 
 <script src="lock.js"></script>
 <script>
+    // Mobile dropdown toggle
     document.querySelectorAll('.dropdown > a').forEach(link => {
         link.addEventListener('click', e => {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
-                link.parentElement.classList.toggle('active');
+                const content = link.nextElementSibling;
+                content.style.display = content.style.display === 'flex' ? 'none' : 'flex';
             }
         });
     });
 
-    document.querySelectorAll('a[data-locked="true"]').forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            const fecha = link.getAttribute('data-date');
-            alert(`🔒 Esta carta aún no está desbloqueada.\n\nSe desbloqueará el ${fecha} ❤️`);
-        });
-    });
-
+    // Dyn greeting
     function updateGreeting() {
         const greetingElement = document.getElementById('greeting');
         const hour = new Date().getHours();
@@ -313,22 +384,10 @@
             greeting = "Buenas noches";
         }
 
-        greetingElement.textContent = `${greeting}, bienvenida de vuelta ❤️`;
+        greetingElement.textContent = `${greeting}, bienvenida ❤️`;
     }
 
     updateGreeting();
-</script>
-
-<!-- 🔒 BLOQUEO FORZADO PARA / y /index.html -->
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const path = window.location.pathname;
-
-        if (path.endsWith("/") || path.endsWith("/index.html")) {
-            document.body.classList.add("locked");
-            document.getElementById("pageLock").style.display = "flex";
-        }
-    });
 </script>
 
 </body>
