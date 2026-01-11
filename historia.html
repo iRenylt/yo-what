@@ -98,7 +98,9 @@
             font-size: 1.1rem;
             margin-bottom: 20px;
             width: 100%;
+            transition: border 0.3s;
         }
+        .lock-box input:focus { border-color: rgba(255, 255, 255, 0.5); }
         .lock-box button {
             background: transparent;
             border: 1px solid #fff;
@@ -111,6 +113,7 @@
             transition: all 0.3s;
         }
         .lock-box button:hover { background: #fff; color: #000; }
+        .lock-error { margin-top: 10px; font-size: 0.85rem; color: #ff6b6b; display: none; }
 
         header {
             position: relative;
@@ -128,13 +131,16 @@
         }
 
         header img {
-            max-height: 80px;
+            max-height: 100px;
             filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin-bottom: 10px;
         }
 
+        header img:hover { transform: scale(1.1) rotate(5deg); }
+
         .header-text h1 {
-            font-size: 2.2rem;
+            font-size: 2.8rem;
             font-weight: 400;
             letter-spacing: -1px;
             margin-bottom: 10px;
@@ -144,9 +150,9 @@
         }
 
         .header-text p {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             text-transform: uppercase;
         }
 
@@ -156,7 +162,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             padding: 20px;
             margin-bottom: 40px;
         }
@@ -164,15 +170,15 @@
         nav a {
             color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            font-size: 0.8rem;
-            padding: 10px 25px;
-            border-radius: 25px;
+            font-size: 0.85rem;
+            padding: 12px 30px;
+            border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.4s;
             text-transform: uppercase;
             letter-spacing: 2px;
             width: 100%;
-            max-width: 280px;
+            max-width: 320px;
             text-align: center;
             background: rgba(255, 255, 255, 0.02);
         }
@@ -181,48 +187,119 @@
             color: #fff;
             border-color: #fff;
             background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .dropdown {
+            width: 100%;
+            max-width: 320px;
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: relative;
+            background: rgba(10, 10, 15, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 10px 0;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 10px;
+            width: 100%;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .dropdown:hover .dropdown-content { display: flex; }
+        
+        .dropdown-content a { 
+            width: 90%; 
+            margin: 0 auto; 
+            border: none; 
+            font-size: 0.8rem; 
+            padding: 10px;
+            background: transparent;
+        }
+        
+        .dropdown-content a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: none;
+            transform: none;
         }
 
         .container {
             position: relative;
             z-index: 10;
-            max-width: 800px;
+            max-width: 700px;
             margin: 0 auto 60px;
             padding: 0 20px;
             flex: 1;
         }
 
+        /* 💬 Estilo Comentarios/Input adaptado */
+        #mensaje {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        #enviar {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 10px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        #enviar:hover {
+            background: #fff;
+            color: #000;
+        }
+
         .history-section {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 25px;
-            padding: 40px;
-            margin-bottom: 30px;
+            border-radius: 30px;
+            padding: 50px 40px;
             backdrop-filter: blur(10px);
-            transition: all 0.4s ease;
+            text-align: center;
+            transition: all 0.6s ease;
+            margin-bottom: 35px;
         }
 
-        .history-section:hover {
+        .history-section:hover { 
             border-color: rgba(255, 255, 255, 0.2);
             background: rgba(255, 255, 255, 0.04);
         }
 
         .history-section h2 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 400;
-            margin-bottom: 20px;
-            color: rgba(255, 255, 255, 0.5);
-            letter-spacing: 3px;
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 4px;
             text-transform: uppercase;
-            border-left: 2px solid #fff;
-            padding-left: 15px;
         }
 
         .history-section p {
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.05rem;
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.1rem;
+            font-style: italic;
         }
 
         footer {
@@ -236,26 +313,17 @@
             text-transform: uppercase;
         }
 
-        footer a {
-            color: inherit;
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: all 0.3s;
-        }
-
-        footer a:hover {
-            color: #fff;
-            border-bottom-color: #fff;
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-            .header-text h1 { font-size: 1.8rem; }
-            .history-section { padding: 30px 20px; }
+            header { padding: 60px 20px 30px; }
+            .header-text h1 { font-size: 2.2rem; }
+            nav { gap: 10px; }
+            nav a { font-size: 0.8rem; padding: 12px 20px; }
+            .history-section { padding: 40px 25px; }
             .history-section p { font-size: 1rem; }
         }
     </style>
@@ -266,21 +334,20 @@
 <div class="stars"></div>
 <div class="floating-letters"></div>
 
-<div id="pageLock" class="page-lock">
-    <div class="lock-box">
-        <h2>REN'S ARCHIVE</h2>
-        <input type="password" id="pinInput" placeholder="CÓDIGO REQUERIDO">
-        <button onclick="unlockPage()">Verificar Identidad</button>
-        <div id="errorMsg" class="lock-error">IDENTIDAD NO VERIFICADA</div>
+    <div id="pageLock" class="page-lock">
+        <div class="lock-box">
+            <h2>REN'S ARCHIVE</h2>
+            <input type="password" id="pinInput" placeholder="CÓDIGO REQUERIDO">
+            <button onclick="unlockPage()">Verificar Identidad</button>
+            <div id="errorMsg" class="lock-error" style="display:none; margin-top: 10px; font-size: 0.85rem; color: #ff6b6b;">IDENTIDAD NO VERIFICADA</div>
+        </div>
     </div>
-</div>
-
 <header>
     <div class="header-content">
         <img src="https://i.imgur.com/aoMCu2s.png" alt="ren">
         <div class="header-text">
             <h1>Nuestra Cronología</h1>
-            <p>Registro de datos // Historia</p>
+            <p>Registro de Datos // Historia</p>
         </div>
     </div>
 </header>
@@ -289,9 +356,17 @@
     <a href="index.html">Inicio</a>
     <a href="historia.html">Línea de Tiempo</a>
     <a href="recuerdos.html">Archivo de Recuerdos</a>
+    
+    </div>
 </nav>
 
-<div class="container">
+<div class="container" style="display: flex; flex-direction: column; align-items: center;">
+
+    <!-- 💬 COMENTARIOS (Contenido previo mantenido) -->
+    <textarea id="mensaje" placeholder="Escribe aquí tus comentarios o mensajes para mí..."></textarea>
+    <button id="enviar">Enviar</button>
+
+    <!-- Secciones de Historia (Contenido previo mantenido) -->
     <section class="history-section">
         <h2>La Primera Luz del Día [El comienzo I]</h2>
         <p>No sé exactamente en qué momento empezó lo nuestro. No hubo una fecha clara ni una escena de película. Solo sé que desde el inicio hubo algo distinto contigo. Una vibra que se sentía cómoda, natural, sin esfuerzo. Al principio eran conversaciones normales… hasta que dejaron de serlo. Algo en ti hacía que quisiera quedarme un poco más, hablar un poco más, escuchar un poco más.</p>
@@ -306,7 +381,7 @@
         <h2>La conexión [Dualidad III]</h2>
         <p>Hubo un punto en el que ya no era solo química, era conexión. Nos entendíamos en detalles pequeños, en silencios, en miradas. No era intensidad vacía, era cercanía real. Empezamos a cuidarnos emocionalmente, a estar presentes, a demostrarnos que importábamos. Ahí entendí que lo nuestro no era algo ligero.</p>
     </section>
-
+    
     <section class="history-section">
         <h2>El momento en que se volvió real [Mi felicidad IV]</h2>
         <p>Desde el 9 de junio, todo cambió. No porque fuera mágico, sino porque fue consciente. Decidimos tomarnos en serio, elegirnos con intención. Ya no era solo sentir, era construir. Con errores, con aprendizaje, pero con compromiso. Ese día marcó el inicio de algo más profundo y más verdadero.</p>
@@ -354,102 +429,22 @@
 </div>
 
 <footer>
-    <p>// REN'S ARCHIVE 2025-2026 // PROTOCOLO DE SEGURIDAD // <a href="#">POLÍTICA DE PRIVACIDAD</a> //</p>
+    <p>// REN'S ARCHIVE 2025-2026 // NIVEL DE SEGURIDAD 4 // TODOS LOS DERECHOS RESERVADOS //</p>
 </footer>
 
-    <!-- 🔒 SCRIPT AGREGADO (TU CÓDIGO, INTACTO) -->
-    <script>
-    const PIN_CORRECTO = "0906";
-
-    function actualizarUltimaActividad() {
-        localStorage.setItem('lastActivity', Date.now());
-    }
-
-    function verificarBloqueo() {
-        document.body.classList.add("locked");
-        const pageLock = document.getElementById("pageLock");
-        if (pageLock) {
-            pageLock.style.display = "flex";
-        }
-    }
-
-    function showWelcomeAnimation() {
-        const pageLock = document.getElementById("pageLock");
-        if (!pageLock) return;
-
-        const lockBox = pageLock.querySelector('.lock-box');
-
-        lockBox.innerHTML = `
-            <h1 id="welcomeText" style="
-                font-size: 2.5rem;
-                background: linear-gradient(to bottom, #fff, #888);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                opacity: 0;
-                transform: translateY(20px);
-                transition: all 1.5s ease;
-                letter-spacing: 2px;
-            ">
-                Bienvenida Nohelia ❤️
-            </h1>
-        `;
-
-        setTimeout(() => {
-            const text = document.getElementById('welcomeText');
-            text.style.opacity = '1';
-            text.style.transform = 'translateY(0)';
-        }, 100);
-
-        setTimeout(() => {
-            pageLock.style.transition = 'opacity 1s ease';
-            pageLock.style.opacity = '0';
-            setTimeout(() => {
-                pageLock.style.display = 'none';
-                document.body.classList.remove("locked");
-                actualizarUltimaActividad();
-            }, 1000);
-        }, 2500);
-    }
-
-    function unlockPage() {
-        const input = document.getElementById("pinInput").value;
-        const error = document.getElementById("errorMsg");
-
-        if (input === PIN_CORRECTO) {
-            sessionStorage.setItem('authenticated', 'true');
-
-            const isIndex =
-                window.location.pathname.endsWith('index.html') ||
-                window.location.pathname === '/' ||
-                window.location.pathname.endsWith('/');
-
-            if (isIndex) {
-                showWelcomeAnimation();
-            } else {
-                const pageLock = document.getElementById("pageLock");
-                if (pageLock) pageLock.style.display = "none";
-                document.body.classList.remove("locked");
-                actualizarUltimaActividad();
+<script src="lock.js"></script>
+<script>
+    // Mobile dropdown toggle
+    document.querySelectorAll('.dropdown > a').forEach(link => {
+        link.addEventListener('click', e => {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const content = link.nextElementSibling;
+                content.style.display = content.style.display === 'flex' ? 'none' : 'flex';
             }
-        } else {
-            if (error) error.style.display = "block";
-        }
-    }
-
-    verificarBloqueo();
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const isHistory = window.location.pathname.endsWith('historia.html');
-        const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
-
-        if (isHistory || !isAuthenticated) {
-            verificarBloqueo();
-        } else {
-            const pageLock = document.getElementById("pageLock");
-            if (pageLock) pageLock.style.display = "none";
-            document.body.classList.remove("locked");
-        }
+        });
     });
-    </script>
+</script>
+
 </body>
 </html>
