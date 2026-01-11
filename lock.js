@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function enviarComentario() {
         const mensaje = textarea.value.trim();
         if (!mensaje) {
-            alert("Escribe algo primero sss");
+            alert("Escribe algo primero por favor");
             return;
         }
 
@@ -124,13 +124,13 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({ mensaje })
         })
         .then(res => {
-            if (!res.ok) throw new Error("Error al guardar lol");
+            if (!res.ok) throw new Error("Error al guardar");
             textarea.value = "";
-            alert("Guardado 💙");
+            alert("Enviado ❤️");
         })
         .catch(err => {
             console.error(err);
-            alert("Error al guardar lol");
+            alert("Error al guardar");
         });
     }
 
