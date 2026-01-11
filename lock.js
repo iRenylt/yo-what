@@ -1,11 +1,14 @@
 const PIN_CORRECTO = "0906";
 
+/* ============================= */
+/* 🔒 BLOQUEO Y AUTENTICACIÓN */
+/* ============================= */
+
 function actualizarUltimaActividad() {
     localStorage.setItem('lastActivity', Date.now());
 }
 
 function verificarBloqueo() {
-    // Forzamos el bloqueo visual total de inmediato
     document.body.classList.add("locked");
     const pageLock = document.getElementById("pageLock");
     if (pageLock) {
@@ -17,7 +20,6 @@ function showWelcomeAnimation() {
     const pageLock = document.getElementById("pageLock");
     if (!pageLock) return;
 
-    // Limpiar el cuadro de bloqueo para la animación
     const lockBox = pageLock.querySelector('.lock-box');
 
     lockBox.innerHTML = `
@@ -35,15 +37,14 @@ function showWelcomeAnimation() {
         </h1>
     `;
 
-
-    // Activar animación
     setTimeout(() => {
         const text = document.getElementById('welcomeText');
-        text.style.opacity = '1';
-        text.style.transform = 'translateY(0)';
+        if (text) {
+            text.style.opacity = '1';
+            text.style.transform = 'translateY(0)';
+        }
     }, 100);
 
-    // Desvanecer todo el overlay y mostrar contenido
     setTimeout(() => {
         pageLock.style.transition = 'opacity 1s ease';
         pageLock.style.opacity = '0';
@@ -60,10 +61,13 @@ function unlockPage() {
     const error = document.getElementById("errorMsg");
 
     if (input === PIN_CORRECTO) {
-        // Guardamos en sessionStorage que el PIN ha sido validado para esta pestaña/sesión
-        sessionStorage.setItem('authenticated', 'true');
+        // No guardamos estado de autenticación persistente para que siempre pida PIN al recargar
         
-        const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+        const isIndex =
+            window.location.pathname.endsWith('index.html') ||
+            window.location.pathname === '/' ||
+            window.location.pathname.endsWith('/');
+
         if (isIndex) {
             showWelcomeAnimation();
         } else {
@@ -77,21 +81,58 @@ function unlockPage() {
     }
 }
 
-// Bloqueo inmediato preventivo
-verificarBloqueo();
+/* ============================= */
+/* 🚫 BLOQUEO INICIAL FORZADO */
+/* ============================= */
 
-document.addEventListener('DOMContentLoaded', () => {
-    const isHistory = window.location.pathname.endsWith('historia.html');
-    const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
-
-    // Si es historia.html, SIEMPRE pedimos el PIN (ignoramos autenticación previa)
-    // Si es otra página, solo pedimos PIN si no se ha autenticado en esta sesión
-    if (isHistory || !isAuthenticated) {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Siempre bloqueamos al inicio para forzar el PIN en cada carga
         verificarBloqueo();
-    } else {
-        // Ya está autenticado y no es historia.html, desbloqueamos directamente
-        const pageLock = document.getElementById("pageLock");
-        if (pageLock) pageLock.style.display = "none";
-        document.body.classList.remove("locked");
+});
+
+/* ============================= */
+/* 💬 COMENTARIOS (SUPABASE) */
+/* ============================= */
+
+const SUPABASE_URL =
+    "https://xcjzydmprmbpbqkacjwb.supabase.co/";
+
+const SUPABASE_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhjanp5ZG1wcm1icGJxa2FjandiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgwNzY1NjEsImV4cCI6MjA4MzY1MjU2MX0.Bpr4H2iZPl5JWW8rTXp4nBiB1Z_c7pIhKXiThydeNUw";
+
+document.addEventListener("DOMContentLoaded", () => {
+    const boton = document.getElementById("enviar");
+    const textarea = document.getElementById("mensaje");
+
+    if (!boton || !textarea) return;
+
+    function enviarComentario() {
+        const mensaje = textarea.value.trim();
+        if (!mensaje) {
+            alert("Escribe algo primero sss");
+            return;
+        }
+
+            fetch("https://xcjzydmprmbpbqkacjwb.supabase.co/rest/v1/comentarios", {
+            method: "POST",
+            headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": "Bearer " + SUPABASE_KEY,
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+            },
+            body: JSON.stringify({ mensaje })
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Error al guardar lol");
+            textarea.value = "";
+            alert("Guardado 💙");
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Error al guardar lol");
+        });
     }
+
+    boton.addEventListener("click", enviarComentario);
 });
