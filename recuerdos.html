@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ren's Archive // Línea de Tiempo</title>
+    <title>Ren's Archive // Inicio</title>
     <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -113,7 +113,6 @@
             transition: all 0.3s;
         }
         .lock-box button:hover { background: #fff; color: #000; }
-        .lock-error { margin-top: 10px; font-size: 0.85rem; color: #ff6b6b; display: none; }
 
         header {
             position: relative;
@@ -237,40 +236,7 @@
             flex: 1;
         }
 
-        /* 💬 Estilo Comentarios/Input adaptado */
-        #mensaje {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            color: white;
-            font-family: inherit;
-            resize: vertical;
-        }
-
-        #enviar {
-            background: transparent;
-            border: 1px solid #fff;
-            color: #fff;
-            padding: 10px 30px;
-            border-radius: 30px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            margin-bottom: 40px;
-            width: 100%;
-            max-width: 200px;
-        }
-
-        #enviar:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        .history-section {
+        .update-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 30px;
@@ -278,15 +244,28 @@
             backdrop-filter: blur(10px);
             text-align: center;
             transition: all 0.6s ease;
-            margin-bottom: 35px;
         }
 
-        .history-section:hover { 
+        .update-card:hover { 
             border-color: rgba(255, 255, 255, 0.2);
             background: rgba(255, 255, 255, 0.04);
         }
 
-        .history-section h2 {
+        .update-card img {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            filter: grayscale(0.8) contrast(1.1);
+            transition: all 0.8s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .update-card:hover img { 
+            filter: grayscale(0) contrast(1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .update-card h2 {
             font-size: 1rem;
             font-weight: 400;
             margin-bottom: 25px;
@@ -295,7 +274,7 @@
             text-transform: uppercase;
         }
 
-        .history-section p {
+        .update-card p {
             line-height: 2;
             color: rgba(255, 255, 255, 0.75);
             font-size: 1.1rem;
@@ -323,8 +302,8 @@
             .header-text h1 { font-size: 2.2rem; }
             nav { gap: 10px; }
             nav a { font-size: 0.8rem; padding: 12px 20px; }
-            .history-section { padding: 40px 25px; }
-            .history-section p { font-size: 1rem; }
+            .update-card { padding: 40px 25px; }
+            .update-card p { font-size: 1rem; }
         }
     </style>
 </head>
@@ -334,20 +313,21 @@
 <div class="stars"></div>
 <div class="floating-letters"></div>
 
-    <div id="pageLock" class="page-lock">
-        <div class="lock-box">
-            <h2>REN'S ARCHIVE</h2>
-            <input type="password" id="pinInput" placeholder="CÓDIGO REQUERIDO">
-            <button onclick="unlockPage()">Verificar Identidad</button>
-            <div id="errorMsg" class="lock-error" style="display:none; margin-top: 10px; font-size: 0.85rem; color: #ff6b6b;">IDENTIDAD NO VERIFICADA</div>
-        </div>
+<div id="pageLock" class="page-lock">
+    <div class="lock-box">
+        <h2>REN'S ARCHIVE</h2>
+        <input type="password" id="pinInput" placeholder="CÓDIGO REQUERIDO">
+        <button onclick="unlockPage()">Verificar Identidad</button>
+        <div id="errorMsg" class="lock-error">IDENTIDAD NO VERIFICADA</div>
     </div>
+</div>
+
 <header>
     <div class="header-content">
         <img src="https://i.imgur.com/aoMCu2s.png" alt="ren">
         <div class="header-text">
-            <h1>Nuestra Cronología</h1>
-            <p>Registro de Datos // Historia</p>
+            <h1 id="greeting">Bienvenida ❤️</h1>
+            <p>EST. 09 / 06 / 2025 // A & N</p>
         </div>
     </div>
 </header>
@@ -356,76 +336,21 @@
     <a href="index.html">Inicio</a>
     <a href="historia.html">Línea de Tiempo</a>
     <a href="recuerdos.html">Archivo de Recuerdos</a>
-    
+    <div class="dropdown">
+        <a href="#">Registro de Cartas</a>
+        <div class="dropdown-content">
+            <a href="carta1.html">09/10/25</a>
+            <a href="carta7.html">09/01/26</a>
+        </div>
     </div>
 </nav>
 
-<div class="container" style="display: flex; flex-direction: column; align-items: center;">
-
-    <!-- 💬 COMENTARIOS (Contenido previo mantenido) -->
-    <textarea id="mensaje" placeholder="Escribe aquí tus comentarios o mensajes para mí..."></textarea>
-    <button id="enviar">Enviar</button>
-
-    <!-- Secciones de Historia (Contenido previo mantenido) -->
-    <section class="history-section">
-        <h2>La Primera Luz del Día [El comienzo I]</h2>
-        <p>No sé exactamente en qué momento empezó lo nuestro. No hubo una fecha clara ni una escena de película. Solo sé que desde el inicio hubo algo distinto contigo. Una vibra que se sentía cómoda, natural, sin esfuerzo. Al principio eran conversaciones normales… hasta que dejaron de serlo. Algo en ti hacía que quisiera quedarme un poco más, hablar un poco más, escuchar un poco más.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Cuando dejó de ser casual [Caminantes II]</h2>
-        <p>Sin darme cuenta, pasamos de hablar por hablar a compartir. Risas, historias, pensamientos que no le cuento a cualquiera. Contigo empezó a existir confianza, esa que no se pide, simplemente aparece. Empecé a sentir que podía ser yo, sin filtros, sin miedo a no ser suficiente. Y eso, hoy lo sé, no pasa con cualquiera.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>La conexión [Dualidad III]</h2>
-        <p>Hubo un punto en el que ya no era solo química, era conexión. Nos entendíamos en detalles pequeños, en silencios, en miradas. No era intensidad vacía, era cercanía real. Empezamos a cuidarnos emocionalmente, a estar presentes, a demostrarnos que importábamos. Ahí entendí que lo nuestro no era algo ligero.</p>
-    </section>
-    
-    <section class="history-section">
-        <h2>El momento en que se volvió real [Mi felicidad IV]</h2>
-        <p>Desde el 9 de junio, todo cambió. No porque fuera mágico, sino porque fue consciente. Decidimos tomarnos en serio, elegirnos con intención. Ya no era solo sentir, era construir. Con errores, con aprendizaje, pero con compromiso. Ese día marcó el inicio de algo más profundo y más verdadero.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Lo que hemos superado [Problemas Temporales V]</h2>
-        <p>No todo ha sido perfecto, y eso también forma parte de nuestra historia. Hubo dudas, momentos difíciles, emociones intensas. Pero en lugar de huir, hablamos. En lugar de romper, intentamos entender. Aprendimos que amar también es cuidar, escuchar y responsabilizarse del daño que a veces, sin querer, se causa.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Lo que somos hoy [Presente VI]</h2>
-        <p>Hoy somos complicidad, apoyo y crecimiento. Somos alguien con quien contar al final del día. Somos risas, pero también calma. Somos un lugar seguro. Lo nuestro no se sostiene solo por lo que sentimos, sino por lo que hacemos cada día para que funcione. Y eso vale mucho.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Lo que viene [Los gatos bajo la lluvia VII]</h2>
-        <p>No sé exactamente qué nos espera, pero sí sé lo que siento. Quiero seguir construyendo contigo, paso a paso, sin prisa pero sin pausa. Quiero seguir eligiéndote, aprendiendo y creciendo juntos. Porque si algo tengo claro es que esta historia no se siente como un capítulo cualquiera… se siente como algo que merece continuar.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Cuando me di cuenta de que eras especial [Libro II - Capítulo I]</h2>
-        <p>Hubo un momento en el que dejé de verte como alguien más en mi vida y empecé a verte como esa persona. No fue de golpe, fue sutil. Me importaban tus días, tus silencios, cómo estabas incluso cuando no lo decías. Empecé a cuidarte sin pensarlo, porque me nacía. Ahí entendí que lo que sentía por ti no era pasajero, era real.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Nuestro primer beso [Libro II - Capítulo II]</h2>
-        <p>Nuestro primer beso no fue solo un beso. Fue nervios, fue conexión, fue ese segundo eterno donde todo se siente correcto. Fue confirmar que lo que ya existía emocionalmente también estaba ahí, fuerte, sincero. Ese momento se me quedó grabado porque no fue solo físico, fue una promesa silenciosa de que lo nuestro iba en serio.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Lo que construimos día a día [Libro II - Capítulo III]</h2>
-        <p>Lo nuestro no vive solo de momentos lindos, vive del esfuerzo diario. De escucharnos, de cuidarnos, de elegirnos incluso cuando las cosas se sienten intensas. Contigo aprendí que amar también es responsabilidad emocional, es presencia, es querer hacerlo bien. Y eso es algo que siempre he querido contigo.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Por qué tú [Libro II - Capítulo IV]</h2>
-        <p>Porque contigo no tengo que fingir. Porque me siento en casa. Porque me haces crecer, cuestionarme, mejorar. Porque no eres solo mi pareja, eres mi apoyo, mi calma y mi lugar seguro. No te elijo por costumbre, te elijo porque quiero, porque siento, porque contigo veo un futuro que vale la pena.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Lo que quiero decirte, para que no quede ninguna duda [Libro III - Lo que siento I]</h2>
-        <p>¿7 meses ya? Realmente eres maravillosa, pero aún es el comienzo y tengo mucho para ti</p>
-    </section>
+<div class="container">
+    <div class="update-card">
+        <img src="https://i.imgur.com/qCyAZWD.jpeg" alt="update">
+        <h2>Última transmisión: 09/01/2026</h2>
+        <p>"Gracias de verdad por el Me 262. Me sorprendió mucho y me gustó un montón, no solo porque está súper bien hecho, sino por el tiempo, la paciencia y el cariño que pusiste en hacerlo para mí. Se nota que lo pensaste, y eso significa mucho para mí. Lo voy a guardar con mucho cuidado y cariño. Gracias por ese detalle tan lindo."</p>
+    </div>
 </div>
 
 <footer>
@@ -444,7 +369,27 @@
             }
         });
     });
+
+    // Dyn greeting
+    function updateGreeting() {
+        const greetingElement = document.getElementById('greeting');
+        const hour = new Date().getHours();
+        let greeting = "";
+
+        if (hour >= 6 && hour < 12) {
+            greeting = "Buenos días";
+        } else if (hour >= 12 && hour < 20) {
+            greeting = "Buenas tardes";
+        } else {
+            greeting = "Buenas noches";
+        }
+
+        greetingElement.textContent = `${greeting}, bienvenida ❤️`;
+    }
+
+    updateGreeting();
 </script>
+    <script src="lock.js"></script>
 
 </body>
 </html>
