@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ren's Archive // Inicio</title>
+    <title>Ren's Archive // Archivo de Recuerdos</title>
     <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -98,9 +98,7 @@
             font-size: 1.1rem;
             margin-bottom: 20px;
             width: 100%;
-            transition: border 0.3s;
         }
-        .lock-box input:focus { border-color: rgba(255, 255, 255, 0.5); }
         .lock-box button {
             background: transparent;
             border: 1px solid #fff;
@@ -130,16 +128,13 @@
         }
 
         header img {
-            max-height: 100px;
+            max-height: 80px;
             filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin-bottom: 10px;
         }
 
-        header img:hover { transform: scale(1.1) rotate(5deg); }
-
         .header-text h1 {
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             font-weight: 400;
             letter-spacing: -1px;
             margin-bottom: 10px;
@@ -149,9 +144,9 @@
         }
 
         .header-text p {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 5px;
+            letter-spacing: 4px;
             text-transform: uppercase;
         }
 
@@ -161,7 +156,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             padding: 20px;
             margin-bottom: 40px;
         }
@@ -169,15 +164,15 @@
         nav a {
             color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            font-size: 0.85rem;
-            padding: 12px 30px;
-            border-radius: 30px;
+            font-size: 0.8rem;
+            padding: 10px 25px;
+            border-radius: 25px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.4s;
             text-transform: uppercase;
             letter-spacing: 2px;
             width: 100%;
-            max-width: 320px;
+            max-width: 280px;
             text-align: center;
             background: rgba(255, 255, 255, 0.02);
         }
@@ -186,99 +181,73 @@
             color: #fff;
             border-color: #fff;
             background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 30px rgba(255,255,255,0.1);
-            transform: translateY(-2px);
-        }
-
-        .dropdown {
-            width: 100%;
-            max-width: 320px;
-            position: relative;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: relative;
-            background: rgba(10, 10, 15, 0.5);
-            backdrop-filter: blur(5px);
-            padding: 10px 0;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 10px;
-            width: 100%;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .dropdown:hover .dropdown-content { display: flex; }
-        
-        .dropdown-content a { 
-            width: 90%; 
-            margin: 0 auto; 
-            border: none; 
-            font-size: 0.8rem; 
-            padding: 10px;
-            background: transparent;
-        }
-        
-        .dropdown-content a:hover {
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: none;
-            transform: none;
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
 
         .container {
             position: relative;
             z-index: 10;
-            max-width: 700px;
+            max-width: 1200px;
             margin: 0 auto 60px;
             padding: 0 20px;
             flex: 1;
         }
 
-        .update-card {
+        .products-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .product-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 30px;
-            padding: 50px 40px;
-            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 25px;
+            width: 100%;
+            max-width: 320px;
             text-align: center;
-            transition: all 0.6s ease;
+            backdrop-filter: blur(10px);
+            transition: all 0.5s ease;
         }
 
-        .update-card:hover { 
+        .product-card:hover {
             border-color: rgba(255, 255, 255, 0.2);
             background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-5px);
         }
 
-        .update-card img {
+        .product-card img {
             width: 100%;
             border-radius: 20px;
-            margin-bottom: 35px;
-            filter: grayscale(0.8) contrast(1.1);
-            transition: all 0.8s ease;
+            margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            filter: grayscale(0.5);
+            transition: filter 0.5s;
         }
 
-        .update-card:hover img { 
-            filter: grayscale(0) contrast(1);
-            border-color: rgba(255, 255, 255, 0.3);
+        .product-card:hover img {
+            filter: grayscale(0);
         }
 
-        .update-card h2 {
-            font-size: 1rem;
-            font-weight: 400;
-            margin-bottom: 25px;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        .update-card p {
-            line-height: 2;
-            color: rgba(255, 255, 255, 0.75);
+        .product-card h3 {
             font-size: 1.1rem;
-            font-style: italic;
+            font-weight: 400;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 1px;
+        }
+
+        .product-card button {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            cursor: default;
         }
 
         footer {
@@ -298,12 +267,8 @@
         }
 
         @media (max-width: 768px) {
-            header { padding: 60px 20px 30px; }
-            .header-text h1 { font-size: 2.2rem; }
-            nav { gap: 10px; }
-            nav a { font-size: 0.8rem; padding: 12px 20px; }
-            .update-card { padding: 40px 25px; }
-            .update-card p { font-size: 1rem; }
+            .header-text h1 { font-size: 1.8rem; }
+            .product-card { max-width: 100%; }
         }
     </style>
 </head>
@@ -326,8 +291,8 @@
     <div class="header-content">
         <img src="https://i.imgur.com/aoMCu2s.png" alt="ren">
         <div class="header-text">
-            <h1 id="greeting">Bienvenida ❤️</h1>
-            <p>EST. 09 / 06 / 2025 // A & N</p>
+            <h1>Archivos</h1>
+            <p>Almacenamiento // Registros Visuales</p>
         </div>
     </div>
 </header>
@@ -336,60 +301,23 @@
     <a href="index.html">Inicio</a>
     <a href="historia.html">Línea de Tiempo</a>
     <a href="recuerdos.html">Archivo de Recuerdos</a>
-    <div class="dropdown">
-        <a href="#">Registro de Cartas</a>
-        <div class="dropdown-content">
-            <a href="carta1.html">09/10/25</a>
-            <a href="carta7.html">09/01/26</a>
-        </div>
-    </div>
 </nav>
 
 <div class="container">
-    <div class="update-card">
-        <img src="https://i.imgur.com/qCyAZWD.jpeg" alt="update">
-        <h2>Última transmisión: 09/01/2026</h2>
-        <p>"Gracias de verdad por el Me 262. Me sorprendió mucho y me gustó un montón, no solo porque está súper bien hecho, sino por el tiempo, la paciencia y el cariño que pusiste en hacerlo para mí. Se nota que lo pensaste, y eso significa mucho para mí. Lo voy a guardar con mucho cuidado y cariño. Gracias por ese detalle tan lindo."</p>
+    <div class="products-container">
+        <div class="product-card">
+            <img src="https://i.imgur.com/VzxoAj4.jpeg" alt="Nuestra Primera Foto">
+            <h3>Nuestra Primera Foto</h3>
+            <button>09/09/25</button>
+        </div>
     </div>
 </div>
 
 <footer>
-    <p>// REN'S ARCHIVE 2025-2026 // NIVEL DE SEGURIDAD 4 // TODOS LOS DERECHOS RESERVADOS //</p>
+    <p>// REN'S ARCHIVE 2025-2026 // NÚCLEO DE MEDIOS // ALMACENAMIENTO CIFRADO //</p>
 </footer>
 
-<script src="lock.js"></script>
-<script>
-    // Mobile dropdown toggle
-    document.querySelectorAll('.dropdown > a').forEach(link => {
-        link.addEventListener('click', e => {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                const content = link.nextElementSibling;
-                content.style.display = content.style.display === 'flex' ? 'none' : 'flex';
-            }
-        });
-    });
-
-    // Dyn greeting
-    function updateGreeting() {
-        const greetingElement = document.getElementById('greeting');
-        const hour = new Date().getHours();
-        let greeting = "";
-
-        if (hour >= 6 && hour < 12) {
-            greeting = "Buenos días";
-        } else if (hour >= 12 && hour < 20) {
-            greeting = "Buenas tardes";
-        } else {
-            greeting = "Buenas noches";
-        }
-
-        greetingElement.textContent = `${greeting}, bienvenida ❤️`;
-    }
-
-    updateGreeting();
-</script>
+    <!-- 🔒 SCRIPT AGREGADO (TU CÓDIGO, INTACTO) -->
     <script src="lock.js"></script>
-
 </body>
 </html>
