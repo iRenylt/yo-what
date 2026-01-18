@@ -4,68 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ren's Archive // Línea de Tiempo</title>
+    <title>Ren's Archive // Cronología</title>
     <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #ffffff;
+            --accent: #888888;
+            --bg: #050505;
+            --card-bg: rgba(20, 20, 25, 0.6);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.5);
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: radial-gradient(circle at top, #0b0b12, #000);
-            color: #fff;
+            background: var(--bg);
+            color: var(--text-main);
             font-family: 'Playfair Display', serif;
             min-height: 100vh;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
+            line-height: 1.6;
         }
 
-        /* 🌌 Estrellas y Efecto Blade Runner */
+        /* 🌌 Fondo Estelar */
         .stars {
             position: fixed;
-            width: 100%;
-            height: 100%;
-            background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-            animation: starsMove 200s linear infinite;
-            z-index: 1;
-            opacity: 0.3;
+            inset: 0;
+            background: radial-gradient(circle at center, #111111 0%, #050505 100%);
+            z-index: 0;
+        }
+
+        .stars::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.15;
+            animation: starsMove 150s linear infinite;
         }
 
         @keyframes starsMove {
-            from {background-position: 0 0;}
-            to {background-position: -2000px 2000px;}
-        }
-
-        /* 🎶 Letras flotantes */
-        .floating-letters {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: rgba(255,255,255,0.05);
-            z-index: 0;
-            pointer-events: none;
-            white-space: nowrap;
-            animation: fadeLetters 5s ease-in-out infinite alternate;
-        }
-
-        @keyframes fadeLetters {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
         }
 
         /* 🔒 BLOQUEO */
-        body.locked {
-            overflow: hidden !important;
-            height: 100vh !important;
-        }
-
-        body.locked > *:not(.page-lock):not(.stars):not(.floating-letters) {
-            display: none !important;
-        }
+        body.locked { overflow: hidden !important; height: 100vh !important; }
+        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
 
         .page-lock {
             position: fixed;
@@ -75,256 +66,335 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(20px);
         }
 
         .lock-box {
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 40px;
-            border-radius: 20px;
-            background: rgba(10, 10, 15, 0.8);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 400px;
+            animation: lockFadeIn 1s ease-out;
         }
 
-        .lock-box h2 { font-weight: 400; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
+        @keyframes lockFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .lock-box h2 { 
+            font-weight: 400; 
+            margin-bottom: 30px; 
+            letter-spacing: 4px; 
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
         .lock-box input {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border);
             color: #fff;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 15px;
             outline: none;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-bottom: 20px;
             width: 100%;
-            transition: border 0.3s;
+            transition: all 0.3s;
         }
-        .lock-box input:focus { border-color: rgba(255, 255, 255, 0.5); }
+
         .lock-box button {
             background: transparent;
             border: 1px solid #fff;
             color: #fff;
-            padding: 10px 30px;
-            border-radius: 30px;
+            padding: 12px 40px;
+            border-radius: 50px;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
             transition: all 0.3s;
         }
-        .lock-box button:hover { background: #fff; color: #000; }
-        .lock-error { margin-top: 10px; font-size: 0.85rem; color: #ff6b6b; display: none; }
 
+        .lock-box button:hover { 
+            background: #fff;
+            color: #000;
+        }
+
+        .lock-error {
+            margin-top: 15px;
+            color: #ff4444;
+            font-size: 0.8rem;
+            display: none;
+            letter-spacing: 1px;
+        }
+
+        /* ✨ HEADER */
         header {
             position: relative;
             z-index: 10;
-            padding: 80px 20px 40px;
+            padding: 120px 20px 60px;
             text-align: center;
-            animation: fadeIn 2s ease;
         }
 
-        .header-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        header img {
-            max-height: 100px;
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: 10px;
-        }
-
-        header img:hover { transform: scale(1.1) rotate(5deg); }
-
-        .header-text h1 {
-            font-size: 2.8rem;
-            font-weight: 400;
-            letter-spacing: -1px;
-            margin-bottom: 10px;
-            background: linear-gradient(to bottom, #fff, #888);
+        .nohelia-name {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 700;
+            letter-spacing: 15px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #fff 30%, rgba(255,255,255,0.2) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
+            display: block;
         }
 
-        .header-text p {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 5px;
+        .header-sub {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 6px;
             text-transform: uppercase;
+            margin-top: 10px;
         }
 
+        /* 📱 Navegación */
         nav {
             position: relative;
-            z-index: 10;
+            z-index: 1000;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+
+        nav a, .nav-item {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 12px;
-            padding: 20px;
-            margin-bottom: 40px;
-        }
-
-        nav a {
-            color: rgba(255, 255, 255, 0.6);
+            justify-content: center;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 20px;
+            color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.85rem;
-            padding: 12px 30px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            width: 100%;
-            max-width: 320px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.02);
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
         }
 
-        nav a:hover {
-            color: #fff;
-            border-color: #fff;
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 30px rgba(255,255,255,0.1);
-            transform: translateY(-2px);
-        }
+        nav a:hover, .nav-item:hover { color: #fff; border-color: #fff; transform: translateY(-3px); }
 
-        .dropdown {
-            width: 100%;
-            max-width: 320px;
-            position: relative;
-        }
-
+        .dropdown { position: relative; width: 100%; }
         .dropdown-content {
             display: none;
-            position: relative;
-            background: rgba(10, 10, 15, 0.5);
-            backdrop-filter: blur(5px);
-            padding: 10px 0;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 10px;
+            position: absolute;
+            top: 105%;
+            left: 0;
             width: 100%;
+            background: rgba(5, 5, 5, 0.95);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 10px;
+            z-index: 2000;
             flex-direction: column;
             gap: 5px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+        }
+            .dropdown:hover .dropdown-content, .dropdown.active .dropdown-content { display: flex; }
+            .dropdown-content a { width: 100%; padding: 10px; border: none; background: transparent; }
         }
 
-        .dropdown:hover .dropdown-content { display: flex; }
-        
-        .dropdown-content a { 
-            width: 90%; 
-            margin: 0 auto; 
-            border: none; 
-            font-size: 0.8rem; 
-            padding: 10px;
-            background: transparent;
-        }
-        
-        .dropdown-content a:hover {
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: none;
-            transform: none;
+        /* 🆕 Badge de Notificación */
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            display: none;
         }
 
+        .has-update .badge { display: block; }
+
+        /* ⏳ LINEA DE TIEMPO */
         .container {
             position: relative;
             z-index: 10;
-            max-width: 700px;
-            margin: 0 auto 60px;
-            padding: 0 20px;
-            flex: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 100px;
         }
 
-        /* 💬 Estilo Comentarios/Input adaptado */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 80px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 0;
+            width: 9px;
+            height: 9px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        .timeline-date {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .timeline-content {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+        }
+
+        .timeline-content:hover {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .timeline-content h2 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .timeline-content p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        /* 💬 AREA DE MENSAJES */
+        .message-box {
+            margin-bottom: 60px;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+        }
+
         #mensaje {
             width: 100%;
-            padding: 14px;
-            margin-bottom: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            color: white;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            color: #fff;
             font-family: inherit;
-            resize: vertical;
+            font-size: 16px;
+            margin-bottom: 20px;
+            resize: none;
+            outline: none;
+            transition: all 0.3s;
         }
+
+        #mensaje:focus { border-color: #fff; background: rgba(255,255,255,0.05); }
 
         #enviar {
             background: transparent;
             border: 1px solid #fff;
             color: #fff;
-            padding: 10px 30px;
-            border-radius: 30px;
+            padding: 12px 50px;
+            border-radius: 50px;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
             transition: all 0.3s;
-            margin-bottom: 40px;
-            width: 100%;
-            max-width: 200px;
         }
 
-        #enviar:hover {
-            background: #fff;
-            color: #000;
+        #enviar:hover { background: #fff; color: #000; }
+
+        /* 🖱️ INDICADOR DE SCROLL */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 5;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
         }
 
-        .history-section {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 30px;
-            padding: 50px 40px;
-            backdrop-filter: blur(10px);
-            text-align: center;
-            transition: all 0.6s ease;
-            margin-bottom: 35px;
-        }
+        .scroll-indicator p { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
+        .scroll-indicator .dot { width: 4px; height: 4px; background: #fff; border-radius: 50%; }
 
-        .history-section:hover { 
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .history-section h2 {
-            font-size: 1rem;
-            font-weight: 400;
-            margin-bottom: 25px;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        .history-section p {
-            line-height: 2;
-            color: rgba(255, 255, 255, 0.75);
-            font-size: 1.1rem;
-            font-style: italic;
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+            40% {transform: translateX(-50%) translateY(-10px);}
+            60% {transform: translateX(-50%) translateY(-5px);}
         }
 
         footer {
             position: relative;
             z-index: 10;
-            padding: 60px 20px;
+            padding: 40px 20px;
             text-align: center;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 0.7rem;
+            color: var(--text-dim);
+            font-size: 0.6rem;
             letter-spacing: 3px;
-            text-transform: uppercase;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            header { padding: 60px 20px 30px; }
-            .header-text h1 { font-size: 2.2rem; }
-            nav { gap: 10px; }
-            nav a { font-size: 0.8rem; padding: 12px 20px; }
-            .history-section { padding: 40px 25px; }
-            .history-section p { font-size: 1rem; }
+        @media (max-width: 600px) {
+            .nohelia-name { font-size: 2.8rem; letter-spacing: 8px; }
+            nav { grid-template-columns: 1fr 1fr; }
+            .timeline-content { padding: 30px 20px; }
         }
     </style>
 </head>
@@ -332,139 +402,250 @@
 <body>
 
 <div class="stars"></div>
-<div class="floating-letters"></div>
 
-    <div id="pageLock" class="page-lock">
-        <div class="lock-box">
-            <h2>REN'S ARCHIVE</h2>
-            <input type="password" id="pinInput" placeholder="CÓDIGO REQUERIDO">
-            <button onclick="unlockPage()">Verificar Identidad</button>
-            <div id="errorMsg" class="lock-error" style="display:none; margin-top: 10px; font-size: 0.85rem; color: #ff6b6b;">IDENTIDAD NO VERIFICADA</div>
-        </div>
+<div id="pageLock" class="page-lock">
+    <div class="lock-box">
+        <h2 id="lockPhrase">ESPERANDO POR TI</h2>
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">SOLO TÚ TIENES LA LLAVE</p>
+        <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
+        <button onclick="unlockPage()">Abrir Corazón</button>
+        <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
     </div>
+</div>
+
 <header>
-    <div class="header-content">
-        <img src="https://i.imgur.com/aoMCu2s.png" alt="ren">
-        <div class="header-text">
-            <h1>Nuestra Cronología</h1>
-            <p>Registro de Datos // Historia</p>
-        </div>
-    </div>
+    <span class="nohelia-name">Nohelia</span>
+    <div class="header-sub">NUESTRA CRONOLOGÍA // REGISTRO DE DATOS</div>
 </header>
 
-<nav>
-    <a href="index.html">Inicio</a>
-    <a href="historia.html">Línea de Tiempo</a>
-    <a href="recuerdos.html">Archivo de Recuerdos</a>
-    
+    <nav>
+        <a href="index.html" id="nav-inicio">Inicio<span class="badge"></span></a>
+        <a href="historia.html" id="nav-historia">Línea de Tiempo<span class="badge"></span></a>
+        <a href="recuerdos.html" id="nav-recuerdos">Archivos<span class="badge"></span></a>
+        <div class="dropdown">
+            <a href="#" class="nav-item">Cartas<span class="badge"></span></a>
+            <div class="dropdown-content">
+                <a href="carta1.html" id="nav-carta1">09/10/25</a>
+                <a href="carta7.html" id="nav-carta7">09/01/26</a>
+                <a href="" id="nav-carta8">09/02/26</a>
+            </div>
+        </div>
+    </nav>
+
+<div class="container">
+    <div class="message-box">
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 15px; letter-spacing: 3px; text-transform: uppercase;">Añadir al archivo</p>
+        <textarea id="mensaje" rows="4" placeholder="Escribe algo para el archivo..."></textarea>
+        <button id="enviar">Guardar Memoria</button>
     </div>
-</nav>
 
-<div class="container" style="display: flex; flex-direction: column; align-items: center;">
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO I - CAPÍTULO I</span>
+            <div class="timeline-content">
+                <h2>La Primera Luz del Día</h2>
+                <p>No sé exactamente en qué momento empezó lo nuestro. No hubo una fecha clara ni una escena de película. Solo sé que desde el inicio hubo algo distinto contigo. Una vibra que se sentía cómoda, natural, sin esfuerzo. Al principio eran conversaciones normales… hasta que dejaron de serlo. Algo en ti hacía que quisiera quedarme un poco más, hablar un poco más, escuchar un poco más.</p>
+            </div>
+        </div>
 
-    <!-- 💬 COMENTARIOS (Contenido previo mantenido) -->
-    <textarea id="mensaje" placeholder="Escribe aquí tus comentarios o mensajes para mí..."></textarea>
-    <button id="enviar">Enviar</button>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO I - CAPÍTULO II</span>
+            <div class="timeline-content">
+                <h2>Cuando dejó de ser casual</h2>
+                <p>Sin darme cuenta, pasamos de hablar por hablar a compartir. Risas, historias, pensamientos que no le cuento a cualquiera. Contigo empezó a existir confianza, esa que no se pide, simplemente aparece. Empecé a sentir que podía ser yo, sin filtros, sin miedo a no ser suficiente. Y eso, hoy lo sé, no pasa con cualquiera.</p>
+            </div>
+        </div>
 
-    <!-- Secciones de Historia (Contenido previo mantenido) -->
-    <section class="history-section">
-        <h2>La Primera Luz del Día [El comienzo I]</h2>
-        <p>No sé exactamente en qué momento empezó lo nuestro. No hubo una fecha clara ni una escena de película. Solo sé que desde el inicio hubo algo distinto contigo. Una vibra que se sentía cómoda, natural, sin esfuerzo. Al principio eran conversaciones normales… hasta que dejaron de serlo. Algo en ti hacía que quisiera quedarme un poco más, hablar un poco más, escuchar un poco más.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO I - CAPÍTULO III</span>
+            <div class="timeline-content">
+                <h2>La conexión</h2>
+                <p>Hubo un punto en el que ya no era solo química, era conexión. Nos entendíamos en detalles pequeños, en silencios, en miradas. No era intensidad vacía, era cercanía real. Empezamos a cuidarnos emocionalmente, a estar presentes, a demostrarnos que importábamos. Ahí entendí que lo nuestro no era algo ligero.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Cuando dejó de ser casual [Caminantes II]</h2>
-        <p>Sin darme cuenta, pasamos de hablar por hablar a compartir. Risas, historias, pensamientos que no le cuento a cualquiera. Contigo empezó a existir confianza, esa que no se pide, simplemente aparece. Empecé a sentir que podía ser yo, sin filtros, sin miedo a no ser suficiente. Y eso, hoy lo sé, no pasa con cualquiera.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO I - CAPÍTULO IV</span>
+            <div class="timeline-content">
+                <h2>Mi felicidad - El momento en que se volvió real</h2>
+                <p>Desde el 09 / 06 / 2025, todo cambió. Decidimos tomarnos en serio, elegirnos con intención. Ya no era solo sentir, era construir. Con errores, con aprendizaje, pero con compromiso. Ese día marcó el inicio de algo más profundo.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>La conexión [Dualidad III]</h2>
-        <p>Hubo un punto en el que ya no era solo química, era conexión. Nos entendíamos en detalles pequeños, en silencios, en miradas. No era intensidad vacía, era cercanía real. Empezamos a cuidarnos emocionalmente, a estar presentes, a demostrarnos que importábamos. Ahí entendí que lo nuestro no era algo ligero.</p>
-    </section>
-    
-    <section class="history-section">
-        <h2>El momento en que se volvió real [Mi felicidad IV]</h2>
-        <p>Desde el 9 de junio, todo cambió. No porque fuera mágico, sino porque fue consciente. Decidimos tomarnos en serio, elegirnos con intención. Ya no era solo sentir, era construir. Con errores, con aprendizaje, pero con compromiso. Ese día marcó el inicio de algo más profundo y más verdadero.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO I - CAPÍTULO V</span>
+            <div class="timeline-content">
+                <h2>Problemas Temporales</h2>
+                <p>No todo ha sido perfecto, y eso también forma parte de nuestra historia. Hubo dudas, momentos difíciles, emociones intensas. Pero en lugar de huir, hablamos. En lugar de romper, intentamos entender. Aprendimos que amar también es cuidar, escuchar y responsabilizarse del daño que a veces, sin querer, se causa.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Lo que hemos superado [Problemas Temporales V]</h2>
-        <p>No todo ha sido perfecto, y eso también forma parte de nuestra historia. Hubo dudas, momentos difíciles, emociones intensas. Pero en lugar de huir, hablamos. En lugar de romper, intentamos entender. Aprendimos que amar también es cuidar, escuchar y responsabilizarse del daño que a veces, sin querer, se causa.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO I - CAPÍTULO VI</span>
+            <div class="timeline-content">
+                <h2>Lo que somos hoy</h2>
+                <p>Hoy somos complicidad, apoyo y crecimiento. Somos alguien con quien contar al final del día. Somos risas, pero también calma. Somos un lugar seguro. Lo nuestro no se sostiene solo por lo que sentimos, sino por lo que hacemos cada día para que funcione. Y eso vale mucho.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Lo que somos hoy [Presente VI]</h2>
-        <p>Hoy somos complicidad, apoyo y crecimiento. Somos alguien con quien contar al final del día. Somos risas, pero también calma. Somos un lugar seguro. Lo nuestro no se sostiene solo por lo que sentimos, sino por lo que hacemos cada día para que funcione. Y eso vale mucho.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO I - CAPÍTULO VII</span>
+            <div class="timeline-content">
+                <h2>Lo que viene - Nuestro futuro</h2>
+                <p>No sé exactamente qué nos espera, pero sí sé lo que siento. Quiero seguir construyendo contigo, paso a paso, sin prisa pero sin pausa. Quiero seguir eligiéndote, aprendiendo y creciendo juntos. Porque si algo tengo claro es que esta historia no se siente como un capítulo cualquiera… se siente como algo que merece continuar.</p>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO II - CAPÍTULO I</span>
+            <div class="timeline-content">
+                <h2>Cuando me di cuenta de que eras especial</h2>
+                <p>Hubo un momento en el que dejé de verte como alguien más en mi vida y empecé a verte como esa persona. No fue de golpe, fue sutil. Me importaban tus días, tus silencios, cómo estabas incluso cuando no lo decías. Empecé a cuidarte sin pensarlo, porque me nacía. Ahí entendí que lo que sentía por ti no era pasajero, era real.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Lo que viene [Los gatos bajo la lluvia VII]</h2>
-        <p>No sé exactamente qué nos espera, pero sí sé lo que siento. Quiero seguir construyendo contigo, paso a paso, sin prisa pero sin pausa. Quiero seguir eligiéndote, aprendiendo y creciendo juntos. Porque si algo tengo claro es que esta historia no se siente como un capítulo cualquiera… se siente como algo que merece continuar.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO II - CAPÍTULO II</span>
+            <div class="timeline-content">
+                <h2>Nuestro primer beso</h2>
+                <p>No fue solo un beso. Fue nervios, fue conexión, fue ese segundo eterno donde todo se siente correcto. Fue confirmar que lo que ya existía emocionalmente también estaba ahí, fuerte, sincero. Ese momento se me quedó grabado porque no fue solo físico, fue una promesa silenciosa de que lo nuestro iba en serio.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Cuando me di cuenta de que eras especial [Libro II - Capítulo I]</h2>
-        <p>Hubo un momento en el que dejé de verte como alguien más en mi vida y empecé a verte como esa persona. No fue de golpe, fue sutil. Me importaban tus días, tus silencios, cómo estabas incluso cuando no lo decías. Empecé a cuidarte sin pensarlo, porque me nacía. Ahí entendí que lo que sentía por ti no era pasajero, era real.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO II - CAPÍTULO III</span>
+            <div class="timeline-content">
+                <h2>Lo que construimos día a día</h2>
+                <p>Lo nuestro no vive solo de momentos lindos, vive del esfuerzo diario. De escucharnos, de cuidarnos, de elegirnos incluso cuando las cosas se sienten intensas. Contigo aprendí que amar también es responsabilidad emocional, es presencia, es querer hacerlo bien. Y eso es algo que siempre he querido contigo.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Nuestro primer beso [Libro II - Capítulo II]</h2>
-        <p>Nuestro primer beso no fue solo un beso. Fue nervios, fue conexión, fue ese segundo eterno donde todo se siente correcto. Fue confirmar que lo que ya existía emocionalmente también estaba ahí, fuerte, sincero. Ese momento se me quedó grabado porque no fue solo físico, fue una promesa silenciosa de que lo nuestro iba en serio.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO II - CAPÍTULO IV</span>
+            <div class="timeline-content">
+                <h2>¿Por qué tú?</h2>
+                <p>Porque contigo no tengo que fingir. Porque me siento en casa. Porque me haces crecer, cuestionarme, mejorar. Porque no eres solo mi pareja, eres mi apoyo, mi calma y mi lugar seguro. No te elijo por costumbre, te elijo porque quiero, porque siento, porque contigo veo un futuro que vale la pena.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Lo que construimos día a día [Libro II - Capítulo III]</h2>
-        <p>Lo nuestro no vive solo de momentos lindos, vive del esfuerzo diario. De escucharnos, de cuidarnos, de elegirnos incluso cuando las cosas se sienten intensas. Contigo aprendí que amar también es responsabilidad emocional, es presencia, es querer hacerlo bien. Y eso es algo que siempre he querido contigo.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO III - CAPÍTULO I</span>
+            <div class="timeline-content">
+                <h2>Lo que quiero decirte, para que no quede ninguna duda - I</h2>
+                <p>No necesito decir algo perfecto para quedarme. A veces basta con estar, con acompañar sin ruido, sin presión. Contigo aprendí que el silencio también puede ser un lugar seguro, que no todo se explica, pero sí se siente. Y cuando el mundo pesa, quiero ser alguien que sume calma, no preguntas.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Por qué tú [Libro II - Capítulo IV]</h2>
-        <p>Porque contigo no tengo que fingir. Porque me siento en casa. Porque me haces crecer, cuestionarme, mejorar. Porque no eres solo mi pareja, eres mi apoyo, mi calma y mi lugar seguro. No te elijo por costumbre, te elijo porque quiero, porque siento, porque contigo veo un futuro que vale la pena.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO III - CAPÍTULO II</span>
+            <div class="timeline-content">
+                <h2>Lo que quiero decirte, para que no quede ninguna duda - II</h2>
+                <p>No estás aquí por esforzarte, ni por cumplir expectativas invisibles. Estás porque eres tú, tal como eres cuando no intentas impresionar. No necesito que seas más, ni distinta, ni “mejor”. Lo que hay ya es suficiente, y eso importa más de lo que imaginas.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Lo que quiero decirte, para que no quede ninguna duda [Libro III - Lo que siento I]</h2>
-        <p>¿7 meses ya? Realmente eres maravillosa, pero aún es el comienzo y tengo mucho para ti</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO III - CAPÍTULO III</span>
+            <div class="timeline-content">
+                <h2>Lo que quiero decirte, para que no quede ninguna duda - III</h2>
+                <p>No corro, no empujo, no dramatizo. Prefiero avanzar despacio pero firme, cuidando lo que se construye día a día. Lo nuestro no necesita prisa para ser real. Necesita atención, respeto y verdad. Y eso sí lo puedo dar.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Lo que quiero decirte, para que no quede ninguna duda [Libro III - Lo que siento II]</h2>
-        <p>No necesito decir algo perfecto para quedarme. A veces basta con estar, con acompañar sin ruido, sin presión. Contigo aprendí que el silencio también puede ser un lugar seguro, que no todo se explica, pero sí se siente. Y cuando el mundo pesa, quiero ser alguien que sume calma, no preguntas.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO III - CAPÍTULO IV</span>
+            <div class="timeline-content">
+                <h2>Lo que quiero decirte, para que no quede ninguna duda - IV</h2>
+                <p>Si algún día dudas, si algo te inquieta, si el ruido vuelve… no tienes que cargarlo sola. No espero perfección, espero honestidad. Hablar no rompe lo bonito; al contrario, lo sostiene. Y quiero que sepas que escuchar también es una forma de querer. Prefiero algo más simple y más real: hoy estoy aquí, contigo, eligiendo esto con calma. Y a veces, eso es justo lo que más tranquilidad da.</p>
+            </div>
+        </div>
 
-    <section class="history-section">
-        <h2>Lo que quiero decirte, para que no quede ninguna duda [Libro III - Lo que siento III]</h2>
-        <p>No estás aquí por esforzarte, ni por cumplir expectativas invisibles. Estás porque eres tú, tal como eres cuando no intentas impresionar. No necesito que seas más, ni distinta, ni “mejor”. Lo que hay ya es suficiente, y eso importa más de lo que imaginas.</p>
-    </section>
+        <div class="timeline-item">
+            <span class="timeline-date">LIBRO IV - CAPÍTULO I</span>
+            <div class="timeline-content">
+                <h2>Lo que sientes - I</h2>
+                <p>Ya hablamos de mí y ahora es tu turno.. ¿por qué no añades algo al archivo?</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <section class="history-section">
-        <h2>Lo que quiero decirte, para que no quede ninguna duda [Libro III - Lo que siento IV]</h2>
-        <p>No corro, no empujo, no dramatizo. Prefiero avanzar despacio pero firme, cuidando lo que se construye día a día. Lo nuestro no necesita prisa para ser real. Necesita atención, respeto y verdad. Y eso sí lo puedo dar.</p>
-    </section>
-
-    <section class="history-section">
-        <h2>Lo que quiero decirte, para que no quede ninguna duda [Libro III - Lo que siento V]</h2>
-        <p>Si algún día dudas, si algo te inquieta, si el ruido vuelve… no tienes que cargarlo sola. No espero perfección, espero honestidad. Hablar no rompe lo bonito; al contrario, lo sostiene. Y quiero que sepas que escuchar también es una forma de querer. Prefiero algo más simple y más real: hoy estoy aquí, contigo, eligiendo esto con calma. Y a veces, eso es justo lo que más tranquilidad da.</p>
-    </section>
+<div class="scroll-indicator">
+    <p>Desliza</p>
+    <div class="dot"></div>
 </div>
 
 <footer>
-    <p>// REN'S ARCHIVE 2025-2026 // NIVEL DE SEGURIDAD 4 // TODOS LOS DERECHOS RESERVADOS //</p>
+    <p>// REN'S ARCHIVE // 2025-206 //</p>
 </footer>
 
 <script src="lock.js"></script>
 <script>
-    // Mobile dropdown toggle
-    document.querySelectorAll('.dropdown > a').forEach(link => {
-        link.addEventListener('click', e => {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                const content = link.nextElementSibling;
-                content.style.display = content.style.display === 'flex' ? 'none' : 'flex';
+    // Frases aleatorias para la pantalla de bloqueo
+    const phrases = ["ESPERANDO POR TI", "NECESITAS UNA SONRISA", "UN LUGAR SEGURO"];
+    document.getElementById('lockPhrase').textContent = phrases[Math.floor(Math.random() * phrases.length)];
+
+    // Dropdown toggle
+    const dropdown = document.querySelector('.dropdown');
+    const dropdownBtn = document.querySelector('.nav-item');
+    dropdownBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropdown.classList.toggle('active');
+    });
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) dropdown.classList.remove('active');
+    });
+
+    // Sistema de Notificaciones
+    const pages = ['inicio', 'historia', 'recuerdos', '', ''];
+    
+    function checkUpdates() {
+        pages.forEach(page => {
+            const isNew = localStorage.getItem(`new_${page}`) === 'true';
+            const element = document.getElementById(`nav-${page}`);
+            if (element && isNew) element.classList.add('has-update');
+            
+            if (window.location.pathname.includes(page + '.html') || (page === 'historia' && window.location.pathname.endsWith('historia.html'))) {
+                localStorage.setItem(`new_${page}`, 'false');
+                if (element) element.classList.remove('has-update');
             }
         });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key.toLowerCase() === '/') {
+            const currentState = localStorage.getItem(`new_historia`) === 'true';
+            const newState = !currentState;
+            pages.forEach(page => localStorage.setItem(`new_${page}`, newState ? 'true' : 'false'));
+            checkUpdates();
+            alert(newState ? "Notificaciones activadas" : "Notificaciones desactivadas");
+        }
+    });
+
+    window.addEventListener('load', checkUpdates);
+
+    // Observer para animaciones
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
+
+
+    // Ocultar indicador de scroll al bajar
+    window.addEventListener('scroll', () => {
+        const indicator = document.querySelector('.scroll-indicator');
+        if (indicator) {
+            if (window.scrollY > 100) {
+                indicator.style.opacity = '0';
+            } else {
+                indicator.style.opacity = '0.6';
+            }
+        }
     });
 </script>
-
 </body>
 </html>
