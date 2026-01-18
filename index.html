@@ -8,64 +8,55 @@
     <link rel="icon" href="https://i.imgur.com/aoMCu2s.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #ffffff;
+            --accent: #888888;
+            --bg: #050505;
+            --card-bg: rgba(20, 20, 25, 0.6);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.5);
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: radial-gradient(circle at top, #0b0b12, #000);
-            color: #fff;
+            background: var(--bg);
+            color: var(--text-main);
             font-family: 'Playfair Display', serif;
             min-height: 100vh;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
+            line-height: 1.6;
         }
 
-        /* 🌌 Estrellas y Efecto Blade Runner */
+        /* 🌌 Fondo Estelar Dinámico */
         .stars {
             position: fixed;
-            width: 100%;
-            height: 100%;
-            background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-            animation: starsMove 200s linear infinite;
-            z-index: 1;
-            opacity: 0.3;
+            inset: 0;
+            background: radial-gradient(circle at center, #111111 0%, #050505 100%);
+            z-index: 0;
+        }
+
+        .stars::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.15;
+            animation: starsMove 150s linear infinite;
         }
 
         @keyframes starsMove {
-            from {background-position: 0 0;}
-            to {background-position: -2000px 2000px;}
-        }
-
-        /* 🎶 Letras flotantes */
-        .floating-letters {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: rgba(255,255,255,0.05);
-            z-index: 0;
-            pointer-events: none;
-            white-space: nowrap;
-            animation: fadeLetters 5s ease-in-out infinite alternate;
-        }
-
-        @keyframes fadeLetters {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
         }
 
         /* 🔒 BLOQUEO */
-        body.locked {
-            overflow: hidden !important;
-            height: 100vh !important;
-        }
-
-        body.locked > *:not(.page-lock):not(.stars):not(.floating-letters) {
-            display: none !important;
-        }
+        body.locked { overflow: hidden !important; height: 100vh !important; }
+        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
 
         .page-lock {
             position: fixed;
@@ -75,73 +66,98 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(20px);
         }
 
         .lock-box {
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 40px;
-            border-radius: 20px;
-            background: rgba(10, 10, 15, 0.8);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 400px;
+            animation: lockFadeIn 1s ease-out;
         }
 
-        .lock-box h2 { font-weight: 400; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
+        @keyframes lockFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .lock-box h2 { 
+            font-weight: 400; 
+            margin-bottom: 30px; 
+            letter-spacing: 4px; 
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
         .lock-box input {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border);
             color: #fff;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 15px;
             outline: none;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-bottom: 20px;
             width: 100%;
-            transition: border 0.3s;
+            transition: all 0.3s;
         }
-        .lock-box input:focus { border-color: rgba(255, 255, 255, 0.5); }
+
+        .lock-box input:focus { 
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
         .lock-box button {
             background: transparent;
             border: 1px solid #fff;
             color: #fff;
-            padding: 10px 30px;
-            border-radius: 30px;
+            padding: 12px 40px;
+            border-radius: 50px;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
             transition: all 0.3s;
         }
-        .lock-box button:hover { background: #fff; color: #000; }
+
+        .lock-box button:hover { 
+            background: #fff;
+            color: #000;
+        }
+
+        .lock-error {
+            margin-top: 15px;
+            color: #ff4444;
+            font-size: 0.8rem;
+            display: none;
+            letter-spacing: 1px;
+        }
 
         header {
             position: relative;
             z-index: 10;
-            padding: 80px 20px 40px;
+            padding: 100px 20px 60px;
             text-align: center;
-            animation: fadeIn 2s ease;
-        }
-
-        .header-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
         }
 
         header img {
-            max-height: 100px;
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: 10px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border);
+            padding: 5px;
+            margin-bottom: 25px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        header img:hover { transform: scale(1.1) rotate(5deg); }
+        header img:hover { transform: scale(1.05); border-color: #fff; }
 
         .header-text h1 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             font-weight: 400;
-            letter-spacing: -1px;
             margin-bottom: 10px;
             background: linear-gradient(to bottom, #fff, #888);
             -webkit-background-clip: text;
@@ -149,161 +165,236 @@
         }
 
         .header-text p {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 5px;
-            text-transform: uppercase;
-        }
-
-        nav {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            padding: 20px;
-            margin-bottom: 40px;
-        }
-
-        nav a {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            font-size: 0.85rem;
-            padding: 12px 30px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            width: 100%;
-            max-width: 320px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        nav a:hover {
-            color: #fff;
-            border-color: #fff;
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 30px rgba(255,255,255,0.1);
-            transform: translateY(-2px);
-        }
-
-        .dropdown {
-            width: 100%;
-            max-width: 320px;
-            position: relative;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: relative;
-            background: rgba(10, 10, 15, 0.5);
-            backdrop-filter: blur(5px);
-            padding: 10px 0;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 10px;
-            width: 100%;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .dropdown:hover .dropdown-content { display: flex; }
-        
-        .dropdown-content a { 
-            width: 90%; 
-            margin: 0 auto; 
-            border: none; 
-            font-size: 0.8rem; 
-            padding: 10px;
-            background: transparent;
-        }
-        
-        .dropdown-content a:hover {
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: none;
-            transform: none;
-        }
-
-        .container {
-            position: relative;
-            z-index: 10;
-            max-width: 700px;
-            margin: 0 auto 60px;
-            padding: 0 20px;
-            flex: 1;
-        }
-
-        .update-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 30px;
-            padding: 50px 40px;
-            backdrop-filter: blur(10px);
-            text-align: center;
-            transition: all 0.6s ease;
-        }
-
-        .update-card:hover { 
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .update-card img {
-            width: 100%;
-            border-radius: 20px;
-            margin-bottom: 35px;
-            filter: grayscale(0.8) contrast(1.1);
-            transition: all 0.8s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .update-card:hover img { 
-            filter: grayscale(0) contrast(1);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .update-card h2 {
-            font-size: 1rem;
-            font-weight: 400;
-            margin-bottom: 25px;
-            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            color: var(--text-dim);
             letter-spacing: 4px;
             text-transform: uppercase;
         }
 
-        .update-card p {
-            line-height: 2;
-            color: rgba(255, 255, 255, 0.75);
-            font-size: 1.1rem;
+        /* 📱 Navegación Minimalista */
+        nav {
+            position: relative;
+            z-index: 1000;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                grid-template-columns: 1fr;
+            }
+            .dropdown {
+                grid-column: span 1;
+            }
+        }
+
+        nav a, .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 20px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        nav a:hover, .nav-item:hover {
+            color: #fff;
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-3px);
+        }
+
+        /* 🆕 Badge de Notificación */
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            display: none;
+        }
+
+        .has-update .badge { display: block; }
+
+        .dropdown { position: relative; width: 100%; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 105%;
+            left: 0;
+            width: 100%;
+            background: rgba(5, 5, 5, 0.95);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 10px;
+            z-index: 2000;
+            flex-direction: column;
+            gap: 5px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+        }
+
+        .dropdown:hover .dropdown-content, .dropdown.active .dropdown-content { display: flex; }
+        .dropdown-content a { width: 100%; padding: 10px; border: none; background: transparent; }
+
+        /* 📄 Contenido Principal */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            margin-bottom: 30px;
+            transition: all 0.4s ease;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 60px 20px 40px;
+            }
+            .header-text h1 {
+                font-size: 2.2rem;
+            }
+            nav {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-bottom: 40px;
+            }
+            .dropdown {
+                grid-column: span 1;
+            }
+            nav a, .nav-item {
+                padding: 12px;
+                font-size: 0.65rem;
+                border-radius: 15px;
+            }
+            .card {
+                padding: 20px;
+                border-radius: 20px;
+            }
+            .card-content h2 {
+                font-size: 1.2rem;
+            }
+            .card-content p {
+                font-size: 0.9rem;
+            }
+            iframe {
+                height: 80px !important;
+            }
+            .scroll-indicator {
+                display: none !important;
+            }
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .card-header .date {
+            font-size: 0.7rem;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .card-content h2 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .card-content p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.8;
             font-style: italic;
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            filter: grayscale(0.2);
+        }
+
+        iframe {
+            margin-top: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            filter: grayscale(0.5);
         }
 
         footer {
             position: relative;
             z-index: 10;
-            padding: 60px 20px;
+            padding: 40px 20px;
             text-align: center;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 0.7rem;
+            color: var(--text-dim);
+            font-size: 0.6rem;
             letter-spacing: 3px;
-            text-transform: uppercase;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* 🖱️ INDICADOR DE SCROLL */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 5;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+            transition: opacity 0.5s;
         }
 
-        @media (max-width: 768px) {
-            header { padding: 60px 20px 30px; }
-            .header-text h1 { font-size: 2.2rem; }
-            nav { gap: 10px; }
-            nav a { font-size: 0.8rem; padding: 12px 20px; }
-            .update-card { padding: 40px 25px; }
-            .update-card p { font-size: 1rem; }
+        .scroll-indicator p { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
+        .scroll-indicator .dot { width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+            40% {transform: translateX(-50%) translateY(-10px);}
+            60% {transform: translateX(-50%) translateY(-5px);}
         }
     </style>
 </head>
@@ -311,114 +402,289 @@
 <body>
 
 <div class="stars"></div>
-<div class="floating-letters"></div>
 
-<div id="pageLock" class="page-lock">
-    <div class="lock-box">
-        <h2>REN'S ARCHIVE</h2>
-        <input type="password" id="pinInput" placeholder="CÓDIGO REQUERIDO">
-        <button onclick="unlockPage()">Verificar Identidad</button>
-        <div id="errorMsg" class="lock-error">IDENTIDAD NO VERIFICADA</div>
-    </div>
-</div>
-
-<header>
-    <div class="header-content">
-        <img src="https://i.imgur.com/aoMCu2s.png" alt="ren">
-        <div class="header-text">
-            <h1 id="greeting">Bienvenida ❤️</h1>
-            <p>EST. 09 / 06 / 2025 // A & N</p>
+    <div id="pageLock" class="page-lock">
+        <div class="lock-box">
+            <h2 id="lockPhrase">ESPERANDO POR TI</h2>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">SOLO TÚ TIENES LA LLAVE</p>
+            <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
+            <button onclick="unlockPage()">Abrir Corazón</button>
+            <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
         </div>
     </div>
-</header>
+
+    <header>
+        <img src="https://i.imgur.com/aoMCu2s.png" alt="ren" id="secretTrigger">
+        <div class="header-text">
+            <h1 id="greeting">Hola ❤️</h1>
+            <p>EST. 09 / 06 / 2025</p>
+        </div>
+    </header>
+
+    <!-- Modal Secreto -->
+    <div id="secretModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; align-items:center; justify-content:center; backdrop-filter:blur(20px); padding:20px;">
+        <div style="background:var(--card-bg); border:1px solid var(--border); padding:40px; border-radius:30px; text-align:center; max-width:400px; animation: lockFadeIn 0.5s ease;">
+            <p style="font-size:1.5rem; margin-bottom:20px;">✨ Has encontrado un secreto ✨</p>
+            <p style="color:var(--text-dim); font-style:italic;">"En cada línea de código de este archivo, hay un pensamiento para ti."</p>
+            <button onclick="document.getElementById('secretModal').style.display='none'" style="margin-top:30px; background:transparent; border:1px solid #fff; color: #fff; padding:10px 30px; border-radius:30px; cursor:pointer;">Cerrar</button>
+        </div>
+    </div>
 
 <nav>
-    <a href="index.html">Inicio</a>
-    <a href="historia.html">Línea de Tiempo</a>
-    <a href="recuerdos.html">Archivo de Recuerdos</a>
+    <a href="index.html" id="nav-inicio">Inicio<span class="badge"></span></a>
+    <a href="historia.html" id="nav-historia">Línea de Tiempo<span class="badge"></span></a>
+    <a href="recuerdos.html" id="nav-recuerdos">Archivos<span class="badge"></span></a>
     <div class="dropdown">
-        <a href="#">Registro de Cartas</a>
+        <a href="#" class="nav-item">Cartas<span class="badge"></span></a>
         <div class="dropdown-content">
-            <a href="carta1.html">09/10/25</a>
-            <a href="carta7.html">09/01/26</a>
+            <a href="carta1.html" id="nav-carta1">09/10/25</a>
+            <a href="carta7.html" id="nav-carta7">09/01/26</a>
+            <a href="" id="nav-carta8">09/02/26</a>
         </div>
     </div>
 </nav>
 
-<div class="container">
-        <div class="update-card">
-            <h2>Última transmisión: 12/01/2026</h2>
-            <h2>Notas escritas: ¿Por qué Footage Archive?</h2>
-            <p>Footage Archive empezó como un proyecto personal, de mí para ti. A veces no sé por dónde empezar, porque cuando intento hacerlo todo se vuelve complejo. Hay momentos que se sienten raros, porque no basta solo con tenerte: el amor también hay que asimilarlo. Aunque todo podría estar escrito, dejarlo fluir sigue siendo mi mejor opción. Aun así, existen situaciones que me desgastan y me cuesta mantener la calma a tu lado, pero sigo aquí, eligiéndote.
+    <div class="container">
+        <!-- 🌸 SECCIÓN DE LA FLOR -->
+        <div class="card" style="text-align: center;">
+            <div class="card-header" style="justify-content: center;">
+                <span class="date">Especial para ti</span>
+            </div>
+            <div class="card-content">
+                <h2>Un pequeño detalle</h2>
+                <p style="margin-bottom: 30px;">Presiona el botón para ver algo bonito ❤️</p>
 
-            Quédate un poco más conmigo. Conocernos nos ha tomado cientos de días.
+                <div id="flowerCanvas" style="display: none; height: 300px; width: 100%; position: relative; justify-content: center; align-items: center; overflow: visible; margin-bottom: 20px;">
+                    <svg viewBox="0 0 200 200" style="width: 250px; height: 250px; overflow: visible;">
+                        <!-- Stem -->
+                        <path id="stem" d="M100 200 L100 100" stroke="#2d5a27" stroke-width="4" fill="none" stroke-dasharray="100" stroke-dashoffset="100">
+                            <animate id="stemAnim" attributeName="stroke-dashoffset" from="100" to="0" dur="2s" fill="freeze" begin="indefinite" />
+                        </path>
+                        <!-- Leaves -->
+                        <path id="leaf1" d="M100 150 Q70 140 80 120 Q95 130 100 150" fill="#2d5a27" opacity="0">
+                            <animate id="leaf1Anim" attributeName="opacity" from="0" to="1" dur="1s" fill="freeze" begin="indefinite" />
+                        </path>
+                        <path id="leaf2" d="M100 170 Q130 160 120 140 Q105 150 100 170" fill="#2d5a27" opacity="0">
+                            <animate id="leaf2Anim" attributeName="opacity" from="0" to="1" dur="1s" fill="freeze" begin="indefinite" />
+                        </path>
+                        <!-- Petals (Centered exactly at the end of the stem at 100, 100) -->
+                            <g transform="translate(100 100)">
+                                <g id="petals" transform="scale(0)">
+                            <animateTransform id="petalsAnim" attributeName="transform" type="scale" from="0" to="1" dur="2s" fill="freeze" begin="indefinite" />
+                            <circle cx="0" cy="-20" r="15" fill="#ffb7d5" />
+                            <circle cx="17" cy="-10" r="15" fill="#ff80ab" />
+                            <circle cx="17" cy="10" r="15" fill="#ffb7d5" />
+                            <circle cx="0" cy="20" r="15" fill="#ff80ab" />
+                            <circle cx="-17" cy="10" r="15" fill="#ffb7d5" />
+                            <circle cx="-17" cy="-10" r="15" fill="#ff80ab" />
+                            <!-- Center -->
+                            <circle cx="0" cy="0" r="10" fill="#ffd54f" />
+                        </g>
+                                </g>
+                    </svg>
+                </div>
 
-            Siempre te he dicho lo que me gustaría que me demuestres, pero no es una obligación. Eso será lo que tú decidas, y yo lo aceptaré con paz. Aunque lo diga, no depende de mí, depende de lo que tú quieras para nosotros. Yo me dejo llevar contigo, dejo que fluya, porque contigo esperé una flor y recibí un jardín.
+                <button id="runFlower" onclick="startFlower()" style="background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 40px; border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; transition: all 0.3s;">Iniciar</button>
+            </div>
+        </div>
 
-            Mi visión ahora es más clara, aunque también cometo errores. Digo muchas cosas, a veces no de la mejor manera, pero siempre desde lo que siento.
+        <div class="card">
+            <div class="card-header">
+                <span class="date">Fecha de actualización: 17/01/2026</span>
+            </div>
+            <div class="card-content">
+                <h2>¿Qué será del futuro de Footage Archive?</h2>
+                <p>El futuro de Footage Archive no está cerrado.</p><br>
+                <p>No es algo terminado, es algo que sigue creciendo con el tiempo, como nosotros. La idea no es llenarlo de cosas por llenar, sino dejar que evolucione con sentido y cuidado.</p><br>
+                <p>Footage Archive seguirá siendo un lugar honesto.
+                Un espacio que se adapta, que cambia, que aprende. No busca ser perfecto, busca ser real. Mientras exista respeto, comunicación y ganas, este lugar seguirá creciendo contigo.</p><br>
+                <p>No sé exactamente en qué se convertirá,
+                pero sí sé por qué existe: para acompañarnos, para cuidarnos mejor y para dejar constancia de lo que vamos construyendo, sin forzarlo, sin adelantar etapas.</p>
+                <iframe src="https://open.spotify.com/embed/track/6h9h7LDcuWowOHUhWRTwnO?si=1c7a91c648044a15" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </div>
+        </div>
 
-            Footage Archive también comenzó como una carta, como un regalo para ti, y con el tiempo se convirtió en lo que es ahora: un lugar más seguro y sincero de mí. Es una parte vulnerable que decido compartirte. Prefiero decirte la verdad antes que mentirte. Soy honesto desde mucho antes de que me conocieras, y así seguiré siendo, incluso desde el inicio cuando me pediste que siempre lo fuera contigo.
+        <div class="card">
+            <div class="card-header">
+                <span class="date">Fecha de actualización: 13/01/2026</span>
+            </div>
+            <div class="card-content">
+                <h2>¿Por qué Footage Archive?</h2>
+                <p>Footage Archive empezó como algo de mí para ti.
+                Una forma de decirte lo que a veces no sé cómo empezar a explicar. El amor no solo se siente, también se aprende a entender, y este espacio nació desde ahí: desde dejar que todo fluya con honestidad.</p><br>
 
-            Footage Archive es lo que yo llamo una pequeña, amorosa y cariñosa obra de arte que solo un idiota muy enamorado programaría y diseñaría (yo). Todo aquí conlleva amor, cariño, tiempo y esfuerzo. Cada detalle fue pensado y hecho para ti. Aunque diga que no soy muy creativo, lo intento, y lo hago por ti. Lo actualizo cada tres días porque, aunque parezca que tengo mucho tiempo, en realidad es corto, pero siempre busco dártelo.
+                    <p>No siempre es fácil. Hay momentos que me cuestan, cosas que me desgastan, pero sigo aquí, eligiéndote. Esto no es una promesa ni una obligación, es una elección consciente. Lo que tenemos depende de lo que ambos queramos cuidar.</p><br>
 
-            “Acércate y atrévete, tómame aquí”.
+                <p>Footage Archive también es un regalo.
+                Un lugar seguro y sincero donde te comparto una parte vulnerable de mí. Todo aquí está hecho con tiempo, cariño y atención. Cada detalle fue pensado para ti, porque así sé querer.</p><br>
 
-            Footage Archive está diseñado para ser un espacio dual, tuyo y mío, donde puedas compartirme sentimientos, pensamientos y emociones que quizá a veces no puedas decirme en persona o te cueste expresar. Lo que lo hace diferente es que ahora eso tiene un lugar real al que puedes acudir cuando lo necesites.
+                <p>Es un espacio nuestro.
+                Para que puedas dejarme palabras, pensamientos o emociones cuando lo necesites. No reemplaza lo real, lo acompaña. Es mi forma de estar presente contigo, con verdad y calma.</p><br> 
+                <p>Desde lo más sincero y honesto:
+                – A</p>
+                <iframe src="https://open.spotify.com/embed/track/4DGwG4QsOWNhoM3jEyKnuR?si=dcc068b4a0814682" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </div>
+        </div>
 
-            Más adelante añadiré más funciones para ti. Por ahora, puedes dejarme mensajes y comentarios que leeré con atención.
-
-            Desde lo más sincero y honesto:
-            – A</p>
-            <iframe src="https://open.spotify.com/embed/track/4DGwG4QsOWNhoM3jEyKnuR?si=dcc068b4a0814682" width="100%" height="100%" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <div class="card">
+            <div class="card-header">
+                <span class="date">Fecha de actualización: 09/01/2026</span>
+            </div>
+            <div class="card-content">
+                <img src="https://i.imgur.com/qCyAZWD.jpeg" alt="update">
+                <h2>Agradecimientos</h2>
+                <p>Gracias de verdad por el Me 262. Me sorprendió mucho y me gustó un montón, no solo porque está súper bien hecho, sino por el tiempo, la paciencia y el cariño que pusiste en hacerlo para mí. Se nota que lo pensaste, y eso significa mucho para mí. Lo voy a guardar con mucho cuidado y cariño. Gracias por ese detalle tan lindo.</p>
+            </div>
         </div>
     </div>
 
-<div class="container">
-    <div class="update-card">
-        <img src="https://i.imgur.com/qCyAZWD.jpeg" alt="update">
-        <h2>Última transmisión: 09/01/2026</h2>
-        <h2>Agradecimientos:</h2>
-        <p>Gracias de verdad por el Me 262. Me sorprendió mucho y me gustó un montón, no solo porque está súper bien hecho, sino por el tiempo, la paciencia y el cariño que pusiste en hacerlo para mí. Se nota que lo pensaste, y eso significa mucho para mí. Lo voy a guardar con mucho cuidado y cariño. Gracias por ese detalle tan lindo.</p>
+    <div class="scroll-indicator" id="scrollIndicator">
+        <p>Desliza</p>
+        <div class="dot"></div>
     </div>
-</div>
 
 <footer>
-    <p>// REN'S ARCHIVE 2025-2026 // NIVEL DE SEGURIDAD 4 // TODOS LOS DERECHOS RESERVADOS //</p>
+    <p>// REN'S ARCHIVE // 2025-206 //</p>
 </footer>
 
 <script src="lock.js"></script>
 <script>
-    // Mobile dropdown toggle
-    document.querySelectorAll('.dropdown > a').forEach(link => {
-        link.addEventListener('click', e => {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                const content = link.nextElementSibling;
-                content.style.display = content.style.display === 'flex' ? 'none' : 'flex';
+    // Scroll Indicator Logic
+    window.addEventListener('scroll', () => {
+        const indicator = document.getElementById('scrollIndicator');
+        if (window.scrollY > 100) {
+            indicator.style.opacity = '0';
+            indicator.style.pointerEvents = 'none';
+        } else {
+            indicator.style.opacity = '0.6';
+            indicator.style.pointerEvents = 'auto';
+        }
+    });
+
+    // Frases aleatorias para la pantalla de bloqueo
+    const phrases = [
+        "ESPERANDO POR TI",
+        "NECESITAS UNA SONRISA",
+        "UN LUGAR SEGURO",
+        "BIENVENIDA A CASA",
+        "UN ARCHIVO SECRETO"
+    ];
+    document.getElementById('lockPhrase').textContent = phrases[Math.floor(Math.random() * phrases.length)];
+
+    // Dropdown toggle
+    const dropdown = document.querySelector('.dropdown');
+    const dropdownBtn = document.querySelector('.nav-item');
+    dropdownBtn.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+            e.preventDefault();
+            dropdown.classList.toggle('active');
+        }
+    });
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) dropdown.classList.remove('active');
+    });
+
+    // Sistema de Notificaciones (Badge de "Nuevo")
+    const pages = ['inicio', 'historia', 'cartas', 'carta1', 'carta7', '', ''];
+
+    function checkUpdates() {
+        pages.forEach(page => {
+            const isNew = localStorage.getItem(`new_${page}`) === 'true';
+            const lastVisit = localStorage.getItem(`visit_${page}`);
+            const updateDate = localStorage.getItem(`update_${page}`) || 0;
+
+            const element = document.getElementById(`nav-${page}`);
+            if (element && isNew) {
+                element.classList.add('has-update');
+            }
+
+            if (window.location.pathname.includes(page + '.html') || (page === 'inicio' && (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')))) {
+                localStorage.setItem(`visit_${page}`, Date.now());
+                localStorage.setItem(`new_${page}`, 'false');
+                if (element) element.classList.remove('has-update');
+            }
+        });
+    }
+
+    // Tecla secreta para alternar notificaciones (Presionar 'N')
+    document.addEventListener('keydown', (e) => {
+        if (e.key.toLowerCase() === '/') {
+            const currentState = localStorage.getItem(`new_inicio`) === 'true';
+            const newState = !currentState;
+            pages.forEach(page => {
+                localStorage.setItem(`new_${page}`, newState ? 'true' : 'false');
+            });
+            checkUpdates();
+            alert(newState ? "Notificaciones activadas" : "Notificaciones desactivadas");
+        }
+    });
+
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', function() {
+            const pageId = this.id.replace('nav-', '');
+            if (pageId) {
+                localStorage.setItem(`visit_${pageId}`, Date.now());
+                localStorage.setItem(`new_${pageId}`, 'false');
             }
         });
     });
 
-    // Dyn greeting
+    window.addEventListener('load', checkUpdates);
+
     function updateGreeting() {
         const greetingElement = document.getElementById('greeting');
         const hour = new Date().getHours();
-        let greeting = "";
+        let greeting;
 
-        if (hour >= 6 && hour < 12) {
+        if (hour >= 5 && hour < 12) {
             greeting = "Buenos días";
-        } else if (hour >= 12 && hour < 20) {
+        } else if (hour >= 12 && hour < 18) {
             greeting = "Buenas tardes";
         } else {
             greeting = "Buenas noches";
         }
 
-        greetingElement.textContent = `${greeting}, bienvenida ❤️`;
+        greetingElement.textContent = `${greeting}, Nohelia 💕`;
     }
 
+    // Ejecutar al cargar
     updateGreeting();
-</script>
-    <script src="lock.js"></script>
 
+    // Revisar cada minuto por si cambia la hora
+    setInterval(updateGreeting, 60000);
+
+
+    // Secretos
+    let clickCount = 0;
+    document.getElementById('secretTrigger').addEventListener('click', () => {
+        clickCount++;
+        if (clickCount === 3) {
+            document.getElementById('secretModal').style.display = 'flex';
+            clickCount = 0;
+        }
+    });
+
+    function startFlower() {
+        const canvas = document.getElementById('flowerCanvas');
+        const btn = document.getElementById('runFlower');
+        canvas.style.display = 'flex';
+        btn.style.display = 'none';
+
+        // Manual trigger for animations to ensure they start on mobile
+        setTimeout(() => {
+            document.getElementById('stemAnim').beginElement();
+            setTimeout(() => document.getElementById('leaf1Anim').beginElement(), 1000);
+            setTimeout(() => document.getElementById('leaf2Anim').beginElement(), 1500);
+            setTimeout(() => document.getElementById('petalsAnim').beginElement(), 2000);
+        }, 100);
+    }
+
+    // Easter egg en el footer
+    const footerText = document.querySelector('footer p');
+    footerText.addEventListener('dblclick', () => {
+        footerText.textContent = "TE AMO MÁS DE LO QUE IMAGINAS ❤️";
+        setTimeout(() => footerText.textContent = "// REN'S ARCHIVE // 2025-206 //", 3000);
+    });
+</script>
 </body>
 </html>
