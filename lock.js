@@ -21,39 +21,89 @@ function showWelcomeAnimation() {
     if (!pageLock) return;
 
     const lockBox = pageLock.querySelector('.lock-box');
-
-    lockBox.innerHTML = `
-        <h1 id="welcomeText" style="
-            font-size: 2.5rem;
-            background: linear-gradient(to bottom, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1.5s ease;
-            letter-spacing: 2px;
-        ">
-            Bienvenida Nohelia ❤️
-        </h1>
-    `;
+    lockBox.style.transition = "all 1s cubic-bezier(0.19, 1, 0.22, 1)";
+    lockBox.style.opacity = "0";
+    lockBox.style.transform = "scale(0.8) translateY(-50px)";
+    lockBox.style.filter = "blur(10px)";
 
     setTimeout(() => {
-        const text = document.getElementById('welcomeText');
-        if (text) {
-            text.style.opacity = '1';
-            text.style.transform = 'translateY(0)';
-        }
-    }, 100);
+        pageLock.innerHTML = `
+            <div style="text-align: center; color: white; width: 100%; max-width: 500px; padding: 20px;">
+                <div id="welcomeIcon" style="
+                    font-size: 4rem; 
+                    margin-bottom: 20px; 
+                    opacity: 0; 
+                    transform: scale(0.5);
+                    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                ">❤️</div>
+                <h1 id="welcomeText" style="
+                    font-size: 3.5rem;
+                    font-weight: 400;
+                    background: linear-gradient(to bottom, #fff, #aaa);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    opacity: 0;
+                    transform: translateY(30px);
+                    transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+                    letter-spacing: 8px;
+                    margin-bottom: 15px;
+                    text-transform: uppercase;
+                ">
+                    HOLA NOHELIA
+                </h1>
+                <p id="welcomeSub" style="
+                    font-size: 0.9rem;
+                    letter-spacing: 12px;
+                    color: rgba(255,255,255,0.4);
+                    opacity: 0;
+                    transform: translateY(10px);
+                    transition: all 1s ease 0.4s;
+                    text-transform: uppercase;
+                ">
+                    TU ARCHIVO ESTÁ LISTO
+                </p>
+                <div id="welcomeLine" style="
+                    width: 0;
+                    height: 1px;
+                    background: linear-gradient(90deg, transparent, #fff, transparent);
+                    margin: 30px auto;
+                    transition: width 2s cubic-bezier(0.19, 1, 0.22, 1) 0.6s;
+                "></div>
+                <p id="welcomeFinal" style="
+                    font-size: 0.7rem;
+                    color: rgba(255,255,255,0.2);
+                    opacity: 0;
+                    transition: all 1s ease 1s;
+                    letter-spacing: 4px;
+                ">DESBLOQUEANDO RECUERDOS...</p>
+            </div>
+        `;
 
-    setTimeout(() => {
-        pageLock.style.transition = 'opacity 1s ease';
-        pageLock.style.opacity = '0';
         setTimeout(() => {
-            pageLock.style.display = 'none';
-            document.body.classList.remove("locked");
-            actualizarUltimaActividad();
-        }, 1000);
-    }, 2500);
+            document.getElementById('welcomeIcon').style.opacity = '1';
+            document.getElementById('welcomeIcon').style.transform = 'scale(1)';
+            document.getElementById('welcomeText').style.opacity = '1';
+            document.getElementById('welcomeText').style.transform = 'translateY(0)';
+            document.getElementById('welcomeSub').style.opacity = '1';
+            document.getElementById('welcomeSub').style.transform = 'translateY(0)';
+            document.getElementById('welcomeLine').style.width = '100%';
+            document.getElementById('welcomeFinal').style.opacity = '1';
+        }, 100);
+
+        setTimeout(() => {
+            pageLock.style.transition = 'all 2s cubic-bezier(0.19, 1, 0.22, 1)';
+            pageLock.style.backgroundColor = 'transparent';
+            pageLock.style.backdropFilter = 'blur(0px)';
+            pageLock.style.opacity = '0';
+            pageLock.style.transform = 'scale(1.1)';
+            
+            setTimeout(() => {
+                pageLock.style.display = 'none';
+                document.body.classList.remove("locked");
+                actualizarUltimaActividad();
+            }, 2000);
+        }, 4000);
+    }, 800);
 }
 
 function unlockPage() {
@@ -109,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function enviarComentario() {
         const mensaje = textarea.value.trim();
         if (!mensaje) {
-            alert("Escribe algo primero por favor");
+            alert("Escribe algo primero antes de enviar 😊");
             return;
         }
 
@@ -124,13 +174,13 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({ mensaje })
         })
         .then(res => {
-            if (!res.ok) throw new Error("Error al guardar");
+            if (!res.ok) throw new Error("Error al guardar el mensaje 😓");
             textarea.value = "";
-            alert("Enviado ❤️");
+            alert("Guardado y enviado ❤️");
         })
         .catch(err => {
             console.error(err);
-            alert("Error al guardar");
+            alert("Error al guardar el mensaje 😓");
         });
     }
 
