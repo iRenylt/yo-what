@@ -7,6 +7,7 @@
     <title>Ren's Archive // Cronología</title>
     <link rel="icon" href="https://i.imgur.com/iSyUemC.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffffff;
@@ -24,7 +25,7 @@
         body {
             background: var(--bg);
             color: var(--text-main);
-            font-family: 'Playfair Display', serif;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Playfair Display', serif;
             min-height: 100vh;
             overflow-x: hidden;
             display: flex;
@@ -134,7 +135,7 @@
         header {
             position: relative;
             z-index: 10;
-            padding: 120px 20px 60px;
+            padding: 80px 20px 45px;
             text-align: center;
         }
 
@@ -145,6 +146,7 @@
             text-transform: uppercase;
             margin-bottom: 20px;
             background: linear-gradient(to bottom, #fff 30%, rgba(255,255,255,0.2) 100%);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
@@ -163,54 +165,60 @@
         nav {
             position: relative;
             z-index: 1000;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            max-width: 600px;
-            margin: 0 auto 60px;
-            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-width: 100%;
+            margin: 0 auto 50px;
+            padding: 0 12px;
+            justify-content: center;
+            align-items: center;
         }
 
         nav a, .nav-item {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             background: var(--glass);
             border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 20px;
+            padding: 10px 14px;
+            border-radius: 18px;
             color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.4px;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
             cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        nav a:hover, .nav-item:hover { color: #fff; border-color: #fff; transform: translateY(-3px); }
+        nav a:hover, .nav-item:hover { color: #fff; border-color: #fff; background: rgba(255, 255, 255, 0.05); transform: translateY(-3px); }
 
-        .dropdown { position: relative; width: 100%; }
+        .dropdown { position: relative; width: auto; display: inline-block; }
         .dropdown-content {
             display: none;
             position: absolute;
-            top: 105%;
-            left: 0;
-            width: 100%;
-            background: rgba(5, 5, 5, 0.95);
+            top: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: max-content;
+            min-width: 120px;
+            background: rgba(5, 5, 5, 0.98);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 10px;
-            z-index: 2000;
+            border-radius: 16px;
+            padding: 8px 4px;
+            z-index: 2001;
             flex-direction: column;
-            gap: 5px;
+            gap: 2px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             backdrop-filter: blur(20px);
         }
-            .dropdown:hover .dropdown-content, .dropdown.active .dropdown-content { display: flex; }
-            .dropdown-content a { width: 100%; padding: 10px; border: none; background: transparent; }
-        }
+        .dropdown:hover .dropdown-content { display: flex; }
+        .dropdown-content a { display: block; padding: 8px 10px; border: none; background: transparent; white-space: nowrap; color: var(--text-dim); text-decoration: none; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.3px; transition: all 0.3s ease; border-radius: 9px; cursor: pointer; }
+        .dropdown-content a:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
         /* 🆕 Badge de Notificación */
         .badge {
@@ -233,7 +241,7 @@
             z-index: 10;
             max-width: 800px;
             margin: 0 auto;
-            padding: 0 20px 100px;
+            padding: 0 16px 70px;
         }
 
         .timeline {
@@ -253,15 +261,15 @@
 
         .timeline-item {
             position: relative;
-            margin-bottom: 80px;
+            margin-bottom: 60px;
             opacity: 0;
-            transform: translateX(-20px);
-            transition: all 0.8s ease;
+            transform: translateY(12px);
+            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
         }
 
         .timeline-item.visible {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
 
         .timeline-item::before {
@@ -288,15 +296,16 @@
         .timeline-content {
             background: var(--glass);
             border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 40px;
+            border-radius: 25px;
+            padding: 30px;
             backdrop-filter: blur(20px);
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
         }
 
         .timeline-content:hover {
             border-color: rgba(255,255,255,0.2);
             background: rgba(255,255,255,0.05);
+            transform: translateY(-4px);
         }
 
         .timeline-content h2 {
@@ -314,15 +323,44 @@
             font-style: italic;
         }
 
-        /* 💬 AREA DE MENSAJES */
+        /* � Books collapsible (accordion) */
+        .book { margin-bottom: 18px; }
+        .book-header { display: flex; justify-content: space-between; align-items: center; margin: 6px 0 12px; }
+        .book-toggle {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 18px;
+            color: var(--text-dim);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .book-toggle .chev { display: inline-block; transition: transform 0.25s ease; }
+        .book .book-body { overflow: hidden; max-height: 0; transition: max-height 0.4s ease, opacity 0.3s ease; opacity: 0; }
+        .book.open .book-body { opacity: 1; }
+        .book.open .chev { transform: rotate(90deg); }
+        /* ensure timeline items inside collapsed body are hidden from interaction */
+        .book .book-body .timeline-item { pointer-events: auto; }
+
+        /* �💬 AREA DE MENSAJES */
         .message-box {
-            margin-bottom: 60px;
+            margin-bottom: 50px;
             text-align: center;
             background: var(--card-bg);
             border: 1px solid var(--border);
-            padding: 30px;
-            border-radius: 30px;
+            padding: 25px;
+            border-radius: 25px;
             backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .message-box:hover {
+            border-color: rgba(255,255,255,0.2);
         }
 
         #mensaje {
@@ -381,6 +419,31 @@
             60% {transform: translateX(-50%) translateY(-5px);}
         }
 
+        /* 🎁 SECRETOS ESTILOS */
+        .secret-word { cursor: pointer; position: relative; transition: all 0.3s; }
+        .secret-word:hover { color: #ffb7d5; text-shadow: 0 0 10px rgba(255, 183, 213, 0.5); }
+
+        .secret-modal { 
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
+            z-index: 10001; align-items: center; justify-content: center; 
+            backdrop-filter: blur(20px); padding: 20px; animation: fadeIn 0.4s ease;
+        }
+
+        .secret-modal.active { display: flex; }
+
+        .secret-content { 
+            background: var(--card-bg); border: 1px solid var(--border); padding: 40px; 
+            border-radius: 30px; text-align: center; max-width: 500px; animation: popIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .secret-image { max-width: 100%; border-radius: 20px; margin: 20px 0; max-height: 400px; }
+        .secret-text { color: var(--text-dim); font-style: italic; margin: 15px 0; line-height: 1.6; }
+        .secret-button { background: transparent; border: 1px solid #fff; color: #fff; padding: 10px 30px; border-radius: 30px; cursor: pointer; margin-top: 20px; transition: all 0.3s; }
+        .secret-button:hover { background: #fff; color: #000; }
+
         footer {
             position: relative;
             z-index: 10;
@@ -389,12 +452,43 @@
             color: var(--text-dim);
             font-size: 0.6rem;
             letter-spacing: 3px;
+            background: linear-gradient(to bottom, transparent, rgba(5, 5, 5, 0.8));
+            margin-top: auto;
+            width: 100%;
+            border-top: 1px solid var(--border);
         }
 
-        @media (max-width: 600px) {
-            .nohelia-name { font-size: 2.8rem; letter-spacing: 8px; }
-            nav { grid-template-columns: 1fr 1fr; }
-            .timeline-content { padding: 30px 20px; }
+        @media (max-width: 768px) {
+            header { padding: 65px 18px 45px; }
+            .nohelia-name { font-size: 2.5rem; letter-spacing: 10px; }
+            nav { gap: 6px; margin-bottom: 35px; padding: 0 8px; }
+            nav a, .nav-item { padding: 9px 12px; font-size: 0.68rem; border-radius: 15px; }
+            .dropdown-content { min-width: 115px; padding: 6px 3px; }
+            .dropdown-content a { padding: 7px 8px; font-size: 0.6rem; }
+            .container { padding: 0 14px 55px; }
+            .timeline-content { padding: 25px 20px; }
+            .message-box { padding: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            header { padding: 50px 12px 30px; }
+            .nohelia-name { font-size: 1.8rem; letter-spacing: 6px; }
+            .header-sub { font-size: 0.65rem; }
+            nav { gap: 5px; margin-bottom: 28px; padding: 0 6px; }
+            nav a, .nav-item { padding: 8px 10px; font-size: 0.62rem; border-radius: 13px; }
+            .dropdown-content { min-width: 105px; padding: 5px 2px; }
+            .dropdown-content a { padding: 6px 7px; font-size: 0.55rem; }
+            .container { padding: 0 12px 50px; }
+            .timeline { padding-left: 25px; }
+            .timeline-item { margin-bottom: 50px; }
+            .timeline-item::before { left: -30px; width: 7px; height: 7px; }
+            .timeline-content { padding: 20px; border-radius: 18px; }
+            .timeline-content h2 { font-size: 1rem; }
+            .timeline-content p { font-size: 0.9rem; }
+            .timeline-date { font-size: 0.65rem; }
+            .message-box { padding: 16px; margin-bottom: 40px; }
+            #mensaje { padding: 15px; font-size: 14px; }
+            #enviar { padding: 10px 30px; font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -495,7 +589,7 @@
                 <p>No sé exactamente qué nos espera, pero sí sé lo que siento. Quiero seguir construyendo contigo, paso a paso, sin prisa pero sin pausa. Quiero seguir eligiéndote, aprendiendo y creciendo juntos. Porque si algo tengo claro es que esta historia no se siente como un capítulo cualquiera… se siente como algo que merece continuar.</p>
             </div>
         </div>
-        
+
         <div class="timeline-item">
             <span class="timeline-date">LIBRO II - CAPÍTULO I</span>
             <div class="timeline-content">
@@ -632,58 +726,227 @@
     </div>
 </div>
 
-<div class="scroll-indicator">
-    <p>Desliza</p>
-    <div class="dot"></div>
-</div>
-
 <footer>
     <p>// REN'S ARCHIVE // 2025-206 //</p>
 </footer>
 
 <script src="lock.js"></script>
 <script>
+    // ✨ SISTEMA DE SECRETOS AVANZADO (HISTORIA) ✨
+
+    const secrets = {
+        revealed: new Set(),
+        konamiCode: ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'],
+        konamiIndex: 0
+    };
+
+    function showSecret(title, content) {
+        const modal = document.createElement('div');
+        modal.className = 'secret-modal active';
+        modal.innerHTML = `
+            <div class="secret-content">
+                <p style="font-size: 1.2rem; margin-bottom: 10px;">✨ ${title} ✨</p>
+                <p class="secret-text">${content}</p>
+                <button class="secret-button" onclick="this.closest('.secret-modal').remove()">Cerrar</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Agrupar capítulos por libro y crear controles colapsables (evita scroll largo)
+        function makeBooksCollapsible() {
+            const container = document.querySelector('.timeline');
+            if (!container) return;
+            const items = Array.from(container.querySelectorAll('.timeline-item'));
+            if (!items.length) return;
+            const groups = [];
+            items.forEach(item => {
+                const dateEl = item.querySelector('.timeline-date');
+                const match = dateEl ? dateEl.textContent.match(/LIBRO\s+([IVXLCDM]+)/i) : null;
+                const bookLabel = match ? `LIBRO ${match[1]}` : 'SIN LIBRO';
+                let group = groups.find(g => g.label === bookLabel);
+                if (!group) {
+                    group = { label: bookLabel, items: [] };
+                    groups.push(group);
+                }
+                group.items.push(item);
+            });
+            // Reconstruir el contenedor con la estructura por libros
+            container.innerHTML = '';
+            groups.forEach(g => {
+                const book = document.createElement('div');
+                book.className = 'book';
+                book.dataset.book = g.label;
+                const header = document.createElement('div');
+                header.className = 'book-header';
+                header.innerHTML = `<button class="book-toggle" aria-expanded="false"><span class="book-title">${g.label}</span><span class="chev">▸</span></button>`;
+                const body = document.createElement('div');
+                body.className = 'book-body';
+                g.items.forEach(it => body.appendChild(it));
+                book.appendChild(header);
+                book.appendChild(body);
+                container.appendChild(book);
+            });
+            // Añadir handlers a los toggles
+            container.querySelectorAll('.book-toggle').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const book = btn.closest('.book');
+                    const body = book.querySelector('.book-body');
+                    const expanded = btn.getAttribute('aria-expanded') === 'true';
+                    btn.setAttribute('aria-expanded', String(!expanded));
+                    book.classList.toggle('open', !expanded);
+                    if (!expanded) {
+                        // expandir
+                        body.style.maxHeight = body.scrollHeight + 'px';
+                        body.style.opacity = '1';
+                        // marcar items visibles para animación
+                        body.querySelectorAll('.timeline-item').forEach(it => it.classList.add('visible'));
+                    } else {
+                        // colapsar
+                        body.style.maxHeight = '0';
+                        body.style.opacity = '0';
+                        body.querySelectorAll('.timeline-item').forEach(it => it.classList.remove('visible'));
+                    }
+                });
+            });
+        }
+        // Ejecutar agrupación antes de asignar eventos a títulos para que los selectores sigan funcionando
+        makeBooksCollapsible();
+
+        // SECRETO 1: Click en títulos de la línea de tiempo
+        document.querySelectorAll('.timeline-item h2').forEach(title => {
+            title.style.cursor = 'pointer';
+            title.addEventListener('click', () => {
+                const year = title.textContent;
+                if (!secrets.revealed.has(`timeline-${year}`)) {
+                    showSecret('Momento Especial', `${year} marca un momento importante en nuestra historia. Cada fecha es un recuerdo que llevamos juntos.`);
+                    secrets.revealed.add(`timeline-${year}`);
+                }
+            });
+        });
+
+        // SECRETO 2: Click en la palabra "historia" - usando TreeWalker para no afectar estructura
+        function highlightWordInNode(node, word, className) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                if (regex.test(node.textContent)) {
+                    const span = document.createElement('span');
+                    span.innerHTML = node.textContent.replace(regex, `<span class="${className}">$&</span>`);
+                    node.parentNode.replaceChild(span, node);
+                }
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE') {
+                Array.from(node.childNodes).forEach(child => highlightWordInNode(child, word, className));
+            }
+        }
+
+        const messageBox = document.querySelector('.message-box');
+        if (messageBox) {
+            highlightWordInNode(messageBox, 'historia', 'secret-word');
+        }
+
+        // SECRETO 3: Click en "Nohelia"
+        const header = document.querySelector('.nohelia-name');
+        if (header) {
+            header.style.cursor = 'pointer';
+            header.addEventListener('click', () => {
+                if (!secrets.revealed.has('nohelia-click')) {
+                    showSecret('Tu Nombre', 'Nohelia. Un nombre que representa todo lo hermoso que veo en ti. Cada sílaba es especial.');
+                    secrets.revealed.add('nohelia-click');
+                }
+            });
+        }
+
+        // SECRETO 4: Footer limpio - sin eventos de secreto
+
+        // SECRETO 5: Click en palabras clave dentro de timeline-content
+        document.querySelectorAll('.timeline-content p').forEach(para => {
+            highlightWordInNode(para, 'capítulo', 'secret-word');
+            highlightWordInNode(para, 'recuerdo', 'secret-word');
+            highlightWordInNode(para, 'encuentro', 'secret-word');
+        });
+
+        document.querySelectorAll('.timeline-content .secret-word').forEach(word => {
+            word.addEventListener('click', () => {
+                const word_text = word.textContent.toLowerCase();
+                if (!secrets.revealed.has(`word-${word_text}`)) {
+                    const messages = {
+                        'capítulo': 'Cada capítulo de nuestra historia es importante y merece ser recordado.',
+                        'recuerdo': 'Los recuerdos son lo que nos mantiene unidos, incluso en los momentos difíciles.',
+                        'encuentro': 'Nuestro encuentro fue el comienzo de algo hermoso que sigue creciendo.'
+                    };
+                    showSecret('En la Línea de Tiempo', messages[word_text] || 'Un momento importante en nuestra historia.');
+                    secrets.revealed.add(`word-${word_text}`);
+                }
+            });
+        });
+    });
+
+    // KONAMI CODE
+    document.addEventListener('keydown', (e) => {
+        const key = e.key;
+        if (key === secrets.konamiCode[secrets.konamiIndex]) {
+            secrets.konamiIndex++;
+            if (secrets.konamiIndex === secrets.konamiCode.length) {
+                showSecret('¡CÓDIGO SECRETO!', 'Encontraste el código Konami en la línea de tiempo. Eres un verdadero explorador de secretos.');
+                secrets.revealed.add('konami-historia');
+                secrets.konamiIndex = 0;
+            }
+        } else {
+            secrets.konamiIndex = key === secrets.konamiCode[0] ? 1 : 0;
+        }
+    });
+
     // Frases aleatorias para la pantalla de bloqueo
     const phrases = ["ESPERANDO POR TI", "NECESITAS UNA SONRISA", "UN LUGAR SEGURO"];
-    document.getElementById('lockPhrase').textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    const lockPhrase = document.getElementById('lockPhrase');
+    if (lockPhrase) {
+        lockPhrase.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    }
 
     // Dropdown toggle
     const dropdown = document.querySelector('.dropdown');
     const dropdownBtn = document.querySelector('.nav-item');
-    dropdownBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropdown.classList.toggle('active');
-    });
+
+    if (dropdownBtn) {
+        dropdownBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            dropdown.classList.toggle('active');
+        });
+    }
+
     document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) dropdown.classList.remove('active');
+        if (dropdown && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
     });
+
+    if (dropdown) {
+        dropdown.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                dropdown.classList.remove('active');
+            });
+        });
+    }
 
     // Sistema de Notificaciones
     const pages = ['inicio', 'historia', 'recuerdos', '', ''];
-    
+
     function checkUpdates() {
         pages.forEach(page => {
             const isNew = localStorage.getItem(`new_${page}`) === 'true';
             const element = document.getElementById(`nav-${page}`);
             if (element && isNew) element.classList.add('has-update');
-            
+
             if (window.location.pathname.includes(page + '.html') || (page === 'historia' && window.location.pathname.endsWith('historia.html'))) {
                 localStorage.setItem(`new_${page}`, 'false');
                 if (element) element.classList.remove('has-update');
             }
         });
     }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key.toLowerCase() === '/') {
-            const currentState = localStorage.getItem(`new_historia`) === 'true';
-            const newState = !currentState;
-            pages.forEach(page => localStorage.setItem(`new_${page}`, newState ? 'true' : 'false'));
-            checkUpdates();
-            alert(newState ? "Notificaciones activadas" : "Notificaciones desactivadas");
-        }
-    });
 
     window.addEventListener('load', checkUpdates);
 
@@ -695,7 +958,6 @@
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
-
 
     // Ocultar indicador de scroll al bajar
     window.addEventListener('scroll', () => {
