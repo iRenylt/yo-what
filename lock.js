@@ -77,7 +77,7 @@ function showWelcomeAnimation() {
                     letter-spacing: 4px;
                 ">DESBLOQUEANDO RECUERDOS...</p>
             </div>
-        `;
+        `; 
 
         setTimeout(() => {
             document.getElementById('welcomeIcon').style.opacity = '1';
@@ -96,12 +96,14 @@ function showWelcomeAnimation() {
             pageLock.style.backdropFilter = 'blur(0px)';
             pageLock.style.opacity = '0';
             pageLock.style.transform = 'scale(1.1)';
-            
+
             setTimeout(() => {
                 pageLock.style.display = 'none';
                 document.body.classList.remove("locked");
                 actualizarUltimaActividad();
+                loadAvatarFromDB(); // 👈 AQUI TAMBIÉN
             }, 2000);
+
         }, 4000);
     }, 800);
 }
@@ -110,9 +112,9 @@ function unlockPage() {
     const input = document.getElementById("pinInput").value;
     const error = document.getElementById("errorMsg");
 
+    if (error) error.style.display = "none";
+
     if (input === PIN_CORRECTO) {
-        // No guardamos estado de autenticación persistente para que siempre pida PIN al recargar
-        
         const isIndex =
             window.location.pathname.endsWith('index.html') ||
             window.location.pathname === '/' ||
@@ -125,6 +127,7 @@ function unlockPage() {
             if (pageLock) pageLock.style.display = "none";
             document.body.classList.remove("locked");
             actualizarUltimaActividad();
+            loadAvatarFromDB(); // 👈 AQUI
         }
     } else {
         if (error) error.style.display = "block";
@@ -138,7 +141,38 @@ function unlockPage() {
     document.addEventListener('DOMContentLoaded', () => {
         // Siempre bloqueamos al inicio para forzar el PIN en cada carga
         verificarBloqueo();
-});
+    });
+
+    // Evitar zoom automático en iOS al enfocar/ocultar el teclado en el input del PIN
+    document.addEventListener('DOMContentLoaded', () => {
+        const pinInput = document.getElementById('pinInput');
+        if (!pinInput) return;
+
+        function isIOS() {
+            return /iP(ad|hone|od)/.test(navigator.userAgent) && !window.MSStream;
+        }
+
+        const metaViewport = document.querySelector('meta[name=viewport]');
+        const originalViewport = metaViewport ? metaViewport.getAttribute('content') : 'width=device-width, initial-scale=1.0';
+
+        // Aseguramos tamaño de fuente mínimo 16px para evitar zoom en iOS como primera defensa
+        pinInput.style.fontSize = '16px';
+
+        if (isIOS()) {
+            pinInput.addEventListener('focus', () => {
+                if (metaViewport) metaViewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
+                document.documentElement.style['-webkit-text-size-adjust'] = '100%';
+            });
+
+            pinInput.addEventListener('blur', () => {
+                // esperamos un poco para dejar que el teclado se oculte antes de restaurar
+                setTimeout(() => {
+                    if (metaViewport) metaViewport.setAttribute('content', originalViewport);
+                    document.documentElement.style['-webkit-text-size-adjust'] = '';
+                }, 300);
+            });
+        }
+    });
 
 /* ============================= */
 /* 💬 COMENTARIOS (SUPABASE) */
@@ -186,3 +220,165 @@ document.addEventListener("DOMContentLoaded", () => {
 
     boton.addEventListener("click", enviarComentario);
 });
+
+/* ============================= */
+/* 🖼️ AVATAR COMPARTIDO (SUPABASE) */
+/* ============================= */
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const avatar = document.getElementById("dynamicAvatar");
+        const avatarInput = document.getElementById("avatarInput");
+
+        if (!avatar || !avatarInput) return;
+
+        function isTouchDevice() {
+            return (('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches);
+        }
+
+        // En móviles/táctil: un solo toque abre el selector. En escritorio: doble-clic para evitar subidas accidentales.
+        if (isTouchDevice()) {
+            avatar.addEventListener("click", () => {
+                // marcar que el upload fue solicitado (para evitar conflictos con secretos)
+                window.lastAvatarUploadTrigger = Date.now();
+                avatarInput.click();
+            });
+            avatar.setAttribute('title', 'Toca para cambiar avatar');
+            avatar.setAttribute('aria-label', 'Toca para cambiar avatar');
+        } else {
+            avatar.addEventListener("dblclick", () => {
+                window.lastAvatarUploadTrigger = Date.now();
+                avatarInput.click();
+            });
+            avatar.setAttribute('title', 'Doble clic para cambiar avatar');
+            avatar.setAttribute('aria-label', 'Doble clic para cambiar avatar');
+        }
+
+        avatarInput.addEventListener("change", async () => {
+            const file = avatarInput.files[0];
+            if (!file) return;
+
+            // marcar inicio de la operación y evitar que secretos se activen en los siguientes segundos
+            window.lastAvatarUploadAt = Date.now();
+
+            await uploadAvatar(file);
+
+            // un pequeño margen temporal más después de una subida
+            window.lastAvatarUploadAt = Date.now();
+        });
+
+        // Cargar avatar guardado al iniciar (sin esperar desbloqueo)
+        if (typeof loadAvatarFromDB === 'function') {
+            loadAvatarFromDB().catch(err => console.error('loadAvatarFromDB fallo:', err));
+        }
+
+});
+
+async function uploadAvatar(file) {
+    const fileExt = file.name.split(".").pop();
+    const fileName = `avatar-${Date.now()}.${fileExt}`;
+
+    const response = await fetch(
+        `${SUPABASE_URL}storage/v1/object/avatars/${fileName}`,
+        {
+            method: "PUT",
+            headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": "Bearer " + SUPABASE_KEY,
+                "Content-Type": file.type,
+                "x-upsert": "true"
+            },
+            body: file
+        }
+    );
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error("STORAGE ERROR:", response.status, errorText);
+        alert("Error subiendo la imagen 😓\nMira la consola");
+        return;
+    }
+
+    const publicUrl =
+        `${SUPABASE_URL}storage/v1/object/public/avatars/${fileName}`;
+
+    await saveAvatarUrl(publicUrl);
+}
+
+
+
+async function saveAvatarUrl(url) {
+    // Intento PATCH (actualizar fila existente)
+    let res = await fetch(
+        `${SUPABASE_URL}/rest/v1/avatar_state?id=eq.1`,
+        {
+            method: "PATCH",
+            headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": "Bearer " + SUPABASE_KEY,
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+            },
+            body: JSON.stringify({
+                image_url: url,
+                updated_at: new Date().toISOString()
+            })
+        }
+    );
+
+    // Si no existía la fila (PATCH falló), intentamos INSERTar (crear)
+    if (!res.ok) {
+        try {
+            res = await fetch(`${SUPABASE_URL}/rest/v1/avatar_state`, {
+                method: 'POST',
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": "Bearer " + SUPABASE_KEY,
+                    "Content-Type": "application/json",
+                    "Prefer": "return=minimal"
+                },
+                body: JSON.stringify({ id: 1, image_url: url, updated_at: new Date().toISOString() })
+            });
+        } catch (err) {
+            console.error('Error creando avatar_state:', err);
+        }
+    }
+
+    const avatar = document.getElementById("dynamicAvatar");
+    if (avatar) avatar.src = url + "?t=" + Date.now();
+
+    // marcar timestamp de subida exitosa para evitar que secretos se activen inmediatamente después
+    window.lastAvatarUploadAt = Date.now();
+
+    // después de guardar en servidor, forzamos una carga inmediata para asegurar sincronía entre dispositivos
+    if (typeof loadAvatarFromDB === 'function') {
+        loadAvatarFromDB().catch(err => console.error('loadAvatarFromDB fallo tras guardar avatar:', err));
+    }
+}
+
+
+async function loadAvatarFromDB() {
+    const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/avatar_state?id=eq.1&select=image_url`,
+        {
+            headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": "Bearer " + SUPABASE_KEY
+            }
+        }
+    );
+
+    const data = await res.json();
+    if (data[0]?.image_url) {
+        const url = data[0].image_url;
+        const avatar = document.getElementById("dynamicAvatar");
+        if (avatar) avatar.src = url + "?t=" + Date.now();
+    }
+}
+
+// Poll periódico para mantener sincronizado el avatar entre dispositivos (cada 30s)
+setInterval(() => {
+    if (typeof loadAvatarFromDB === 'function') {
+        loadAvatarFromDB().catch(err => console.error('Error sincronizando avatar:', err));
+    }
+}, 30000);
+
