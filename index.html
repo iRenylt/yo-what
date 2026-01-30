@@ -7,6 +7,7 @@
     <title>Ren's Archive // Inicio</title>
     <link rel="icon" href="https://i.imgur.com/iSyUemC.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffffff;
@@ -17,6 +18,8 @@
             --text-dim: rgba(255, 255, 255, 0.5);
             --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.1);
+            --max-width: 1100px;
+            --muted: rgba(255,255,255,0.12);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,13 +27,130 @@
         body {
             background: var(--bg);
             color: var(--text-main);
-            font-family: 'Playfair Display', serif;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Playfair Display', serif;
             min-height: 100vh;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
             line-height: 1.6;
         }
+
+        /* HERO */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 18px;
+            padding: 24px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .hero .intro { max-width: 900px; text-align: center; color: var(--text-dim); font-size: 1rem; }
+        .cta-buttons { display:flex; gap:12px; align-items:center; justify-content:center; }
+        .cta-buttons a, .cta-buttons button { background: rgba(255,255,255,0.06); border: 1px solid var(--muted); padding:10px 18px; border-radius: 999px; color:var(--text-main); text-decoration:none; font-weight:600; font-size:0.9rem; }
+        .cta-buttons a:hover, .cta-buttons button:hover { transform: translateY(-3px); background: rgba(255,255,255,0.09); }
+
+        /* GRID de tarjetas */
+        .cards-grid { display: grid; grid-template-columns: 1fr; gap: 22px; }
+        @media (min-width: 900px) { .cards-grid { grid-template-columns: 1fr 1fr; } }
+        .cards-grid .card { margin: 0; }
+
+        /* Sección destacada */
+        .featured { display:flex; gap:20px; align-items:center; flex-direction:row; }
+        .featured .cover { width: 140px; height:140px; border-radius:18px; object-fit:cover; border:1px solid var(--border); }
+        .featured .meta { flex:1; }
+        .featured p { color: var(--text-dim); }
+
+        /* Mini player fijo (toggle) */
+        #miniPlayer { position: relative; display: none; margin-top: 12px; }
+        .music-toggle { background: transparent; border:1px solid var(--border); padding:8px 12px; border-radius: 12px; color:var(--text-dim); }
+
+        /* Animaciones y microinteracciones */
+        @keyframes floatY {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes textShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero img { animation: floatY 6s ease-in-out infinite; }
+        .header-text h1 { background-size: 200% 100%; animation: textShift 6s linear infinite; }
+
+        .badge { transition: transform 0.25s ease, opacity 0.25s; }
+        .badge.pulse { box-shadow: 0 0 10px rgba(255,255,255,0.6); animation: pulseBadge 1.8s infinite; }
+        @keyframes pulseBadge { 0% { transform: scale(1); opacity:1 } 50% { transform: scale(1.4); opacity:0.9 } 100% { transform: scale(1); opacity:1 } }
+
+        /* Entrance animations via class toggle */
+        .fade-up { opacity: 0; transform: translateY(12px); transition: opacity 520ms cubic-bezier(.2,.9,.3,1), transform 520ms cubic-bezier(.2,.9,.3,1); }
+        .fade-up.in-view { opacity: 1; transform: translateY(0); }
+
+        .fade-in { opacity: 0; transition: opacity 600ms ease; }
+        .fade-in.in-view { opacity: 1; }
+
+        /* Card hover micro-lift */
+        .card { transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease; }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px rgba(0,0,0,0.45); }
+
+        /* Card colapsibles */
+        .card-toggle-btn { 
+            display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; 
+            background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); 
+            border-radius: 50%; cursor: pointer; font-size: 1.3rem; line-height: 1; 
+            transition: all 280ms ease; position: absolute; top: 18px; right: 20px;
+            animation: toggleGlow 2.5s ease-in-out infinite, togglePulse 2.5s ease-in-out infinite;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            z-index: 60; /* ensure it's above card content */
+            pointer-events: auto;
+        }
+        .card-toggle-btn:hover { 
+            background: rgba(255,255,255,0.15); transform: scale(1.15); border-color: rgba(255,255,255,0.4);
+            animation: toggleGlow 1.5s ease-in-out infinite, togglePulse 1.5s ease-in-out infinite;
+        }
+        .card-toggle-btn.collapsed::before { content: '📩'; }
+        .card-toggle-btn.expanded::before { content: '❎'; }
+
+        @keyframes toggleGlow {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(255, 183, 213, 0.6), inset 0 0 0 0 rgba(255, 183, 213, 0);
+                border-color: rgba(255,255,255,0.2);
+            }
+            50% { 
+                box-shadow: 0 0 0 8px rgba(255, 183, 213, 0), inset 0 0 10px 0 rgba(255, 183, 213, 0.3);
+                border-color: rgba(255,183,213,0.6);
+            }
+        }
+
+        @keyframes togglePulse {
+            0%, 100% { 
+                background: rgba(255,255,255,0.08);
+                transform: scale(1);
+            }
+            50% { 
+                background: rgba(255,255,255,0.12);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Card content colapsible */
+        .card-collapsible { max-height: 9999px; overflow: hidden; transition: max-height 380ms cubic-bezier(0.2, 0.9, 0.3, 1), opacity 300ms ease; opacity: 1; }
+        .card-collapsible.collapsed { max-height: 0; opacity: 0; overflow: hidden; }
+
+        /* Card header relative para toggle */
+        .card-header { position: relative; padding-right: 56px; }
+
+        /* Flor sin toggle */
+        .card-flor .card-toggle-btn { display: none; }
+        /* Center floral header and its label */
+        .card-flor .card-header { justify-content: center !important; }
+        .card-flor .card-header .date { margin: 0 auto; }
+        .card-flor .card-content { text-align: center; }
 
         /* 🌌 Fondo Estelar Dinámico */
         .stars {
@@ -98,7 +218,8 @@
             border-radius: 15px;
             outline: none;
             text-align: center;
-            font-size: 1rem;
+            font-size: 16px; /* evita zoom en iPhone */
+            -webkit-text-size-adjust: 100%;
             margin-bottom: 20px;
             width: 100%;
             transition: all 0.3s;
@@ -138,19 +259,20 @@
         header {
             position: relative;
             z-index: 10;
-            padding: 100px 20px 60px;
+            padding: 80px 20px 45px;
             text-align: center;
         }
 
         header img {
-            width: 90px;
-            height: 90px;
+            width: 85px;
+            height: 85px;
             border-radius: 50%;
             object-fit: cover;
             border: 1px solid var(--border);
             padding: 5px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: floatY 6s ease-in-out infinite;
         }
 
         header img:hover { transform: scale(1.05); border-color: #fff; }
@@ -160,8 +282,10 @@
             font-weight: 400;
             margin-bottom: 10px;
             background: linear-gradient(to bottom, #fff, #888);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-family: 'Playfair Display', serif;
         }
 
         .header-text p {
@@ -175,20 +299,37 @@
         nav {
             position: relative;
             z-index: 1000;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            max-width: 600px;
-            margin: 0 auto 60px;
-            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-width: 100%;
+            margin: 0 auto 50px;
+            padding: 0 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                gap: 6px;
+                margin-bottom: 40px;
+                padding: 0 10px;
+            }
         }
 
         @media (max-width: 600px) {
             nav {
-                grid-template-columns: 1fr;
+                gap: 6px;
+                margin-bottom: 35px;
+                padding: 0 10px;
             }
-            .dropdown {
-                grid-column: span 1;
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                gap: 5px;
+                margin-bottom: 30px;
+                padding: 0 8px;
             }
         }
 
@@ -233,32 +374,33 @@
 
         .has-update .badge { display: block; }
 
-        .dropdown { position: relative; width: 100%; }
+        .dropdown { position: relative; flex-shrink: 0; }
         .dropdown-content {
             display: none;
             position: absolute;
-            top: 105%;
-            left: 0;
-            width: 100%;
+            top: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: max-content;
             background: rgba(5, 5, 5, 0.95);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 10px;
+            border-radius: 16px;
+            padding: 8px;
             z-index: 2000;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             backdrop-filter: blur(20px);
         }
 
         .dropdown:hover .dropdown-content, .dropdown.active .dropdown-content { display: flex; }
-        .dropdown-content a { width: 100%; padding: 10px; border: none; background: transparent; }
+        .dropdown-content a { width: 100%; padding: 10px 16px; border: none; background: transparent; white-space: nowrap; }
 
         /* 📄 Contenido Principal */
         .container {
             position: relative;
             z-index: 10;
-            max-width: 800px;
+            max-width: var(--max-width);
             margin: 0 auto;
             padding: 0 20px 80px;
         }
@@ -311,6 +453,43 @@
             }
         }
 
+        /* Mejoras específicas para móviles pequeños y táctiles */
+        @media (max-width: 480px) {
+            header { padding: 50px 12px 30px; }
+            header img { width: 72px; height: 72px; }
+            .header-text h1 { font-size: 1.6rem; }
+
+            nav { gap: 5px; max-width: 100%; padding: 0 8px; }
+            nav a, .nav-item { padding: 12px 14px; font-size: 0.75rem; border-radius: 14px; min-height: 44px; }
+
+            .container { padding: 0 12px 50px; }
+            .card { padding: 16px; border-radius: 18px; }
+            .card-toggle-btn { width: 28px; height: 28px; top: 16px; right: 18px; font-size: 1.1rem; line-height: 1; }
+            .card-content h2 { font-size: 1.05rem; }
+            .card-content p { font-size: 0.95rem; line-height: 1.5; }
+
+            /* Iframes embebidos se adaptan mejor en alto según pantalla */
+            iframe { height: clamp(110px, 20vh, 160px); }
+
+            /* Lock overlay más compacta en móviles */
+            .lock-box { padding: 20px; width: 92%; max-width: 340px; border-radius: 16px; }
+            .lock-box input { padding: 12px; font-size: 0.95rem; border-radius: 12px; }
+            .lock-box button { padding: 10px 26px; font-size: 0.85rem; }
+
+            /* Dropdown en móviles se comporta como bloque (tocar para desplegar) */
+            .dropdown-content { position: static; display: none; width: 100%; flex-direction: column; box-shadow: none; transform: none; }
+            .dropdown.active .dropdown-content { display: flex; position: relative; top: 0; left: 0; }
+
+            /* SVG de flor más pequeño y centrado */
+            #flowerCanvas { height: 220px; }
+            #flowerCanvas svg { width: 200px; height: 200px; }
+
+            /* Imágenes dentro de cards mejor contenidas */
+            .card img { max-height: 260px; object-fit: cover; }
+
+            /* Reducir ruido del fondo estelar en móvil para rendimiento */
+            .stars::after { opacity: 0.08; }
+        }
         .card:hover {
             border-color: rgba(255, 255, 255, 0.2);
         }
@@ -370,6 +549,10 @@
             color: var(--text-dim);
             font-size: 0.6rem;
             letter-spacing: 3px;
+            background: linear-gradient(to bottom, transparent, rgba(5, 5, 5, 0.8));
+            margin-top: auto;
+            width: 100%;
+            border-top: 1px solid var(--border);
         }
 
         /* 🖱️ INDICADOR DE SCROLL */
@@ -396,6 +579,34 @@
             40% {transform: translateX(-50%) translateY(-10px);}
             60% {transform: translateX(-50%) translateY(-5px);}
         }
+
+        /* 🎁 SECRETOS ESTILOS */
+        .secret-word { cursor: pointer; position: relative; transition: all 0.3s; }
+        .secret-word:hover { color: #ffb7d5; text-shadow: 0 0 10px rgba(255, 183, 213, 0.5); }
+
+        .secret-modal { 
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
+            z-index: 10001; align-items: center; justify-content: center; 
+            backdrop-filter: blur(20px); padding: 20px; animation: fadeIn 0.4s ease;
+        }
+
+        .secret-modal.active { display: flex; }
+
+        .secret-content { 
+            background: var(--card-bg); border: 1px solid var(--border); padding: 40px; 
+            border-radius: 30px; text-align: center; max-width: 500px; animation: popIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .secret-image { max-width: 100%; border-radius: 20px; margin: 20px 0; max-height: 400px; object-fit: cover; }
+        .secret-text { color: var(--text-dim); font-style: italic; margin: 15px 0; line-height: 1.6; }
+        .secret-button { background: transparent; border: 1px solid #fff; color: #fff; padding: 10px 30px; border-radius: 30px; cursor: pointer; margin-top: 20px; transition: all 0.3s; }
+        .secret-button:hover { background: #fff; color: #000; }
+
+        .konami-sequence { position: fixed; bottom: 80px; right: 20px; background: rgba(255, 183, 213, 0.9); color: #000; padding: 15px 25px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; animation: slideUp 0.4s ease; z-index: 5000; }
     </style>
 </head>
 
@@ -414,10 +625,27 @@
     </div>
 
     <header>
-        <img src="https://i.imgur.com/iSyUemC.png" alt="ren" id="secretTrigger">
-        <div class="header-text">
-            <h1 id="greeting">Hola ❤️</h1>
-            <p>EST. 09 / 06 / 2025</p>
+        <div class="hero">
+            <img
+              src="https://i.imgur.com/iSyUemC.png"
+              id="dynamicAvatar"
+              class="secretTrigger"
+              style="cursor:pointer"
+            />
+
+            <input
+              type="file"
+              id="avatarInput"
+              accept="image/*"
+              style="display:none"
+            />
+
+            <div class="header-text">
+                <h1 id="greeting"></h1>
+                <p>EST. 09 / 06 / 2025</p>
+            </div>
+
+            <p class="intro">Bienvenida a Footage Archive — un espacio sencillo y creado con cariño. Explora las cartas, recuerdos y la línea de tiempo. Todo está pensado para acompañarte.</p>
         </div>
     </header>
 
@@ -443,62 +671,85 @@
         </div>
     </div>
 </nav>
-
-
-
     <div class="container">
+
+        <div class="cards-grid">
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="date">Fecha de actualización: 30/01/2026</span>
+                    <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
+                </div>
+                <div class="card-collapsible collapsed">
+                    <div class="card-content">
+                        <h2>¿Footage Archive?</h2>
+                        <p>Desarrollar, programar y diseñar; todo esto es parte de mi amor por ti, preciosa.</p><br>
+                        <p>Sinceramente me relaja hacer esto por ti, aunque a veces me quedo sin creatividad ¿qué es lo que te gustaría ver o que Footage Archive tenga?</p><br>
+                        <p>Revisa todo lentamente y detalladamente, hay muchos secretos ocultos que Footage Archive espera que encuentres</p><br>
+                        <p>Se actualizó toda la página y ahora al presionar el logo del Inicio, puedes cambiar el logo por la imágen que tú quieras ❤️</p>
+
+                        <iframe src="https://open.spotify.com/embed/track/1jecO8NeYLsVWVptITz4c1?si=8b589fba6c234d3d" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    </div>
+                </div>
+            </div>
 
         <div class="card">
             <div class="card-header">
                 <span class="date">Fecha de actualización: 23/01/2026</span>
+                <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
             </div>
-            <div class="card-content">
-                <h2>¿Footage Archive como sentimiento?</h2>
-                <p>Footage Archive es más que un sentimiento. Es una parte de mí. Como ya lo he escrito antes, incluso cuando las cosas pasan, cuando me siento devastado por dentro, perdido, solo o vacío, vuelvo aquí. Este lugar me sostiene. Lo que hace distinto a Footage Archive es que no es solo mío.
-                En cada línea de código hay una parte de ti también.
-                Quiero que mis días te incluyan, que estés presente en ellos, porque contigo no dejo de sonreír.</p><br>
-                <p>Tienes eso que me hace bien.
-                Mantienes vivo este sitio.
-                Aunque yo lo construya y lo programe, Footage Archive es una parte de mí que también te pertenece. Es un obsequio. Es un sentimiento.
+            <div class="card-collapsible collapsed">
+                <div class="card-content">
+                    <h2>¿Footage Archive como sentimiento?</h2>
+                    <p>Footage Archive es más que un sentimiento. Es una parte de mí. Como ya lo he escrito antes, incluso cuando las cosas pasan, cuando me siento devastado por dentro, perdido, solo o vacío, vuelvo aquí. Este lugar me sostiene. Lo que hace distinto a Footage Archive es que no es solo mío.
+                    En cada línea de código hay una parte de ti también.
+                    Quiero que mis días te incluyan, que estés presente en ellos, porque contigo no dejo de sonreír.</p><br>
+                    <p>Tienes eso que me hace bien.
+                    Mantienes vivo este sitio.
+                    Aunque yo lo construya y lo programe, Footage Archive es una parte de mí que también te pertenece. Es un obsequio. Es un sentimiento.
 
-                Footage acompaña lo que es difícil de explicar, incómodo de decir, complejo de asimilar.
-                No busca perfección.
-                Busca lo real.</p><br>
-                <p>Aún queda tanto por crear, tanto por agregar, que no puedo imaginar en qué se convertirá este lugar. Y está bien. No tiene que terminar.
+                    Footage acompaña lo que es difícil de explicar, incómodo de decir, complejo de asimilar.
+                    No busca perfección.
+                    Busca lo real.</p><br>
+                    <p>Aún queda tanto por crear, tanto por agregar, que no puedo imaginar en qué se convertirá este lugar. Y está bien. No tiene que terminar.
 
-                    Hay veces que cuesta.
+                        Hay veces que cuesta.
 
-                    Footage es más que un refugio, lo sé.
-                    Aún no tengo una definición exacta de lo que es, pero sí sé esto: es uno de mis regalos más sinceros hacia ti. Como otras partes de mí que hoy llevas contigo, y que en su momento fueron mías. Que lo valores me haría feliz. Incluso si este archivo no entiende mis sentimientos, yo sí entiendo algo: estás intentando mejorar, y eso importa.</p><br>
-                <p>La verdad a veces duele y a veces incomoda.
-                Pero Footage ayuda a transformarla en algo distinto, algo que va más allá del amor idealizado: una conexión real.
+                        Footage es más que un refugio, lo sé.
+                        Aún no tengo una definición exacta de lo que es, pero sí sé esto: es uno de mis regalos más sinceros hacia ti. Como otras partes de mí que hoy llevas contigo, y que en su momento fueron mías. Que lo valores me haría feliz. Incluso si este archivo no entiende mis sentimientos, yo sí entiendo algo: estás intentando mejorar, y eso importa.</p><br>
+                    <p>La verdad a veces duele y a veces incomoda.
+                    Pero Footage ayuda a transformarla en algo distinto, algo que va más allá del amor idealizado: una conexión real.
 
-                No sé exactamente qué pienses o qué sientas, pero este lugar es para ti.
-                Y su futuro se decide día a día.
+                    No sé exactamente qué pienses o qué sientas, pero este lugar es para ti.
+                    Y su futuro se decide día a día.
 
-                Desde lo más profundo y honesto de mí:
-                quiero que te haga sentir segura, tranquila, cuidada.
-                Que la ansiedad baje.
-                Que sepas que te elijo en el presente, sin promesas vacías, sin soltar lo que ya existe, solo cuidándolo y mejorándolo.</p><br>
-                <p>(La Línea de Tiempo se actualizó)</p>
-                
-                <iframe src="https://open.spotify.com/embed/track/1S25bTykXigH76PdRNPaKV?si=f4dd8b37f0c34298" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    Desde lo más profundo y honesto de mí:
+                    quiero que te haga sentir segura, tranquila, cuidada.
+                    Que la ansiedad baje.
+                    Que sepas que te elijo en el presente, sin promesas vacías, sin soltar lo que ya existe, solo cuidándolo y mejorándolo.</p><br>
+                    <p>(La Línea de Tiempo se actualizó)</p>
+
+                    <iframe src="https://open.spotify.com/embed/track/5sLeuS2QO4qBPIOIvWvN80?si=a5822019caca456e" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                </div>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <span class="date">Fecha de actualización: 21/01/2026 - 22/01/26</span>
+                <span class="date">Fecha de actualización: 21/01/2026</span>
+                <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
             </div>
-            <div class="card-content">
-                <img src="https://i.imgur.com/1QvEB7R.png" alt="update">
-                <h2>Tú y yo (el detrás de Footage Archive)</h2>
-                <p>En cada línea de Footage Archive estás tú, hay pequeños secretos en la pagína de Inicio (solo dos) y quizá ya los descubriste pero en caso de que no pues.. es tu turno de hacerlo, presionar en lugares, imágenes, frases es una pista, te amo un montón</p>
+            <div class="card-collapsible collapsed">
+                <div class="card-content">
+                    <h2>Tú y yo (el detrás de Footage Archive)</h2>
+                    <p>En cada línea de Footage Archive estás tú, hay pequeños secretos en toda la página y quizá ya los descubriste pero en caso de que no pues.. es tu turno de hacerlo, presionar en lugares, imágenes, frases es una pista, te amo un montón</p>
+                    <img src="https://i.imgur.com/1QvEB7R.png" alt="update">
+                </div>
             </div>
         </div>
-        
+
         <!-- 🌸 SECCIÓN DE LA FLOR -->
-        <div class="card" style="text-align: center;">
+        <div class="card card-flor" style="text-align: center;">
             <div class="card-header" style="justify-content: center;">
                 <span class="date">Especial para ti</span>
             </div>
@@ -543,46 +794,49 @@
         <div class="card">
             <div class="card-header">
                 <span class="date">Fecha de actualización: 17/01/2026</span>
+                <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
             </div>
-            <div class="card-content">
-                <h2>¿Qué será del futuro de Footage Archive?</h2>
-                <p>El futuro de Footage Archive no está cerrado.</p><br>
-                <p>No es algo terminado, es algo que sigue creciendo con el tiempo, como nosotros. La idea no es llenarlo de cosas por llenar, sino dejar que evolucione con sentido y cuidado.</p><br>
-                <p>Footage Archive seguirá siendo un lugar honesto.
-                Un espacio que se adapta, que cambia, que aprende. No busca ser perfecto, busca ser real. Mientras exista respeto, comunicación y ganas, este lugar seguirá creciendo contigo.</p><br>
-                <p>No sé exactamente en qué se convertirá,
-                pero sí sé por qué existe: para acompañarnos, para cuidarnos mejor y para dejar constancia de lo que vamos construyendo, sin forzarlo, sin adelantar etapas.</p>
-                <iframe src="https://open.spotify.com/embed/track/6h9h7LDcuWowOHUhWRTwnO?si=1c7a91c648044a15" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            <div class="card-collapsible collapsed">
+                <div class="card-content">
+                    <h2>¿Qué será del futuro de Footage Archive?</h2>
+                    <p>El futuro de Footage Archive no está cerrado.</p><br>
+                    <p>No es algo terminado, es algo que sigue creciendo con el tiempo, como nosotros. La idea no es llenarlo de cosas por llenar, sino dejar que evolucione con sentido y cuidado.</p><br>
+                    <p>Footage Archive seguirá siendo un lugar honesto.
+                    Un espacio que se adapta, que cambia, que aprende. No busca ser perfecto, busca ser real. Mientras exista respeto, comunicación y ganas, este lugar seguirá creciendo contigo.</p><br>
+                    <p>No sé exactamente en qué se convertirá,
+                    pero sí sé por qué existe: para acompañarnos, para cuidarnos mejor y para dejar constancia de lo que vamos construyendo, sin forzarlo, sin adelantar etapas.</p>
+                    <iframe src="https://open.spotify.com/embed/track/6h9h7LDcuWowOHUhWRTwnO?si=1c7a91c648044a15" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                </div>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
                 <span class="date">Fecha de actualización: 13/01/2026</span>
+                <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
             </div>
-            <div class="card-content">
-                <h2>¿Por qué Footage Archive?</h2>
-                <p>Footage Archive empezó como algo de mí para ti.
-                Una forma de decirte lo que a veces no sé cómo empezar a explicar. El amor no solo se siente, también se aprende a entender, y este espacio nació desde ahí: desde dejar que todo fluya con honestidad.</p><br>
+            <div class="card-collapsible collapsed">
+                <div class="card-content">
+                    <h2>¿Por qué Footage Archive?</h2>
+                    <p>Footage Archive empezó como algo de mí para ti.
+                    Una forma de decirte lo que a veces no sé cómo empezar a explicar. El amor no solo se siente, también se aprende a entender, y este espacio nació desde ahí: desde dejar que todo fluya con honestidad.</p><br>
 
-                    <p>No siempre es fácil. Hay momentos que me cuestan, cosas que me desgastan, pero sigo aquí, eligiéndote. Esto no es una promesa ni una obligación, es una elección consciente. Lo que tenemos depende de lo que ambos queramos cuidar.</p><br>
+                        <p>No siempre es fácil. Hay momentos que me cuestan, cosas que me desgastan, pero sigo aquí, eligiéndote. Esto no es una promesa ni una obligación, es una elección consciente. Lo que tenemos depende de lo que ambos queramos cuidar.</p><br>
 
-                <p>Footage Archive también es un regalo.
-                Un lugar seguro y sincero donde te comparto una parte vulnerable de mí. Todo aquí está hecho con tiempo, cariño y atención. Cada detalle fue pensado para ti, porque así sé querer.</p><br>
+                    <p>Footage Archive también es un regalo.
+                    Un lugar seguro y sincero donde te comparto una parte vulnerable de mí. Todo aquí está hecho con tiempo, cariño y atención. Cada detalle fue pensado para ti, porque así sé querer.</p><br>
 
-                <p>Es un espacio nuestro.
-                Para que puedas dejarme palabras, pensamientos o emociones cuando lo necesites. No reemplaza lo real, lo acompaña. Es mi forma de estar presente contigo, con verdad y calma.</p><br> 
-                <p>Desde lo más sincero y honesto:
-                – A</p>
-                <iframe src="https://open.spotify.com/embed/track/4DGwG4QsOWNhoM3jEyKnuR?si=dcc068b4a0814682" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <p>Es un espacio nuestro.
+                    Para que puedas dejarme palabras, pensamientos o emociones cuando lo necesites. No reemplaza lo real, lo acompaña. Es mi forma de estar presente contigo, con verdad y calma.</p><br> 
+                    <p>Desde lo más sincero y honesto:
+                    – A</p>
+                    <iframe src="https://open.spotify.com/embed/track/4DGwG4QsOWNhoM3jEyKnuR?si=dcc068b4a0814682" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                </div>
             </div>
+        </div>
         </div>
     </div>
 
-    <div class="scroll-indicator" id="scrollIndicator">
-        <p>Desliza</p>
-        <div class="dot"></div>
-    </div>
 
 <footer>
     <p>// REN'S ARCHIVE // 2025-206 //</p>
@@ -590,9 +844,334 @@
 
 <script src="lock.js"></script>
 <script>
-    // Scroll Indicator Logic
+    // ✨ SISTEMA DE SECRETOS AVANZADO ✨
+
+    const secrets = {
+        revealed: new Set(),
+        konamiCode: ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'],
+        konamiIndex: 0
+    };
+
+    // URLs DE IMÁGENES POR HORA (cambiar según tus URLs)
+    const avatarImages = {
+        morning: 'https://i.imgur.com/iSyUemC.png',     // 5-12
+        afternoon: 'https://i.imgur.com/iSyUemC.png',   // 12-18
+        night: 'https://i.imgur.com/iSyUemC.png'        // 18-5
+    };
+
+    function getAvatarByHour() {
+        const hour = new Date().getHours();
+        if (hour >= 5 && hour < 12) return avatarImages.morning;
+        else if (hour >= 12 && hour < 18) return avatarImages.afternoon;
+        else return avatarImages.night;
+    }
+
+    // Actualizar imagen del avatar según la hora
+    document.addEventListener('DOMContentLoaded', () => {
+        const avatar = document.getElementById('dynamicAvatar');
+        if (!avatar) return;
+
+        // Por defecto mostramos un avatar según la hora; la versión en Supabase prevalecerá cuando se sincronice
+        avatar.src = getAvatarByHour();
+
+        // Siempre sincronizar con la base para obtener el avatar compartido en otros dispositivos
+        if (typeof loadAvatarFromDB === 'function') {
+            loadAvatarFromDB().catch(err => console.error('No se pudo cargar avatar desde Supabase', err));
+        }
+    });
+
+    // Función para mostrar secreto
+    function showSecret(title, content, hasImage = false, imageUrl = '', hasAudio = false, audioUrl = '') {
+        const modal = document.createElement('div');
+        modal.className = 'secret-modal active';
+        modal.innerHTML = `
+            <div class="secret-content">
+                <p style="font-size: 1.2rem; margin-bottom: 10px;">✨ ${title} ✨</p>
+                ${hasImage ? `<img src="${imageUrl}" alt="secret" class="secret-image">` : ''}
+                <p class="secret-text">${content}</p>
+                ${hasAudio ? `<audio controls style="width: 100%; margin: 15px 0;"><source src="${audioUrl}" type="audio/mpeg"></audio>` : ''}
+                <button class="secret-button" onclick="this.closest('.secret-modal').remove()">Cerrar</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+    }
+
+    // SECRETO 1: Click triple en avatar (existente, mejorado)
+    let clickCount = 0;
+    document.addEventListener('DOMContentLoaded', () => {
+        const avatar = document.getElementById('dynamicAvatar');
+        if (avatar) {
+            avatar.addEventListener('click', () => {
+                // Evitar conflicto con subida de avatar: ignoramos clicks recientes que abrieron el selector
+                const IGNORE_AFTER_MS = 3000;
+                const lastTrigger = window.lastAvatarUploadTrigger || 0;
+                const lastUpload = window.lastAvatarUploadAt || 0;
+                if (Date.now() - lastTrigger < IGNORE_AFTER_MS || Date.now() - lastUpload < IGNORE_AFTER_MS) {
+                    return; // este click se usó para cambiar avatar, no cuente para el secreto
+                }
+
+                clickCount++;
+                if (clickCount === 3) {
+                    showSecret('Pensamiento Silencioso', 'En cada línea de código de este archivo, hay un pensamiento para ti. Cada color, cada letra, cada animación... todo te incluye.');
+                    secrets.revealed.add('avatar-triple-click');
+                    clickCount = 0;
+                }
+                setTimeout(() => clickCount = 0, 5000);
+            });
+        }
+
+        // Actualizar avatar al cargar
+
+    });
+
+    // SECRETO 2: Código Konami (↑↑↓↓←→←→BA)
+    document.addEventListener('keydown', (e) => {
+        const key = e.key;
+        if (key === secrets.konamiCode[secrets.konamiIndex]) {
+            secrets.konamiIndex++;
+            if (secrets.konamiIndex === secrets.konamiCode.length) {
+                showSecret('¡CÓDIGO SECRETO ACTIVADO!', 'Presionaste la secuencia Konami... ¡Has desbloqueado un nivel de magia! Estoy orgulloso de ti por encontrar esto.');
+                secrets.revealed.add('konami-code');
+                const notification = document.createElement('div');
+                notification.className = 'konami-sequence';
+                notification.textContent = '🎮 CÓDIGO DESBLOQUEADO';
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 3000);
+                secrets.konamiIndex = 0;
+            }
+        } else {
+            secrets.konamiIndex = key === secrets.konamiCode[0] ? 1 : 0;
+        }
+    });
+
+    // SECRETO 3: Doble click en el footer - REMOVIDO, footer limpio
+    // (sin eventos de secreto)
+
+    // SECRETO 4: Presionar "Footage Archive" en el intro
+    document.addEventListener('DOMContentLoaded', () => {
+        const intro = document.querySelector('.hero .intro');
+        if (intro) {
+            const text = intro.innerHTML;
+            intro.innerHTML = text.replace(/Footage Archive/g, '<span class="secret-word">Footage Archive</span>');
+
+            document.querySelectorAll('.secret-word').forEach(word => {
+                word.addEventListener('click', () => {
+                    if (!secrets.revealed.has('footage-archive-click')) {
+                        showSecret('El Origen', 'Footage Archive es mi forma de estar completamente presente contigo, sin guardar nada, sin filtros. Es amor en código.');
+                        secrets.revealed.add('footage-archive-click');
+                    }
+                });
+            });
+        }
+    });
+
+    // SECRETO 5: Triple click en "Hola"
+    const greeting = document.getElementById('greeting');
+    if (greeting) {
+        let greetingClicks = 0;
+        greeting.style.cursor = 'pointer';
+        greeting.addEventListener('click', () => {
+            greetingClicks++;
+            if (greetingClicks === 3) {
+                showSecret('Momento del Día', 'Cada momento contigo es especial. Buenos días, buenas tardes o buenas noches... siempre estás en mi mente. ¿Cómo estuvo tu día?');
+                secrets.revealed.add('greeting-triple-click');
+                greetingClicks = 0;
+            }
+            setTimeout(() => greetingClicks = 0, 5000);
+        });
+    }
+
+    // SECRETO 6: Presionar la palabra "cariño" en intro
+    document.addEventListener('DOMContentLoaded', () => {
+        const intro = document.querySelector('.hero .intro');
+        if (intro) {
+            intro.innerHTML = intro.innerHTML.replace(/cariño/g, '<span class="secret-word">cariño</span>');
+
+            document.querySelectorAll('.secret-word').forEach(word => {
+                if (word.textContent === 'cariño') {
+                    word.addEventListener('click', () => {
+                        if (!secrets.revealed.has('carino-click')) {
+                            showSecret('Cuidado', 'Eres mi cariño. Mi forma de cuidarte es a través de gestos como este: un archivo lleno de secretos, de detalles, de ti y de mí.');
+                            secrets.revealed.add('carino-click');
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    // SECRETO 7: Click en primer card header
+    document.addEventListener('DOMContentLoaded', () => {
+        const firstCard = document.querySelector('.card-header .date');
+        if (firstCard) {
+            firstCard.style.cursor = 'pointer';
+            firstCard.addEventListener('click', () => {
+                if (!secrets.revealed.has('first-card-date')) {
+                    showSecret('Momento en el Tiempo', 'Esta fecha marca cuando escribí este archivo, pero cada momento contigo es actualizado en tiempo real en mi corazón.');
+                    secrets.revealed.add('first-card-date');
+                }
+            });
+        }
+    });
+
+    // SECRETO 8: Presionar "EST." en header
+    document.addEventListener('DOMContentLoaded', () => {
+        const dateElement = document.querySelector('.header-text p');
+        if (dateElement) {
+            dateElement.style.cursor = 'pointer';
+            let estClicks = 0;
+            dateElement.addEventListener('click', () => {
+                estClicks++;
+                if (estClicks === 2) {
+                    showSecret('Establecimiento', 'EST. significa el comienzo de algo precioso. 09/06/2025 es cuando decidimos que esto era real, que valía la pena cuidarlo.');
+                    secrets.revealed.add('est-click');
+                    estClicks = 0;
+                }
+                setTimeout(() => estClicks = 0, 5000);
+            });
+        }
+    });
+
+    // SECRETO 9: Presionar "sincero" o "honesto" en los cards
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.card-content');
+        cards.forEach(card => {
+            const html = card.innerHTML;
+            card.innerHTML = html.replace(/(\bsincero\b|\bhonesto\b)/gi, '<span class="secret-word">$1</span>');
+        });
+
+        document.querySelectorAll('.card-content .secret-word').forEach(word => {
+            word.addEventListener('click', () => {
+                const word_text = word.textContent.toLowerCase();
+                const secret_key = `word-${word_text}-click`;
+                if (!secrets.revealed.has(secret_key)) {
+                    const messages = {
+                        'sincero': 'Ser sincero es el único regalo que puedo darte. Sin máscaras, sin pretensiones, solo yo, para ti.',
+                        'honesto': 'La honestidad duele a veces, pero es el único camino que respeto. Contigo siempre seré honesto.'
+                    };
+                    showSecret('Verdad', messages[word_text] || 'Esta palabra significa vulnerabilidad.');
+                    secrets.revealed.add(secret_key);
+                }
+            });
+        });
+    });
+
+    // SECRETO 10: Presionar "amor" en los cards
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.card-content');
+        cards.forEach(card => {
+            const html = card.innerHTML;
+            card.innerHTML = html.replace(/(\bamor\b)/gi, '<span class="secret-word">$1</span>');
+        });
+
+        document.querySelectorAll('.card-content .secret-word').forEach(word => {
+            if (word.textContent.toLowerCase() === 'amor') {
+                word.addEventListener('click', () => {
+                    if (!secrets.revealed.has('amor-click')) {
+                        showSecret('Definición Personal', 'Amor es elegirte cada día. Es construir esto contigo. Es saber que eres lo que más me hace sonreír.');
+                        secrets.revealed.has('amor-click') || secrets.revealed.add('amor-click');
+                    }
+                });
+            }
+        });
+    });
+
+    // SECRETO 11: Presionar "TE AMO" cuando aparece
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.card-content');
+        cards.forEach(card => {
+            const html = card.innerHTML;
+            card.innerHTML = html.replace(/TE AMO/g, '<span class="secret-word" style="color: #ffb7d5; font-weight: 600;">TE AMO</span>');
+        });
+
+        document.querySelectorAll('.card-content .secret-word').forEach(word => {
+            if (word.textContent === 'TE AMO') {
+                word.addEventListener('click', () => {
+                    if (!secrets.revealed.has('te-amo-click')) {
+                        showSecret('Declaración', 'TE AMO. No es fácil decirlo en código, pero aquí está, escrito en las líneas del archivo. Te amo.');
+                        secrets.revealed.add('te-amo-click');
+                    }
+                });
+            }
+        });
+    });
+
+    // SECRETO 12: Presionar "flor" (en el card especial)
+    document.addEventListener('DOMContentLoaded', () => {
+        const flowerCard = document.querySelector('.card-flor .card-content h2');
+        if (flowerCard) {
+            const html = flowerCard.innerHTML;
+            flowerCard.innerHTML = html.replace(/pequeño/g, '<span class="secret-word">pequeño</span>');
+
+            flowerCard.parentElement.innerHTML = flowerCard.parentElement.innerHTML.replace(/bonito/g, '<span class="secret-word">bonito</span>');
+
+            document.querySelectorAll('.card-flor .secret-word').forEach(word => {
+                word.addEventListener('click', () => {
+                    if (!secrets.revealed.has('flower-click')) {
+                        showSecret('Detalles', 'Los detalles pequeños son los que más importan. Una flor, una palabra, un código... son mi forma de decirte que te veo, que te valoro.');
+                        secrets.revealed.add('flower-click');
+                    }
+                });
+            });
+        }
+    });
+
+    // SECRETO 13: Presionar el botón "Iniciar" de la flor 5 veces
+    let flowerButtonClicks = 0;
+    const flowerBtn = document.getElementById('runFlower');
+    if (flowerBtn) {
+        flowerBtn.addEventListener('click', () => {
+            flowerButtonClicks++;
+            if (flowerButtonClicks === 5) {
+                showSecret('Mensaje en la Flor', 'Esta flor crece porque la riegas con tu atención. Cada click, cada visita, cada momento que pasas aquí... la hace más hermosa.');
+                secrets.revealed.add('flower-button-5clicks');
+                flowerButtonClicks = 0;
+            }
+            setTimeout(() => flowerButtonClicks = 0, 10000);
+        });
+    }
+
+    // SECRETO 14: Presionar "A" (firma) 
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.card-content');
+        cards.forEach(card => {
+            const html = card.innerHTML;
+            card.innerHTML = html.replace(/– A<\/p>/g, '<p>– <span class="secret-word" style="font-weight: 600;">A</span></p>');
+        });
+
+        document.querySelectorAll('.card-content .secret-word').forEach(word => {
+            if (word.textContent === 'A') {
+                word.addEventListener('click', () => {
+                    if (!secrets.revealed.has('firma-a-click')) {
+                        showSecret('Quién Soy', 'A. Esa inicial soy yo. El que te escribió todo esto. El que aún sigue aquí, eligiéndote, cuidándote, amándote.');
+                        secrets.revealed.add('firma-a-click');
+                    }
+                });
+            }
+        });
+    });
+
+    // SECRETO 15: Presionar "Línea de Tiempo" en nav
+    document.addEventListener('DOMContentLoaded', () => {
+        const historyLink = document.getElementById('nav-historia');
+        if (historyLink) {
+            let timelineClicks = 0;
+            historyLink.addEventListener('click', (e) => {
+                timelineClicks++;
+                if (timelineClicks === 1) {
+                    // Primera visita solo navega, segunda vez muestra secreto
+                }
+            });
+        }
+    });
+
+    // Scroll Indicator Logic (robusto: comprueba existencia)
     window.addEventListener('scroll', () => {
-        const indicator = document.getElementById('scrollIndicator');
+        const indicator = document.querySelector('.scroll-indicator') || document.getElementById('scrollIndicator');
+        if (!indicator) return; // no hay indicador en esta página
         if (window.scrollY > 100) {
             indicator.style.opacity = '0';
             indicator.style.pointerEvents = 'none';
@@ -610,20 +1189,33 @@
         "BIENVENIDA A CASA",
         "UN ARCHIVO SECRETO"
     ];
-    document.getElementById('lockPhrase').textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    const lockPhrase = document.getElementById('lockPhrase');
+    if (lockPhrase) {
+        lockPhrase.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    }
 
-    // Dropdown toggle
+    // Dropdown toggle mejorado
     const dropdown = document.querySelector('.dropdown');
     const dropdownBtn = document.querySelector('.nav-item');
-    dropdownBtn.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768) {
+
+    if (dropdownBtn && dropdown) {
+        dropdownBtn.addEventListener('click', (e) => {
             e.preventDefault();
             dropdown.classList.toggle('active');
-        }
-    });
-    document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) dropdown.classList.remove('active');
-    });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        document.querySelectorAll('.dropdown-content a').forEach(link => {
+            link.addEventListener('click', () => {
+                dropdown.classList.remove('active');
+            });
+        });
+    }
 
     // Sistema de Notificaciones (Badge de "Nuevo")
     const pages = ['inicio', 'historia', 'cartas', 'carta1', 'carta7', '', ''];
@@ -631,9 +1223,6 @@
     function checkUpdates() {
         pages.forEach(page => {
             const isNew = localStorage.getItem(`new_${page}`) === 'true';
-            const lastVisit = localStorage.getItem(`visit_${page}`);
-            const updateDate = localStorage.getItem(`update_${page}`) || 0;
-
             const element = document.getElementById(`nav-${page}`);
             if (element && isNew) {
                 element.classList.add('has-update');
@@ -646,19 +1235,6 @@
             }
         });
     }
-
-    // Tecla secreta para alternar notificaciones (Presionar 'N')
-    document.addEventListener('keydown', (e) => {
-        if (e.key.toLowerCase() === '/') {
-            const currentState = localStorage.getItem(`new_inicio`) === 'true';
-            const newState = !currentState;
-            pages.forEach(page => {
-                localStorage.setItem(`new_${page}`, newState ? 'true' : 'false');
-            });
-            checkUpdates();
-            alert(newState ? "Notificaciones activadas" : "Notificaciones desactivadas");
-        }
-    });
 
     document.querySelectorAll('nav a').forEach(link => {
         link.addEventListener('click', function() {
@@ -685,25 +1261,24 @@
             greeting = "Buenas noches";
         }
 
-        greetingElement.textContent = `${greeting}, bienvenida 💕`;
+        if (greetingElement) {
+            greetingElement.textContent = `${greeting} 💕`;
+        }
     }
 
-    // Ejecutar al cargar
     updateGreeting();
-
-    // Revisar cada minuto por si cambia la hora
     setInterval(updateGreeting, 60000);
 
+    // Toggle para expandir/contraer cards
+    function toggleCard(btn) {
+        const card = btn.closest('.card');
+        const collapsible = card.querySelector('.card-collapsible');
+        if (!collapsible) return;
 
-    // Secretos
-    let clickCount = 0;
-    document.getElementById('secretTrigger').addEventListener('click', () => {
-        clickCount++;
-        if (clickCount === 3) {
-            document.getElementById('secretModal').style.display = 'flex';
-            clickCount = 0;
-        }
-    });
+        collapsible.classList.toggle('collapsed');
+        btn.classList.toggle('collapsed');
+        btn.classList.toggle('expanded');
+    }
 
     function startFlower() {
         const canvas = document.getElementById('flowerCanvas');
@@ -711,7 +1286,6 @@
         canvas.style.display = 'flex';
         btn.style.display = 'none';
 
-        // Manual trigger for animations to ensure they start on mobile
         setTimeout(() => {
             document.getElementById('stemAnim').beginElement();
             setTimeout(() => document.getElementById('leaf1Anim').beginElement(), 1000);
@@ -720,12 +1294,26 @@
         }, 100);
     }
 
-    // Easter egg en el footer
-    const footerText = document.querySelector('footer p');
-    footerText.addEventListener('dblclick', () => {
-        footerText.textContent = "TE AMO MÁS DE LO QUE IMAGINAS ❤️";
-        setTimeout(() => footerText.textContent = "// REN'S ARCHIVE // 2025-206 //", 3000);
-    });
+    // IntersectionObserver para animar elementos cuando salen en pantalla
+    (function() {
+        const options = { root: null, rootMargin: '0px', threshold: 0.12 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, options);
+
+        document.querySelectorAll('.card, .featured, .hero').forEach((el) => {
+            if (!el.classList.contains('fade-in') && !el.classList.contains('fade-up')) el.classList.add('fade-up');
+            observer.observe(el);
+        });
+    })();
+
+    // Mostrar resumen de secretos encontrados
+    console.log('%c🎁 SECRETOS DISPONIBLES EN ESTE ARCHIVO 🎁', 'color: #ffb7d5; font-size: 16px; font-weight: bold;');
+    console.log('%cEncontrados: ' + secrets.revealed.size, 'color: #fff; font-size: 12px;');
 </script>
 </body>
 </html>
