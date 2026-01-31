@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ren's Archive // Inicio</title>
-    <link rel="icon" href="https://i.imgur.com/iSyUemC.png" type="image/png">
+    <title>Footage Archive</title>
+    <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -541,6 +541,18 @@
             filter: grayscale(0.5);
         }
 
+        /* Spotify mobile fallback: keep embed visible and show a small fallback link under it on small screens */
+        .spotify-embed { position: relative; }
+        .spotify-embed .spotify-iframe { width: 100%; }
+        .spotify-fallback { display: none; margin-top: 12px; }
+        .spotify-open { text-decoration: none; color: var(--text-dim); font-weight: 600; background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 8px 12px; border-radius: 12px; }
+        .spotify-open:hover { color: #fff; border-color: #fff; background: rgba(255,255,255,0.05); }
+        @media (max-width: 900px) {
+            /* Do not hide the iframe — show the fallback link below it for users who experience the sad-face */
+            .spotify-embed .spotify-iframe { display: block; }
+            .spotify-embed .spotify-fallback { display: flex; gap: 10px; align-items: center; justify-content: flex-start; }
+        }
+
         footer {
             position: relative;
             z-index: 10;
@@ -688,7 +700,12 @@
                         <p>Revisa todo lentamente y detalladamente, hay muchos secretos ocultos que Footage Archive espera que encuentres</p><br>
                         <p>Se actualizó toda la página y ahora al presionar el logo del Inicio, puedes cambiar el logo por la imágen que tú quieras ❤️</p>
 
-                        <iframe src="https://open.spotify.com/embed/track/1jecO8NeYLsVWVptITz4c1?si=8b589fba6c234d3d" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                        <div class="spotify-embed">
+                            <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/1jecO8NeYLsVWVptITz4c1?si=8b589fba6c234d3d" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                            <div class="spotify-fallback">
+                                <a class="spotify-open" href="https://open.spotify.com/track/1jecO8NeYLsVWVptITz4c1" target="_blank" rel="noopener">🎧 Abrir en Spotify</a>
+                            </div>
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -729,7 +746,12 @@
                     Que sepas que te elijo en el presente, sin promesas vacías, sin soltar lo que ya existe, solo cuidándolo y mejorándolo.</p><br>
                     <p>(La Línea de Tiempo se actualizó)</p>
 
-                    <iframe src="https://open.spotify.com/embed/track/5sLeuS2QO4qBPIOIvWvN80?si=a5822019caca456e" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <div class="spotify-embed">
+                        <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/5sLeuS2QO4qBPIOIvWvN80?si=a5822019caca456e" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                        <div class="spotify-fallback">
+                            <a class="spotify-open" href="https://open.spotify.com/track/5sLeuS2QO4qBPIOIvWvN80" target="_blank" rel="noopener">🎧 Abrir en Spotify</a>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -805,7 +827,12 @@
                     Un espacio que se adapta, que cambia, que aprende. No busca ser perfecto, busca ser real. Mientras exista respeto, comunicación y ganas, este lugar seguirá creciendo contigo.</p><br>
                     <p>No sé exactamente en qué se convertirá,
                     pero sí sé por qué existe: para acompañarnos, para cuidarnos mejor y para dejar constancia de lo que vamos construyendo, sin forzarlo, sin adelantar etapas.</p>
-                    <iframe src="https://open.spotify.com/embed/track/6h9h7LDcuWowOHUhWRTwnO?si=1c7a91c648044a15" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <div class="spotify-embed">
+                        <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/6h9h7LDcuWowOHUhWRTwnO?si=1c7a91c648044a15" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                        <div class="spotify-fallback">
+                            <a class="spotify-open" href="https://open.spotify.com/track/6h9h7LDcuWowOHUhWRTwnO" target="_blank" rel="noopener">🎧 Abrir en Spotify</a>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -830,7 +857,12 @@
                     Para que puedas dejarme palabras, pensamientos o emociones cuando lo necesites. No reemplaza lo real, lo acompaña. Es mi forma de estar presente contigo, con verdad y calma.</p><br> 
                     <p>Desde lo más sincero y honesto:
                     – A</p>
-                    <iframe src="https://open.spotify.com/embed/track/4DGwG4QsOWNhoM3jEyKnuR?si=dcc068b4a0814682" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <div class="spotify-embed">
+                        <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/4DGwG4QsOWNhoM3jEyKnuR?si=dcc068b4a0814682" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                        <div class="spotify-fallback">
+                            <a class="spotify-open" href="https://open.spotify.com/track/4DGwG4QsOWNhoM3jEyKnuR" target="_blank" rel="noopener">🎧 Abrir en Spotify</a>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -839,7 +871,7 @@
 
 
 <footer>
-    <p>// REN'S ARCHIVE // 2025-206 //</p>
+    <p>// FOOTAGE ARCHIVE 2025-206 //</p>
 </footer>
 
 <script src="lock.js"></script>
