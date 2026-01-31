@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ren's Archive // Archivos</title>
-    <link rel="icon" href="https://i.imgur.com/iSyUemC.png" type="image/png">
+    <title>Footage Archive</title>
+    <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -449,7 +449,20 @@
 </div>
 
 <header>
-    <img src="https://i.imgur.com/iSyUemC.png" alt="ren">
+    <div class="hero">
+        <img
+          src="https://i.imgur.com/iSyUemC.png"
+          id="dynamicAvatar"
+          class="secretTrigger"
+          style="cursor:pointer"
+        />
+
+        <input
+          type="file"
+          id="avatarInput"
+          accept="image/*"
+          style="display:none"
+        />
     <div class="header-text">
         <h1>Archivo de Imágenes</h1>
         <p>REGISTRO DE DETALLES // ALMACENAMIENTO</p>
@@ -508,13 +521,8 @@
     </div>
 </div>
 
-<div class="scroll-indicator" id="scrollIndicator">
-    <p>Desliza</p>
-    <div class="dot"></div>
-</div>
-
 <footer>
-    <p>// REN'S ARCHIVE // 2025-206 //</p>
+    <p>// FOOTAGE ARCHIVE 2025-206 //</p>
 </footer>
 
 <script src="lock.js"></script>
