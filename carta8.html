@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta 8 Meses - Footage Archive</title>
+    <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #fff;
+            --accent: #ffb6c1;
+            --bg: #050505;
+            --card-bg: rgba(30, 20, 40, 0.7);
+            --text-main: #fff;
+            --text-dim: rgba(255,255,255,0.5);
+            --glass: rgba(255,255,255,0.06);
+            --border: rgba(255,255,255,0.13);
+            --petal: #ffb6c1;
+            --petal-dark: #e75480;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', 'Playfair Display', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+        .stars {
+            position: fixed; inset: 0;
+            background: radial-gradient(circle at center, #111 0%, #050505 100%);
+            z-index: 0;
+        }
+        .stars::after {
+            content: "";
+            position: absolute; inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.13;
+            animation: starsMove 150s linear infinite;
+        }
+        @keyframes starsMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+        .page-lock {
+            position: fixed; inset: 0; background: #000; z-index: 99999;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+        .lock-box {
+            text-align: center; padding: 40px; width: 90%; max-width: 400px;
+        }
+        .lock-box h2 { font-weight: 400; margin-bottom: 30px; letter-spacing: 4px; color: #fff; }
+        .lock-box input {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff;
+            padding: 15px; border-radius: 15px; outline: none; text-align: center; font-size: 1rem; margin-bottom: 20px; width: 100%;
+        }
+        .lock-box button {
+            background: transparent; border: 1px solid #fff; color: #fff;
+            padding: 12px 40px; border-radius: 50px; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 2px; font-size: 0.8rem; transition: all 0.3s;
+        }
+        .lock-box button:hover { background: #fff; color: #000; }
+        .lock-error {
+            margin-top: 15px; color: #ff4444; font-size: 0.8rem; display: none;
+        }
+        nav {
+            position: relative; z-index: 1000; display: flex; justify-content: center;
+            flex-wrap: wrap; gap: 10px; max-width: 100%; margin: 20px auto; padding: 0 15px;
+        }
+        nav a, .nav-item {
+            background: var(--glass); border: 1px solid var(--border); padding: 8px 15px;
+            border-radius: 15px; color: var(--text-dim); text-decoration: none; font-size: 0.65rem;
+            text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease;
+            backdrop-filter: blur(10px); cursor: pointer; white-space: nowrap;
+        }
+        nav a:hover, .nav-item:hover { color: #fff; border-color: #fff; transform: translateY(-2px); }
+        @media (max-width: 600px) {
+            nav { margin: 20px auto; gap: 8px; }
+            nav a, .nav-item { padding: 6px 12px; font-size: 0.6rem; }
+        }
+        .envelope-wrapper {
+            position: relative; z-index: 10; width: 100%; max-width: 800px; margin: 40px auto;
+            perspective: 1000px; padding: 20px; animation: fadeIn 1.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .envelope {
+            position: relative; width: 100%; height: 420px;
+            background: linear-gradient(135deg, rgba(30, 30, 35, 0.8) 0%, rgba(20, 20, 25, 0.6) 100%);
+            border: 1px solid var(--border); border-radius: 20px; cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5); gap: 20px;
+        }
+        .envelope::before {
+            content: "Para: Nohelia";
+            color: var(--text-main); font-size: 1.4rem; letter-spacing: 8px; text-transform: uppercase;
+            font-weight: 400; opacity: 0.8; transition: 0.3s;
+        }
+        .envelope:hover {
+            transform: scale(1.02); border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+        }
+        .envelope .seal {
+            width: 70px; height: 70px; background: rgba(255,255,255,0.1);
+            border: 1px solid var(--border); border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 2rem; transition: 0.5s;
+            position: relative; z-index: 2;
+        }
+        .envelope .seal.flower {
+            background: none; border: none; width: 90px; height: 90px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .envelope .seal.flower svg { width: 90px; height: 90px; }
+        .envelope .seal.flower.opened svg .petal {
+            transform: scaleY(1.3) scaleX(1.1) rotate(10deg);
+            filter: drop-shadow(0 0 8px var(--petal-dark));
+        }
+        .envelope .seal.flower svg .petal {
+            transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .envelope .seal.flower svg .center {
+            fill: gold; filter: drop-shadow(0 0 6px #fff7b2);
+        }
+        .envelope .seal.flower svg .petal {
+            fill: var(--petal);
+            stroke: var(--petal-dark);
+            stroke-width: 2;
+        }
+        .envelope .seal.flower.opened svg .center {
+            fill: #fff7b2;
+        }
+        .envelope .seal.flower.opened svg .petal {
+            fill: #fff0f6;
+        }
+        .envelope .seal.flower.opened {
+            animation: flowerOpen 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        @keyframes flowerOpen {
+            0% { transform: scale(1); }
+            60% { transform: scale(1.2) rotate(8deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+        .envelope .seal .hint {
+            position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);
+            font-size: 0.7rem; color: var(--text-dim); letter-spacing: 3px;
+        }
+        .envelope .seal.flower .hint { color: var(--petal-dark); }
+        .envelope .seal.flower.opened .hint { color: var(--accent); }
+        .letter {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98);
+            z-index: 2000; display: none; padding: 40px 20px; overflow-y: auto; backdrop-filter: blur(30px);
+        }
+        .letter-inner {
+            max-width: 700px; margin: 60px auto; background: #fff; color: #1a1a1a;
+            padding: 80px; border-radius: 2px; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            position: relative; transform: translateY(50px); opacity: 0;
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .letter.active .letter-inner { transform: translateY(0); opacity: 1; }
+        .letter-header {
+            border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 40px;
+            text-align: right; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; color: #888;
+        }
+        .letter-body {
+            font-size: 1.15rem; line-height: 2; font-style: italic; text-align: justify;
+        }
+        .letter-footer {
+            margin-top: 60px; text-align: right; border-top: 1px solid #eee; padding-top: 30px;
+        }
+        .close-letter {
+            position: fixed; top: 30px; right: 30px; background: transparent;
+            border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 50px; height: 50px;
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; transition: 0.3s; z-index: 2100;
+        }
+        .close-letter:hover { background: #fff; color: #000; }
+        .sections-grid {
+            margin-top: 60px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;
+        }
+        .section-card {
+            background: var(--glass); border: 1px solid var(--border); border-radius: 30px;
+            padding: 40px; text-align: center; transition: 0.4s; backdrop-filter: blur(10px);
+        }
+        .section-card:hover {
+            transform: translateY(-10px); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05);
+        }
+        .section-card img {
+            width: 100%; border-radius: 20px; margin-bottom: 20px; filter: grayscale(0.3); transition: 0.5s;
+        }
+        .section-card:hover img { filter: grayscale(0); }
+        .section-title {
+            font-size: 0.7rem; color: var(--text-dim); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; display: block;
+        }
+        .section-text {
+            font-style: italic; font-size: 1rem; line-height: 1.8; opacity: 0.8;
+        }
+        @media (max-width: 768px) {
+            .sections-grid { grid-template-columns: 1fr; }
+            .letter-inner { padding: 40px 10px; }
+            .envelope { height: 300px; }
+        }
+        @media (max-width: 500px) {
+            .envelope-wrapper { padding: 2px; }
+            .envelope { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div id="pageLock" class="page-lock">
+        <div class="lock-box">
+            <h2 id="lockPhrase">¡8 MESES!</h2>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">¿Lista para verlo?</p>
+            <input type="text" id="minigameInput" placeholder="¿Cómo sueles llamarme?">
+            <button onclick="checkMinigame()">Desbloquear</button>
+            <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
+        </div>
+    </div>
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="historia.html">Línea de Tiempo</a>
+        <a href="recuerdos.html">Archivos</a>
+    </nav>
+    <div class="envelope-wrapper">
+        <div class="envelope" id="envelope" onclick="openLetter()">
+            <div class="seal">✉️</div>
+            <p style="font-size: 0.7rem; letter-spacing: 4px; color: var(--text-dim); margin-top: 10px;">CLICK PARA ABRIR</p>
+        </div>
+        <div class="sections-grid">
+            <div class="section-card">
+                <span class="section-title">En bucle desde que te conocí</span>
+                <div class="spotify-embed">
+                    <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/2plbrEY59IikOBgBGLjaoe?si=dbebfae879204cc3" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <div class="spotify-fallback">
+                        <a class="spotify-open" href="https://open.spotify.com/track/2plbrEY59IikOBgBGLjaoe" target="_blank" rel="noopener" style="
+                            display: inline-block;
+                            margin: 12px auto 0 auto;
+                            padding: 8px 18px;
+                            background: rgba(255,255,255,0.03);
+                            border: 1px solid rgba(255,255,255,0.13);
+                            border-radius: 12px;
+                            color: #fff;
+                            font-weight: 600;
+                            text-decoration: none;
+                            font-size: 1rem;
+                            transition: all 0.3s;
+                        ">🎧 Abrir en Spotify</a>
+                    </div>
+                </div>
+                <p class="section-text">Celebrando cada momento juntos.</p>
+            </div>
+            <div class="section-card">
+                <span class="section-title">"Amarilla"</span>
+                <iframe width="100%" height="180" src="https://www.youtube.com/embed/btDJLnRddYyGsWH_" title="YouTube video" frameborder="0" allowfullscreen></iframe>
+                <p class="section-text">Beneficios forma parte de este álbum que me recuerda a ti.</p>
+            </div>
+            <div class="section-card">
+                <span class="section-title">Secreto especial</span>
+                <p class="section-text" id="secretText" style="cursor:pointer;">Haz click aquí para descubrir un secreto...</p>
+            </div>
+        </div>
+    </div>
+    <div id="letterOverlay" class="letter">
+        <button class="close-letter" onclick="closeLetter()">✕</button>
+        <div class="letter-inner">
+            <div class="letter-header">
+                Febrero 09, 2026
+            </div>
+            <div class="letter-body">
+                <p>Linda,</p><br>
+                <p>Ocho meses. Y no siento la necesidad de adornarlo demasiado para que signifique algo, porque lo que tenemos no depende de cómo suene, sino de cómo se vive.</p><br>
+                <p>Si miro atrás, no pienso en fechas ni en momentos “perfectos”. Pienso en lo natural que se volvió tenerte cerca. En cómo, sin darnos cuenta, pasaste de ser alguien importante a ser alguien esencial en mi día a día. No por dependencia, sino por elección.</p><br>
+                <p>Contigo aprendí algo clave: cuando algo es real, no cansa. No desgasta. No exige estar demostrando todo el tiempo. Se sostiene solo, porque hay verdad detrás. Y eso es lo que siento contigo.</p><br>
+                <p>Me gusta quién soy cuando estoy a tu lado. No porque me cambies, sino porque no me fuerzas a ser distinto. Puedo estar en silencio, puedo pensar, puedo dudar, puedo ser tranquilo… y aun así sentirme querido. Eso no es común. Eso es valioso.</p><br>
+                <p>Hay partes tuyas que quizás no notas, pero yo sí. Tu forma de sentir tan a fondo, tu manera de preocuparte, la sensibilidad con la que miras las cosas. No eres superficial. No amas a medias. Y aunque a veces eso pese, también es lo que te hace única. No hay copia de ti. No hay reemplazo de eso.</p><br>
+                <p>No escribo para idealizar lo nuestro ni para decir que todo será fácil. No lo necesito. Prefiero algo más honesto: me importa cuidarte bien. Me importa no jugar con lo que sientes. Me importa que, cuando estés conmigo, no tengas que dudar de tu lugar.</p><br>
+                <p>No quiero ser ruido en tu vida. Quiero ser estabilidad.
+No quiero ser promesas grandes. Quiero ser coherencia.
+No quiero impresionarte. Quiero respetarte.</p><br>
+                <p>Ocho meses contigo no me hacen sentir apurado ni atrapado. Me hacen sentir seguro de que voy por el camino correcto, a mi ritmo, contigo al lado. Y eso, para mí, dice mucho más que cualquier palabra bonita.</p><br>
+                <p>Gracias por ser tú.
+Gracias por quedarte siendo tú.
+Gracias por confiarme algo tan delicado como tu corazón.</p><br>
+                <p>Esta carta es solo una pequeña muestra de todo lo que siento por ti. Espero que cada detalle, cada animación y cada secreto escondido aquí te recuerden lo especial que eres para mí. ¡Te amo más de lo que las palabras pueden decir!</p>
+            </div>
+            <div class="letter-footer">
+                <p>Desde aquí y hasta donde vayas,</p>
+                <p style="font-weight: 600; font-size: 1.5rem; margin-top: 10px;">A</p>
+            </div>
+        </div>
+    </div>
+    <script src="lock.js"></script>
+    <script>
+        // Bloqueo total visual en móvil y escritorio
+        function lockScreen() {
+            document.body.classList.add('locked');
+            document.querySelectorAll('body > *:not(.page-lock):not(.stars)').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.getElementById('pageLock').style.display = 'flex';
+        }
+        function unlockScreen() {
+            document.body.classList.remove('locked');
+            document.querySelectorAll('body > *:not(.page-lock):not(.stars)').forEach(el => {
+                el.style.display = '';
+            });
+            document.getElementById('pageLock').style.display = 'none';
+        }
+        lockScreen();
+
+        // Minijuego 1 para desbloquear
+        function checkMinigame() {
+            const input = document.getElementById('minigameInput').value.trim().toLowerCase();
+            const correct = ['amor', 'mi amor', 'amor de mi vida', 'mi niño bello'];
+            if (correct.includes(input)) {
+                setTimeout(()=>{ showSecondMinigame(); }, 400);
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+                setTimeout(()=>{document.getElementById('errorMsg').style.display = 'none';}, 1800);
+            }
+        }
+        // Segundo minijuego
+        function showSecondMinigame() {
+            document.querySelector('.lock-box').innerHTML = `
+                <h2>Minijuego 2</h2>
+                <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">¿Cuál es la fecha oficial de nosotros? <br><span style='color:#e75480;font-size:0.8em'>(formato: 01/02/23)</span></p>
+                <input type="text" id="minigameInput2" placeholder="Escribe la fecha aquí">
+                <button onclick="checkMinigame2()">Desbloquear</button>
+                <div id="errorMsg2" class="lock-error">INTENTA DE NUEVO</div>
+            `;
+        }
+        function checkMinigame2() {
+            const input = document.getElementById('minigameInput2').value.trim();
+            const correct = ['09/06/25'];
+            if (correct.includes(input)) {
+                unlockWithAnimation();
+            } else {
+                document.getElementById('errorMsg2').style.display = 'block';
+                setTimeout(()=>{document.getElementById('errorMsg2').style.display = 'none';}, 1800);
+            }
+        }
+        // Animación de desbloqueo
+        function unlockWithAnimation() {
+            const lock = document.getElementById('pageLock');
+            lock.style.transition = 'opacity 1.2s cubic-bezier(.7,0,.3,1)';
+            lock.style.opacity = 0;
+            setTimeout(()=>{
+                unlockScreen();
+            }, 1200);
+        }
+        // Abrir carta (sin confeti)
+        function openLetter() {
+            const overlay = document.getElementById('letterOverlay');
+            overlay.style.display = 'block';
+            setTimeout(() => overlay.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLetter() {
+            const overlay = document.getElementById('letterOverlay');
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 800);
+        }
+        // Audio especial: solo 2 escuchas
+        let audioPlayCount = 0;
+        let audioUrl = null;
+        const audioInput = document.getElementById('audioInput');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playAudioBtn = document.getElementById('playAudioBtn');
+        const audioMsg = document.getElementById('audioMsg');
+        if(audioInput) {
+            audioInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if(file) {
+                    audioUrl = URL.createObjectURL(file);
+                    audioPlayer.src = audioUrl;
+                    audioPlayer.style.display = 'block';
+                    playAudioBtn.style.display = 'inline-block';
+                    audioMsg.textContent = 'Puedes escuchar este audio solo dos veces. ¡Hazlo especial!';
+                    audioPlayCount = 0;
+                }
+            });
+        }
+        if(playAudioBtn) {
+            playAudioBtn.addEventListener('click', function() {
+                if(audioPlayCount < 2) {
+                    audioPlayer.currentTime = 0;
+                    audioPlayer.play();
+                    audioPlayCount++;
+                    if(audioPlayCount === 2) {
+                        playAudioBtn.disabled = true;
+                        playAudioBtn.textContent = 'Audio bloqueado';
+                        audioMsg.textContent = 'Ya no puedes escuchar el audio más veces.';
+                    }
+                }
+            });
+        }
+        // Secreto interactivo
+        document.getElementById('secretText').onclick = function() {
+            this.textContent = 'El verdadero secreto es que cada día te amo más, y siempre habrá algo nuevo por descubrir juntos.';
+            this.style.color = '#e75480';
+        };
+        // Secretos ocultos extra creativos
+        document.addEventListener('DOMContentLoaded', ()=>{
+            // Secreto: click en la fecha de la carta
+            const header = document.querySelector('.letter-header');
+            if(header){
+                header.style.cursor = 'pointer';
+                header.title = '¿Buscas un secreto?';
+                header.onclick = ()=>{
+                    header.textContent = 'Te amo más de lo que imaginas. (Secreto desbloqueado)';
+                    header.style.color = '#e75480';
+                };
+            }
+            // Secreto: doble click en la carta
+            const carta = document.querySelector('.letter-inner');
+            if(carta){
+                carta.ondblclick = ()=>{
+                    carta.style.background = 'linear-gradient(135deg,#ffe0f7 0%,#fff7b2 100%)';
+                    carta.style.color = '#e75480';
+                    carta.innerHTML += '<div style="margin-top:30px;font-size:1.1rem;">Has encontrado el secreto oculto: <b>Siempre serás mi persona favorita.</b></div>';
+                };
+            }
+            // Secreto: triple click en el sobre
+            const sobre = document.getElementById('envelope');
+            if(sobre){
+                let clickCount = 0;
+                sobre.addEventListener('click', ()=>{
+                    clickCount++;
+                    setTimeout(()=>{clickCount=0;}, 800);
+                    if(clickCount === 3){
+                        alert('¡Secreto desbloqueado! Siempre estaré para ti, incluso cuando no lo veas.');
+                        clickCount = 0;
+                    }
+                });
+            }
+            // Secreto: escribir "te amo" en el primer minijuego
+            const minigameInput = document.getElementById('minigameInput');
+            if(minigameInput){
+                minigameInput.addEventListener('input', function(){
+                    if(this.value.trim().toLowerCase() === 'te amo'){
+                        this.value = '';
+                        alert('¡Encontraste un secreto! Yo también te amo.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
