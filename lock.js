@@ -8,6 +8,105 @@ function actualizarUltimaActividad() {
     localStorage.setItem('lastActivity', Date.now());
 }
 
+// Splash inicial: mostrar logo de la web al abrir, luego desaparecer y mostrar PIN
+function showInitialLogoSplash() {
+    try {
+        const splash = document.createElement('div');
+        splash.id = 'initialSplash';
+        Object.assign(splash.style, {
+            position: 'fixed',
+            inset: '0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(0,0,0,1)',
+            zIndex: '99999',
+            transition: 'opacity 600ms ease, transform 700ms ease',
+            padding: '20px'
+        });
+
+        // Contenedor interno para centrar imagen + texto y controlar responsividad
+        const inner = document.createElement('div');
+        Object.assign(inner.style, {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '18px',
+            textAlign: 'center'
+        });
+
+        // Intentamos obtener el favicon de la página; si no existe, usamos la URL por defecto
+        const iconHref = (document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]'))?.href || 'https://i.imgur.com/GtphDVv.png';
+
+        const img = document.createElement('img');
+        img.src = iconHref;
+        img.alt = document.title ? `${document.title} logo` : 'Logo';
+        Object.assign(img.style, {
+            width: 'min(44vw, 220px)',
+            maxWidth: '220px',
+            height: 'auto',
+            borderRadius: '12px',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.6)',
+            opacity: '0',
+            transform: 'translateY(8px) scale(0.97)',
+            transition: 'all 500ms cubic-bezier(0.22,1,0.36,1)'
+        });
+
+        const logo = document.createElement('div');
+        const logoText = document.title && document.title.trim() ? document.title : 'FOOTAGE ARCHIVE';
+        logo.textContent = logoText.toUpperCase();
+        Object.assign(logo.style, {
+            color: '#fff',
+            fontSize: 'clamp(1.6rem, 4vw, 3.2rem)',
+            fontWeight: '700',
+            letterSpacing: '6px',
+            opacity: '0',
+            transform: 'translateY(6px)',
+            transition: 'opacity 600ms ease, transform 700ms cubic-bezier(0.22,1,0.36,1)',
+            textTransform: 'uppercase',
+            textAlign: 'center',
+            padding: '0 8px',
+            maxWidth: '90vw',
+            wordBreak: 'break-word'
+        });
+
+        inner.appendChild(img);
+        inner.appendChild(logo);
+        splash.appendChild(inner);
+        document.body.appendChild(splash);
+
+        // Entrada suave secuenciada (imagen primero, texto después)
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                img.style.opacity = '1';
+                img.style.transform = 'translateY(0) scale(1)';
+            }, 50);
+
+            setTimeout(() => {
+                logo.style.opacity = '1';
+                logo.style.transform = 'translateY(0)';
+            }, 180);
+        });
+
+        // Mantener visible un instante y luego desvanecer splash
+        setTimeout(() => {
+            splash.style.opacity = '0';
+            splash.style.transform = 'scale(1.04)';
+        }, 1800);
+
+        // Remover splash y mostrar la pantalla de PIN (bloqueo)
+        setTimeout(() => {
+            if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
+            verificarBloqueo();
+        }, 2400);
+    } catch (err) {
+        // En caso de fallo, caer al comportamiento anterior
+        console.error('showInitialLogoSplash fallo:', err);
+        verificarBloqueo();
+    }
+}
+
 function verificarBloqueo() {
     document.body.classList.add("locked");
     const pageLock = document.getElementById("pageLock");
@@ -139,8 +238,20 @@ function unlockPage() {
 /* ============================= */
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Siempre bloqueamos al inicio para forzar el PIN en cada carga
-        verificarBloqueo();
+        // Mostrar splash del logo solamente al abrir el index.
+        // En otras páginas mostramos el bloqueo inmediatamente para evitar esperas.
+        const isIndex =
+            window.location.pathname.endsWith('index.html') ||
+            window.location.pathname === '/' ||
+            window.location.pathname.endsWith('/');
+
+        if (isIndex) {
+            // Animación de entrada y luego bloqueo
+            showInitialLogoSplash();
+        } else {
+            // Evitar splash en páginas internas: mostrar bloqueo directamente
+            verificarBloqueo();
+        }
     });
 
     // Evitar zoom automático en iOS al enfocar/ocultar el teclado en el input del PIN
@@ -381,4 +492,3 @@ setInterval(() => {
         loadAvatarFromDB().catch(err => console.error('Error sincronizando avatar:', err));
     }
 }, 30000);
-
