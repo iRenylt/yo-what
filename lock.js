@@ -1,4 +1,4 @@
-const PIN_CORRECTO = "0706";
+const PIN_CORRECTO = "0906";
 
 /* ============================= */
 /* 🔒 BLOQUEO Y AUTENTICACIÓN */
