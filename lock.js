@@ -13,6 +13,12 @@ function showInitialLogoSplash() {
     try {
         const splash = document.createElement('div');
         splash.id = 'initialSplash';
+        // Asegurarnos de que el splash actúe como pantalla de bloqueo
+        // para que no se vea el contenido detrás mientras aparece.
+        splash.classList.add('page-lock');
+        // Activar el estado locked previamente para ocultar el resto
+        // del contenido mientras el splash esté presente.
+        document.body.classList.add('locked');
         Object.assign(splash.style, {
             position: 'fixed',
             inset: '0',
