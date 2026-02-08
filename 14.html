@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es" style="background:#050505">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#050505">
+	<title>Footage Archive</title>
+  <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600,700&display=swap" rel="stylesheet">
+	<style>
+		:root{--bg:#050505;--card-bg:rgba(20,20,25,0.6);--border:rgba(255,255,255,0.08);--text:#fff;--muted:rgba(255,255,255,0.45);--accent:#ff80ab;--text-dim:rgba(255,255,255,0.5);--glass:rgba(255,255,255,0.03)}
+		*{box-sizing:border-box;margin:0;padding:0}
+		body{font-family:'Inter',system-ui,Segoe UI,Roboto,'Playfair Display',serif;background:var(--bg);color:var(--text);min-height:100vh}
+		.stars{position:fixed;inset:0;background:radial-gradient(circle at center,#111111 0%, #050505 100%);z-index:0}
+
+		.stars::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: url('https://www.transparenttextures.com/patterns/stardust.png');
+			opacity: 0.15;
+			animation: starsMove 150s linear infinite;
+		}
+
+		@keyframes starsMove {
+			from { background-position: 0 0; }
+			to { background-position: 1000px 1000px; }
+		}
+
+		/* Animación suave para el logo (igual que en index.html) */
+		@keyframes floatY {
+			0% { transform: translateY(0); }
+			50% { transform: translateY(-6px); }
+			100% { transform: translateY(0); }
+		}
+		.page-lock {
+			position: fixed;
+			inset: 0;
+			background: #000;
+			z-index: 99999;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			backdrop-filter: blur(20px);
+		}
+
+		.lock-box {
+			text-align: center;
+			padding: 40px;
+			width: 90%;
+			max-width: 400px;
+			animation: lockFadeIn 1s ease-out;
+		}
+
+		@keyframes lockFadeIn {
+			from { opacity: 0; transform: scale(0.9); }
+			to { opacity: 1; transform: scale(1); }
+		}
+
+		.lock-box h2 { 
+			font-weight: 400; 
+			margin-bottom: 30px; 
+			letter-spacing: 4px; 
+			color: #fff;
+			text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+		}
+
+		.lock-box input {
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid var(--border);
+			color: #fff;
+			padding: 15px;
+			border-radius: 15px;
+			outline: none;
+			text-align: center;
+			font-size: 1rem;
+			margin-bottom: 20px;
+			width: 100%;
+			transition: all 0.3s;
+		}
+
+		.lock-box button {
+			background: transparent;
+			border: 1px solid #fff;
+			color: #fff;
+			padding: 12px 40px;
+			border-radius: 50px;
+			cursor: pointer;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			font-size: 0.8rem;
+			transition: all 0.3s;
+		}
+
+		.lock-box button:hover { 
+			background: #fff;
+			color: #000;
+		}
+
+		.lock-error {
+			margin-top: 15px;
+			color: #ff4444;
+			font-size: 0.8rem;
+			display: none;
+			letter-spacing: 1px;
+		}
+
+		header{position:relative;z-index:10;padding:36px 18px 8px;text-align:center}
+		header img{width:92px;height:92px;border-radius:50%;object-fit:cover;border:1px solid var(--border); animation: floatY 6s ease-in-out infinite; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 200ms ease; }
+		header img:hover { transform: scale(1.05); border-color: #fff; }
+		.title{font-family:'Playfair Display',serif;font-size:2rem;margin-top:12px}
+		.subtitle{color:var(--muted);letter-spacing:3px;font-size:0.75rem;margin-bottom:18px}
+
+			/* Navegación simple: solo Inicio visible */
+			nav {
+				position: relative;
+				z-index: 1000;
+				display: flex;
+				justify-content: center;
+				gap: 8px;
+				margin: 12px auto 20px;
+				padding: 0 12px;
+			}
+
+			nav a {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				background: var(--glass);
+				border: 1px solid var(--border);
+				padding: 10px 14px;
+				border-radius: 18px;
+				color: var(--text-dim);
+				text-decoration: none;
+				font-size: 0.8rem;
+			}
+
+			nav a:hover { color: #fff; border-color: #fff; transform: translateY(-3px); }
+
+		.container{max-width:980px;margin:0 auto;padding:18px;position:relative;z-index:10}
+		.card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:18px;backdrop-filter:blur(10px)}
+
+		/* Carta mecanografiada */
+		.letter{min-height:140px;font-size:1.05rem;line-height:1.6;color:var(--muted);white-space:pre-wrap}
+		.caret{display:inline-block;width:8px;height:18px;background:var(--text);margin-left:4px;animation:blink 1s steps(1,end) infinite}
+		@keyframes blink{50%{opacity:0}}
+
+		/* Video / audio grids */
+		.media-grid{display:grid;grid-template-columns:1fr;gap:12px}
+		@media(min-width:860px){.media-grid{grid-template-columns:1fr 1fr}}
+
+		.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+		.btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer}
+
+		/* Mini-juego */
+		#gameArea{position:relative;height:240px;background:linear-gradient(180deg,rgba(255,128,171,0.03),transparent);overflow:hidden;border-radius:12px}
+		.heart{position:absolute;width:44px;height:44px;background:radial-gradient(circle at 30% 30%,#fff,transparent 30%),linear-gradient(135deg,#ffb7d5,#ff80ab);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transform:scale(0.95);transition:transform 120ms}
+		.heart:active{transform:scale(1.05)}
+
+		/* secret modal */
+		.secret-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:10001;align-items:center;justify-content:center}
+		.secret-modal.active{display:flex}
+		.secret-content{background:var(--card-bg);padding:20px;border-radius:14px;max-width:520px;color:var(--text)}
+
+		footer{padding:28px;text-align:center;color:var(--muted);font-size:0.8rem}
+	</style>
+</head>
+<body style="background:#050505;color:#fff">
+	<div class="stars"></div>
+
+	<div id="pageLock" class="page-lock" style="display:flex">
+		<div class="lock-box">
+			<h2 id="lockPhrase">ESPECIAL 14</h2>
+			<p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">SOLO TÚ TIENES LA LLAVE</p>
+			<input id="pinInput" type="password" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+			<button onclick="unlockPage()">Abrir</button>
+			<div id="errorMsg" style="color:#ff6b6b;margin-top:8px;display:none">PIN incorrecto</div>
+		</div>
+	</div>
+
+	<header>
+		<img id="dynamicAvatar" src="https://i.imgur.com/iSyUemC.png" alt="avatar">
+		<div class="title">Fecha especial</div>
+		<div class="subtitle">14 / 02 / 2026</div>
+	</header>
+
+	<nav>
+		<a href="index.html">Inicio</a>
+	</nav>
+
+	<div class="container">
+
+		<div class="card">
+			<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+				<strong style="font-size:1.1rem">Carta digital</strong>
+				<div class="controls">
+					<button id="playLetter" class="btn">Reproducir</button>
+					<button id="pauseLetter" class="btn">Pausar</button>
+					<select id="speed" class="btn"><option value="50">Lento</option><option value="30" selected>Normal</option><option value="10">Rápido</option></select>
+				</div>
+			</div>
+			<div style="margin-top:12px" class="letter" id="letterArea" aria-live="polite"></div>
+		</div>
+
+		<div class="card">
+			<strong>Videos para ver</strong>
+			<div style="color:var(--muted);font-size:0.9rem;margin-top:8px">Puedes sustituir las fuentes en el HTML o subir un archivo aquí para probar localmente.</div>
+			<div class="media-grid" style="margin-top:12px">
+				<div>
+					<video id="userVideo" controls style="width:100%;border-radius:12px;max-height:360px">
+						<!-- Sustituye el src por tus videos -->
+						<source src="videos/video1.mp4" type="video/mp4">
+						Tu navegador no soporta video.
+					</video>
+					<div style="margin-top:8px;color:var(--muted);font-size:0.9rem">Sustituye las rutas de `videos/` en el HTML para usar tus clips locales.</div>
+				</div>
+
+				<div>
+					<video id="sampleVideo" controls style="width:100%;border-radius:12px;max-height:360px">
+						<source src="videos/video2.mp4" type="video/mp4">
+					</video>
+					<div style="margin-top:8px;color:var(--muted);font-size:0.9rem">Puedes colocar aquí un clip corto de recuerdos.</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card">
+			<strong>Audios</strong>
+			<div style="margin-top:8px;color:var(--muted)">Añade aquí audios tuyos que ella pueda escuchar.</div>
+			<div style="margin-top:12px;display:flex;gap:12px;flex-direction:column">
+				<audio controls src="audios/mensaje1.mp3"></audio>
+				<audio controls src="audios/mensaje2.mp3"></audio>
+				<div style="margin-top:8px;color:var(--muted);font-size:0.9rem">Añade tus audios en la carpeta `audios/` o indica rutas en el HTML.</div>
+			</div>
+		</div>
+
+		<div class="card">
+			<strong>Minijuego: Atrapa el corazón</strong>
+			<div style="margin-top:8px;color:var(--muted)">Haz clic en corazones para sumar puntos en 20 segundos.</div>
+			<div id="gameArea" style="margin-top:12px"></div>
+			<div style="margin-top:12px;display:flex;gap:12px;align-items:center">
+				<button id="startGame" class="btn">Iniciar</button>
+				<div style="color:var(--muted)">Puntuación: <span id="score">0</span></div>
+			</div>
+		</div>
+
+		<div class="card">
+			<strong>Secretos y mini-sorpresas</strong>
+			<div style="margin-top:8px;color:var(--muted)">Encuentra palabras escondidas: <span class="secret-word" style="color:var(--accent);cursor:pointer">amor</span>, <span class="secret-word" style="color:var(--accent);cursor:pointer">cariño</span></div>
+		</div>
+
+	</div>
+
+	<div id="secretModal" class="secret-modal"><div class="secret-content" id="secretContent"></div></div>
+
+	<footer>Footage Archive · Especial San Valentín</footer>
+
+	<script src="lock.js"></script>
+	<script>
+		// Texto de la carta (edítalo aquí). Mantener saltos de línea con \n.
+		const LETTER_TEXT = `Mi amor,\n\nHoy quise escribirte una carta que se vaya formando sola, como si cada pensamiento apareciera uno a uno.\n\nGracias por ser compañía, sostén y risa. Te regalo este archivo, estas palabras y todos mis intentos por hacerlo bonito para ti.\n\nCon mucho amor,\nA.`;
+
+		// Máquina de escribir
+		const letterArea = document.getElementById('letterArea');
+		let typingIndex = 0; let typingInterval = null; let typingSpeed = 30;
+		function startTyping(){ if(typingInterval) return; typingInterval = setInterval(()=>{ if(typingIndex<=LETTER_TEXT.length){ letterArea.textContent = LETTER_TEXT.slice(0,typingIndex) + (typingIndex%2? '':''); typingIndex++; } else stopTyping(); }, typingSpeed); }
+		function stopTyping(){ clearInterval(typingInterval); typingInterval = null; if(typingIndex>LETTER_TEXT.length) finalizeLetter(); }
+		document.getElementById('playLetter').addEventListener('click', ()=>{ startTyping(); });
+		document.getElementById('pauseLetter').addEventListener('click', ()=>{ stopTyping(); });
+		document.getElementById('speed').addEventListener('change',(e)=>{ typingSpeed = Number(e.target.value); if(typingInterval){ stopTyping(); startTyping(); } });
+
+		// Cargar la carta automáticamente al entrar (efecto visible)
+		document.addEventListener('DOMContentLoaded', ()=>{ // dejaremos que el PIN controle mostrar la página
+			letterArea.textContent = '';
+		});
+
+		// Frases aleatorias para la pantalla de bloqueo (igual que recuerdos.html)
+		const phrases = [
+			"ESPERANDO POR TI",
+			"NECESITAS UNA SONRISA",
+			"UN LUGAR SEGURO",
+			"BIENVENIDA A CASA",
+			"UN ARCHIVO SECRETO"
+		];
+		const phraseElement = document.getElementById('lockPhrase');
+		if (phraseElement) {
+			phraseElement.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+		}
+
+		// Preparar secretos: envolver palabras clave en la carta cuando termine la escritura
+		function finalizeLetter() {
+			const html = letterArea.textContent
+				.replace(/(amor)/gi, '<span class="secret-word">$1</span>')
+				.replace(/(cariño)/gi, '<span class="secret-word">$1</span>')
+				.replace(/(TE AMO)/g, '<span class="secret-word" style="color:var(--accent);font-weight:600">$1</span>');
+			letterArea.innerHTML = html;
+			document.querySelectorAll('#letterArea .secret-word').forEach(word => {
+				word.style.cursor = 'pointer';
+				word.addEventListener('click', () => {
+					showSecret('Palabra secreta', 'Cada palabra guarda un pensamiento que te pertenece.');
+				});
+			});
+		}
+
+		// Minijuego: corazones aleatorios
+		const gameArea = document.getElementById('gameArea'); const startGame = document.getElementById('startGame'); const scoreEl = document.getElementById('score');
+		let gameInterval = null; let score = 0; function spawnHeart(){ const h = document.createElement('div'); h.className='heart'; h.innerHTML='❤'; const x = Math.random()*(gameArea.clientWidth-44); const y = Math.random()*(gameArea.clientHeight-44); h.style.left = x+'px'; h.style.top = y+'px'; gameArea.appendChild(h); h.addEventListener('click', ()=>{ score+=1; scoreEl.textContent=score; h.remove(); }); setTimeout(()=>{ if(h.parentNode) h.remove(); },2200); }
+		startGame.addEventListener('click', ()=>{ if(gameInterval) return; score=0; scoreEl.textContent=score; let ticks=0; gameInterval = setInterval(()=>{ spawnHeart(); ticks++; if(ticks>20){ clearInterval(gameInterval); gameInterval=null } }, 750); });
+
+		// Secret words
+		function showSecret(title, text){ const modal = document.getElementById('secretModal'); const content = document.getElementById('secretContent'); content.innerHTML = `<h3 style="margin-bottom:8px">${title}</h3><div style="color:var(--muted)">${text}</div><div style="margin-top:12px;text-align:right"><button class="btn" onclick="document.getElementById('secretModal').classList.remove('active')">Cerrar</button></div>`; modal.classList.add('active'); modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.classList.remove('active'); }); }
+		document.querySelectorAll('.secret-word').forEach(w=>{ w.addEventListener('click', ()=>{ showSecret('Pequeño secreto', 'Te amo más de lo que las palabras dejan ver.'); }); });
+
+		// Konami simple
+		const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']; let kindex=0; document.addEventListener('keydown',(e)=>{ if(e.key === konami[kindex]){ kindex++; if(kindex===konami.length){ showSecret('Konami', '¡Nivel secreto desbloqueado! Te mereces una sorpresa.'); kindex=0 } } else kindex = e.key===konami[0]?1:0; });
+
+		// Secreto: Click en el título principal
+		const mainTitle = document.querySelector('.title');
+		if (mainTitle) {
+			mainTitle.style.cursor = 'pointer';
+			mainTitle.addEventListener('click', () => {
+				showSecret('Carta', 'Este título guarda el primer secreto: todo esto fue hecho pensando en ti.');
+			});
+		}
+
+		// Mostrar carta y empezar typing cuando se desbloquea la página
+		// Observamos cambios en body.locked (lock.js quita .locked cuando se desbloquea)
+		const observer = new MutationObserver(()=>{ if(!document.body.classList.contains('locked')){ // página desbloqueada
+				startTyping(); // iniciar carta
+			}});
+		observer.observe(document.body,{attributes:true,attributeFilter:['class']});
+
+		// Small compatibility: ensure dynamicAvatar + avatarInput exist for lock.js features
+		(function ensureAvatarInput(){ if(!document.getElementById('avatarInput')){ const inp = document.createElement('input'); inp.type='file'; inp.id='avatarInput'; inp.accept='image/*'; inp.style.display='none'; document.body.appendChild(inp); }})();
+	</script>
+</body>
+</html>
