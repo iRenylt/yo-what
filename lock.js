@@ -1,5 +1,77 @@
 const PIN_CORRECTO = "0906";
 
+// Priorizar la animación inicial: ocultar todo excepto el splash y el overlay
+// hasta que se complete el proceso de bloqueo/desbloqueo. Esto evita
+// cualquier "flash" de contenido detrás de la animación incluso al recargar.
+(function ensureInitialSplashPriority() {
+    try {
+        const css = `
+        /* Oculta todo menos #initialSplash y #pageLock durante la inicialización */
+        .initializing > *:not(#initialSplash):not(#pageLock) { visibility: hidden !important; }
+        html.initializing, body.initializing { background: #000 !important; }
+        `;
+
+        const style = document.createElement('style');
+        style.id = 'initializing-style';
+        style.appendChild(document.createTextNode(css));
+        (document.head || document.documentElement).appendChild(style);
+
+        // Añadimos la marca de inicialización lo antes posible al <body>
+        // (NO al <html> para evitar ocultar todo el <body> accidentalmente).
+        if (document.body) {
+            document.body.classList.add('initializing');
+        } else {
+            document.addEventListener('DOMContentLoaded', () => document.body.classList.add('initializing'));
+        }
+    } catch (e) {
+        console.error('No se pudo aplicar initializing-style:', e);
+    }
+
+    // Función utilitaria para quitar la clase y el estilo cuando sea seguro
+    window.__removeInitializing = function removeInitializing() {
+        try {
+            if (document.body) document.body.classList.remove('initializing');
+            const s = document.getElementById('initializing-style');
+            if (s && s.parentNode) s.parentNode.removeChild(s);
+            try { delete window.__removeInitializing; } catch (e) {}
+        } catch (e) {
+            console.error('removeInitializing fallo:', e);
+        }
+    };
+})();
+
+// Inyecta estilos modernos y responsivos para la pantalla de PIN
+function injectPinStyles() {
+    if (document.getElementById('pin-styles')) return;
+    const css = `
+    /* Pin styles injected by lock.js - responsive + accessible */
+    .page-lock { display: none; align-items: center; justify-content: center; }
+    .page-lock.active { display: flex; }
+    .page-lock { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 99999; padding: 20px; }
+    .page-lock.force-solid { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 18px; padding: clamp(18px, 3.2vw, 36px); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center; transform-origin: center; }
+    .lock-box h2 { font-size: clamp(1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; }
+    .lock-box p { margin: 0 0 18px; color: rgba(255,255,255,0.65); font-size: 0.85rem; letter-spacing: 2px; }
+    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: #fff; outline: none; transition: box-shadow 220ms ease, transform 200ms ease, border-color 200ms ease; text-align: center; }
+    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 14px rgba(255,183,213,0.06); border-color: rgba(255,255,255,0.18); }
+    .lock-box button { margin-top: 12px; padding: 12px 34px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); color: #fff; cursor: pointer; transition: transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms; }
+    .lock-box button:active { transform: translateY(1px) scale(0.998); }
+    .lock-box button:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    .lock-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 12px; display: none; }
+    .lock-error.show { display: block; animation: shake 420ms ease; }
+    @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-4px); } 100% { transform: translateX(0); } }
+    .page-lock.unlocking { transition: opacity 420ms ease, transform 420ms ease; opacity: 0; transform: scale(1.03); }
+    @media (max-width: 480px) { .lock-box { padding: 14px; border-radius: 12px; } .lock-box h2 { letter-spacing: 2px; } }
+    `;
+
+    const style = document.createElement('style');
+    style.id = 'pin-styles';
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+}
+
+document.addEventListener('DOMContentLoaded', injectPinStyles);
+
 /* ============================= */
 /* 🔒 BLOQUEO Y AUTENTICACIÓN */
 /* ============================= */
@@ -97,15 +169,20 @@ function showInitialLogoSplash() {
 
         // Mantener visible un instante y luego desvanecer splash
         setTimeout(() => {
+            // Antes de hacer el splash totalmente transparente, activamos
+            // el overlay oficial de bloqueo para que haga de fondo sólido
+            // y evitar que el contenido subyacente quede visible.
+            try { verificarBloqueo(); } catch (e) { /* no bloquear si falla */ }
             splash.style.opacity = '0';
             splash.style.transform = 'scale(1.04)';
+            // impedir interacciones mientras se desvanece
+            splash.style.pointerEvents = 'none';
         }, 1800);
 
-        // Remover splash y mostrar la pantalla de PIN (bloqueo)
+        // Remover splash después de que el overlay ya esté activo
         setTimeout(() => {
             if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
-            verificarBloqueo();
-        }, 2400);
+        }, 2050);
     } catch (err) {
         // En caso de fallo, caer al comportamiento anterior
         console.error('showInitialLogoSplash fallo:', err);
@@ -117,13 +194,39 @@ function verificarBloqueo() {
     document.body.classList.add("locked");
     const pageLock = document.getElementById("pageLock");
     if (pageLock) {
-        pageLock.style.display = "flex";
+        // Asegurar que el overlay cubre todo y evita que se vea contenido detrás
+        pageLock.style.display = '';
+        pageLock.classList.add('active');
+        pageLock.style.pointerEvents = 'auto';
+        pageLock.style.zIndex = '99999';
+        // Forzar fondo oscuro (algunos navegadores ignoran backdrop cuando se enfoca teclado móvil)
+        pageLock.style.backgroundColor = '#000';
+        pageLock.style.backdropFilter = 'blur(20px)';
+
+        // Mejorar accesibilidad y foco en el input PIN
+        const pin = document.getElementById('pinInput');
+        if (pin) {
+            pin.setAttribute('aria-label', 'PIN de seguridad');
+            pin.setAttribute('autocomplete', 'off');
+            pin.setAttribute('inputmode', 'numeric');
+            pin.style.fontSize = pin.style.fontSize || '16px';
+            setTimeout(() => { try { pin.focus(); } catch(e){} }, 60);
+        }
     }
 }
 
 function showWelcomeAnimation() {
     const pageLock = document.getElementById("pageLock");
     if (!pageLock) return;
+    // Forzar overlay opaco mientras dure la animación de bienvenida
+    pageLock.style.display = 'flex';
+    pageLock.style.backgroundColor = '#000';
+    pageLock.style.zIndex = '99999';
+    pageLock.style.opacity = '1';
+    pageLock.style.pointerEvents = 'auto';
+    pageLock.style.backdropFilter = 'blur(20px)';
+    // evitar fugas visuales en móviles: desactivar backdrop-filter vía clase
+    pageLock.classList.add('force-solid');
 
     const lockBox = pageLock.querySelector('.lock-box');
     lockBox.style.transition = "all 1s cubic-bezier(0.19, 1, 0.22, 1)";
@@ -196,18 +299,19 @@ function showWelcomeAnimation() {
         }, 100);
 
         setTimeout(() => {
-            pageLock.style.transition = 'all 2s cubic-bezier(0.19, 1, 0.22, 1)';
-            pageLock.style.backgroundColor = 'transparent';
-            pageLock.style.backdropFilter = 'blur(0px)';
+            // Hacemos fade-out (sin volver transparente el fondo antes de tiempo)
+            pageLock.style.transition = 'opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1), transform 1.2s ease';
             pageLock.style.opacity = '0';
-            pageLock.style.transform = 'scale(1.1)';
+            pageLock.style.transform = 'scale(1.04)';
 
             setTimeout(() => {
                 pageLock.style.display = 'none';
+                pageLock.classList.remove('force-solid');
                 document.body.classList.remove("locked");
+                if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
                 actualizarUltimaActividad();
                 loadAvatarFromDB(); // 👈 AQUI TAMBIÉN
-            }, 2000);
+            }, 1200);
 
         }, 4000);
     }, 800);
@@ -229,10 +333,19 @@ function unlockPage() {
             showWelcomeAnimation();
         } else {
             const pageLock = document.getElementById("pageLock");
-            if (pageLock) pageLock.style.display = "none";
+            if (pageLock) {
+                // animación de salida suave
+                pageLock.classList.add('unlocking');
+                setTimeout(() => {
+                    pageLock.classList.remove('active');
+                    pageLock.classList.remove('unlocking');
+                    pageLock.style.display = 'none';
+                }, 420);
+            }
             document.body.classList.remove("locked");
+            if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
             actualizarUltimaActividad();
-            loadAvatarFromDB(); // 👈 AQUI
+            if (typeof loadAvatarFromDB === 'function') loadAvatarFromDB(); // 👈 AQUI
         }
     } else {
         if (error) error.style.display = "block";
@@ -290,6 +403,22 @@ function unlockPage() {
             });
         }
     });
+
+// Forzar overlay sólido mientras el input PIN esté enfocado (workaround cross-platform)
+document.addEventListener('DOMContentLoaded', () => {
+    const pin = document.getElementById('pinInput');
+    const pageLock = document.getElementById('pageLock');
+    if (!pin || !pageLock) return;
+
+    pin.addEventListener('focus', () => {
+        pageLock.classList.add('force-solid');
+    });
+
+    pin.addEventListener('blur', () => {
+        // dejar un pequeño margen para que el teclado se oculte
+        setTimeout(() => pageLock.classList.remove('force-solid'), 250);
+    });
+});
 
 /* ============================= */
 /* 💬 COMENTARIOS (SUPABASE) */
@@ -498,3 +627,26 @@ setInterval(() => {
         loadAvatarFromDB().catch(err => console.error('Error sincronizando avatar:', err));
     }
 }, 30000);
+
+// Evitar flash blanco al navegar o recargar: forzamos fondo oscuro justo antes de navegar
+document.addEventListener('DOMContentLoaded', () => {
+    function protectBackground() {
+        try {
+            document.documentElement.style.backgroundColor = '#050505';
+            if (document.body) document.body.style.background = '#050505';
+        } catch (e) {}
+    }
+
+    // antes de recargar o salir
+    window.addEventListener('beforeunload', protectBackground, {capture: true});
+
+    // al hacer click en enlaces internos, forzar fondo oscuro inmediatamente
+    document.querySelectorAll('a[href]').forEach(a => {
+        a.addEventListener('click', (e) => {
+            const href = a.getAttribute('href');
+            if (!href) return;
+            if (href.startsWith('#') || a.target === '_blank' || href.startsWith('mailto:') || href.startsWith('javascript:')) return;
+            protectBackground();
+        }, {passive: true});
+    });
+});
