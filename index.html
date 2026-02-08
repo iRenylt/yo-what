@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="ca-ES">
+<html lang="ca-ES" style="background:#050505;">
 
 <head>
+    <meta name="theme-color" content="#050505">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Footage Archive</title>
     <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
@@ -55,7 +56,8 @@
         /* GRID de tarjetas */
         .cards-grid { display: grid; grid-template-columns: 1fr; gap: 22px; }
         @media (min-width: 900px) { .cards-grid { grid-template-columns: 1fr 1fr; } }
-        .cards-grid .card { margin: 0; }
+        /* Mantener separación entre tarjetas dentro de la grid */
+        .cards-grid .card { margin: 0 0 26px 0; }
 
         /* Sección destacada */
         .featured { display:flex; gap:20px; align-items:center; flex-direction:row; }
@@ -181,12 +183,30 @@
         .page-lock {
             position: fixed;
             inset: 0;
-            background: #000;
+            background: #000 !important;
             z-index: 99999;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(20px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        /* asegurar un overlay sólido que nunca permita ver contenido detrás */
+        .page-lock::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #000;
+            z-index: -1;
+        }
+
+        /* Forzar overlay sólido (workaround para bugs en móviles al enfocar input) */
+        .page-lock.force-solid {
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+            background: #000 !important;
         }
 
         .lock-box {
@@ -415,6 +435,52 @@
             transition: all 0.4s ease;
         }
 
+        /* Estilos específicos para la tarjeta especial 14/02 (no afectan las demás) */
+        .card.card-special {
+            background: linear-gradient(180deg, rgba(255, 235, 242, 0.06), rgba(255, 215, 230, 0.04));
+            border-color: rgba(255, 183, 213, 0.12);
+        }
+
+        .card.card-special .card-header .date {
+            background: rgba(255, 240, 245, 0.04);
+            border-color: rgba(255, 183, 213, 0.08);
+            color: #fff;
+        }
+
+        .card.card-special .card-toggle-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 183, 213, 0.18);
+            transition: transform 220ms ease, background 220ms ease, box-shadow 220ms ease;
+        }
+
+        .card.card-special .card-toggle-btn:hover {
+            background: rgba(255, 183, 213, 0.08);
+            transform: scale(1.08);
+            box-shadow: 0 8px 30px rgba(255, 183, 213, 0.08);
+        }
+
+        .card.card-special .card-content p { color: rgba(255,255,255,0.9); }
+
+        .card.card-special .special-cta { display:flex; justify-content:center; margin-top:22px; }
+
+        .card.card-special .special-btn {
+            background: linear-gradient(90deg,#ffd7e6,#ffb7d5);
+            color: #111;
+            padding: 12px 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-decoration: none;
+            font-weight:700;
+            box-shadow: 0 8px 30px rgba(255, 183, 213, 0.12);
+            transition: transform 260ms cubic-bezier(.2,.9,.3,1), box-shadow 260ms ease, opacity 200ms ease;
+        }
+
+        .card.card-special .special-btn:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(255, 183, 213, 0.12);
+        }
+
+
         @media (max-width: 600px) {
             header {
                 padding: 60px 20px 40px;
@@ -620,9 +686,14 @@
 
         .konami-sequence { position: fixed; bottom: 80px; right: 20px; background: rgba(255, 183, 213, 0.9); color: #000; padding: 15px 25px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; animation: slideUp 0.4s ease; z-index: 5000; }
     </style>
+    <style>
+        /* Visual cue for locked links */
+        .locked-until-date { opacity: 0.6; cursor: not-allowed !important; pointer-events: auto; }
+        .locked-until-date:hover { transform: none; }
+    </style>
 </head>
 
-<body>
+<body style="background:#050505;color:#fff;">
 
 <div class="stars"></div>
 
@@ -630,7 +701,7 @@
         <div class="lock-box">
             <h2 id="lockPhrase">ESPERANDO POR TI</h2>
             <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">SOLO TÚ TIENES LA LLAVE</p>
-            <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
+            <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <button onclick="unlockPage()">Abrir Corazón</button>
             <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
         </div>
@@ -677,9 +748,11 @@
     <div class="dropdown">
         <a href="#" class="nav-item">Cartas<span class="badge"></span></a>
         <div class="dropdown-content">
-            <a href="carta1.html" id="nav-carta1">09/10/25</a>
-            <a href="carta7.html" id="nav-carta7">09/01/26</a>
-            <a href="carta8.html" id="nav-carta8">09/02/26</a>
+            <a href="carta1.html" id="nav-carta1">09/10/25 ❤️</a>
+            <a href="carta7.html" id="nav-carta7">09/01/26 ❤️</a>
+            <a href="carta8.html" id="nav-carta8">09/02/26 🧡</a>
+            <a href="" id="nav-carta9">09/03/26 ❤️</a>
+            <a href="" id="nav-carta10">09/04/26 ❤️</a>
         </div>
     </div>
 </nav>
@@ -709,6 +782,23 @@
                     </div>
                 </div>
             </div>
+
+            <!-- TARJETA ESPECIAL 14/02 -->
+        <div class="card card-special">
+            <div class="card-header">
+                <span class="date">Especial para ti</span>
+                <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
+            </div>
+            <div class="card-collapsible collapsed">
+                <div class="card-content">
+                    <h2>Se desbloquea el 14/02/26</h2>
+                    <p>He preparado algo especial para el 14 de febrero. Si quieres verlo, pulsa el botón abajo. No suelo celebrar esta fecha como ya lo mencioné pero lo hice para ti.</p>
+                    <div class="special-cta">
+                        <a href="" class="special-btn">Ir al secreto</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
             <div class="card">
                 <div class="card-header">
@@ -890,6 +980,7 @@
             </div>
         </div>
         </div>
+
     </div>
 
 
@@ -912,6 +1003,65 @@
                     alert('Esta carta estará disponible el 9 de febrero de 2026.');
                 }
             });
+        }
+    });
+    // Bloqueo para la página 14.html hasta el 14 de febrero de 2026
+    document.addEventListener('DOMContentLoaded', function() {
+        const link14 = document.querySelector('a[href="14.html"]');
+        if (!link14) return;
+
+        const UNLOCK_DATE_14 = new Date(2026, 1, 14);
+
+        function lockLinkUntilDate(link, unlockDate) {
+            const now = new Date();
+            const originalHref = link.getAttribute('href');
+
+            // If still locked, remove href to prevent navigation (including middle-click/open-in-new-tab)
+            if (now < unlockDate) {
+                link.setAttribute('data-href', originalHref);
+                link.removeAttribute('href');
+                link.classList.add('locked-until-date');
+                link.setAttribute('aria-disabled', 'true');
+
+                // show alert on click to inform user
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Esta sección aún no está desbloqueada. Se desbloqueará el 14 de febrero de 2026.');
+                });
+
+                // prevent keyboard activation (Enter)
+                link.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        alert('Esta sección aún no está desbloqueada. Se desbloqueará el 14 de febrero de 2026.');
+                    }
+                });
+            } else {
+                // If unlocked (date reached), ensure href restored
+                if (!link.getAttribute('href') && link.getAttribute('data-href')) {
+                    link.setAttribute('href', link.getAttribute('data-href'));
+                    link.removeAttribute('data-href');
+                    link.classList.remove('locked-until-date');
+                    link.removeAttribute('aria-disabled');
+                }
+            }
+        }
+
+        lockLinkUntilDate(link14, UNLOCK_DATE_14);
+
+        // Also attempt to auto-restore at midnight if the user keeps the page open
+        const now = new Date();
+        if (now < UNLOCK_DATE_14) {
+            const msUntilUnlock = UNLOCK_DATE_14.getTime() - now.getTime();
+            setTimeout(() => {
+                // restore href when unlock date arrives
+                if (link14.getAttribute('data-href')) {
+                    link14.setAttribute('href', link14.getAttribute('data-href'));
+                    link14.removeAttribute('data-href');
+                    link14.classList.remove('locked-until-date');
+                    link14.removeAttribute('aria-disabled');
+                }
+            }, msUntilUnlock + 500);
         }
     });
     // ✨ SISTEMA DE SECRETOS AVANZADO ✨
