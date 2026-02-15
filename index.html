@@ -6,21 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Footage Archive</title>
-    <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
+    <link rel="icon" href="https://i.imgur.com/PaRZRTN.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffffff;
-            --accent: #888888;
+            --accent: #ff80ab;
+            --accent-light: #ffb7d5;
+            --accent-dark: #ff4081;
             --bg: #050505;
-            --card-bg: rgba(20, 20, 25, 0.6);
+            --card-bg: rgba(20, 20, 25, 0.7);
+            --card-bg-hover: rgba(25, 25, 35, 0.85);
             --text-main: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.5);
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 183, 213, 0.15);
+            --border-hover: rgba(255, 183, 213, 0.3);
             --max-width: 1100px;
-            --muted: rgba(255,255,255,0.12);
+            --muted: rgba(255, 255, 255, 0.2);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,14 +58,65 @@
 
         .hero .intro { max-width: 900px; text-align: center; color: var(--text-dim); font-size: 1rem; }
         .cta-buttons { display:flex; gap:12px; align-items:center; justify-content:center; }
-        .cta-buttons a, .cta-buttons button { background: rgba(255,255,255,0.06); border: 1px solid var(--muted); padding:10px 18px; border-radius: 999px; color:var(--text-main); text-decoration:none; font-weight:600; font-size:0.9rem; }
-        .cta-buttons a:hover, .cta-buttons button:hover { transform: translateY(-3px); background: rgba(255,255,255,0.09); }
+        .cta-buttons a, .cta-buttons button { 
+            background: linear-gradient(135deg, rgba(255,183,213,0.1), rgba(255,128,171,0.05)); 
+            border: 1.5px solid var(--border);
+            padding:12px 20px; 
+            border-radius: 999px; 
+            color:var(--text-main); 
+            text-decoration:none; 
+            font-weight:600; 
+            font-size:0.9rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-buttons a::before, .cta-buttons button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,183,213,0.2), rgba(255,128,171,0.15));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .cta-buttons a:hover, .cta-buttons button:hover { 
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: 0 12px 25px rgba(255, 183, 213, 0.15);
+        }
+        
+        .cta-buttons a:hover::before, .cta-buttons button:hover::before {
+            opacity: 1;
+        }
 
         /* GRID de tarjetas */
-        .cards-grid { display: grid; grid-template-columns: 1fr; gap: 22px; }
+        .cards-grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
         @media (min-width: 900px) { .cards-grid { grid-template-columns: 1fr 1fr; } }
         /* Mantener separación entre tarjetas dentro de la grid */
-        .cards-grid .card { margin: 0 0 26px 0; }
+        .cards-grid .card { margin: 0; }
+        
+        /* Todos los cards con mismo tamaño y estilo */
+        .cards-grid .card:nth-child(1),
+        .cards-grid .card:nth-child(2),
+        .cards-grid .card:nth-child(3),
+        .cards-grid .card:nth-child(4) {
+            grid-column: 1;
+            padding: 40px 30px;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        @media (min-width: 900px) {
+            .cards-grid .card:nth-child(1) { grid-column: 1; }
+            .cards-grid .card:nth-child(2) { grid-column: 2; grid-row: 1; }
+            .cards-grid .card:nth-child(3) { grid-column: 1; }
+            .cards-grid .card:nth-child(4) { grid-column: 1; }
+        }
 
         /* Sección destacada */
         .featured { display:flex; gap:20px; align-items:center; flex-direction:row; }
@@ -71,15 +130,34 @@
 
         /* Animaciones y microinteracciones */
         @keyframes floatY {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-            100% { transform: translateY(0); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         @keyframes textShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 183, 213, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(255, 183, 213, 0.6); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
         .hero img { animation: floatY 6s ease-in-out infinite; }
@@ -99,46 +177,37 @@
         /* Card hover micro-lift */
         .card { transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease; }
         .card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px rgba(0,0,0,0.45); }
+        
+        /* Sin efecto hover para los primeros dos cards principales */
+        .cards-grid .card:nth-child(1):hover,
+        .cards-grid .card:nth-child(2):hover {
+            transform: none;
+            box-shadow: var(--shadow-md);
+        }
 
         /* Card colapsibles */
         .card-toggle-btn { 
-            display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; 
-            background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); 
+            display: none; align-items: center; justify-content: center; width: 36px; height: 36px; 
+            background: rgba(255,183,213,0.08); border: 1.5px solid rgba(255,183,213,0.22);
             border-radius: 50%; cursor: pointer; font-size: 1.3rem; line-height: 1; 
-            transition: all 280ms ease; position: absolute; top: 18px; right: 20px;
-            animation: toggleGlow 2.5s ease-in-out infinite, togglePulse 2.5s ease-in-out infinite;
-            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-            z-index: 60; /* ensure it's above card content */
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); position: absolute; top: 18px; right: 20px;
+            z-index: 60;
             pointer-events: auto;
         }
-        .card-toggle-btn:hover { 
-            background: rgba(255,255,255,0.15); transform: scale(1.15); border-color: rgba(255,255,255,0.4);
-            animation: toggleGlow 1.5s ease-in-out infinite, togglePulse 1.5s ease-in-out infinite;
+        
+        .cards-grid .card:nth-child(n+3) .card-toggle-btn {
+            display: flex;
         }
+        
+        .card-toggle-btn:hover { 
+            background: rgba(255,183,213,0.15); 
+            transform: scale(1.12);
+            border-color: rgba(255,183,213,0.5);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.12);
+        }
+        
         .card-toggle-btn.collapsed::before { content: '📩'; }
         .card-toggle-btn.expanded::before { content: '❎'; }
-
-        @keyframes toggleGlow {
-            0%, 100% { 
-                box-shadow: 0 0 0 0 rgba(255, 183, 213, 0.6), inset 0 0 0 0 rgba(255, 183, 213, 0);
-                border-color: rgba(255,255,255,0.2);
-            }
-            50% { 
-                box-shadow: 0 0 0 8px rgba(255, 183, 213, 0), inset 0 0 10px 0 rgba(255, 183, 213, 0.3);
-                border-color: rgba(255,183,213,0.6);
-            }
-        }
-
-        @keyframes togglePulse {
-            0%, 100% { 
-                background: rgba(255,255,255,0.08);
-                transform: scale(1);
-            }
-            50% { 
-                background: rgba(255,255,255,0.12);
-                transform: scale(1.05);
-            }
-        }
 
         /* Card content colapsible */
         .card-collapsible { max-height: 9999px; overflow: hidden; transition: max-height 380ms cubic-bezier(0.2, 0.9, 0.3, 1), opacity 300ms ease; opacity: 1; }
@@ -147,12 +216,35 @@
         /* Card header relative para toggle */
         .card-header { position: relative; padding-right: 56px; }
 
-        /* Flor sin toggle */
+        /* Flor sin toggle y completamente centrada */
+        .card-flor { justify-content: flex-start !important; }
         .card-flor .card-toggle-btn { display: none; }
-        /* Center floral header and its label */
-        .card-flor .card-header { justify-content: center !important; }
+        .card-flor .card-header { justify-content: center !important; text-align: center; padding-right: 0 !important; }
         .card-flor .card-header .date { margin: 0 auto; }
-        .card-flor .card-content { text-align: center; }
+        .card-flor .card-content { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        .card-flor h2 { width: 100%; margin-bottom: 8px; }
+        .card-flor p { width: 100%; margin-bottom: 8px; color: rgba(255,255,255,0.85); }
+        
+        /* Flor canvas centrado y responsive */
+        #flowerCanvas {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            overflow: visible;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 4px auto;
+            position: relative;
+        }
+        
+        .card-flor button { margin-top: 2px; }
+        
+        #flowerCanvas svg {
+            max-width: 100%;
+            max-height: 250px;
+            height: auto;
+        }
 
         /* 🌌 Fondo Estelar Dinámico */
         .stars {
@@ -227,45 +319,50 @@
             margin-bottom: 30px; 
             letter-spacing: 4px; 
             color: #fff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 30px rgba(255, 183, 213, 0.2);
+            font-size: 1.6rem;
         }
 
         .lock-box input {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
+            border: 1.5px solid var(--border);
             color: #fff;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 15px 16px;
+            border-radius: 14px;
             outline: none;
             text-align: center;
-            font-size: 16px; /* evita zoom en iPhone */
+            font-size: 16px;
             -webkit-text-size-adjust: 100%;
             margin-bottom: 20px;
             width: 100%;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .lock-box input:focus { 
-            border-color: #fff;
+            border-color: var(--border-hover);
             background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(255, 183, 213, 0.1);
         }
 
         .lock-box button {
-            background: transparent;
-            border: 1px solid #fff;
+            background: linear-gradient(135deg, rgba(255,183,213,0.15), rgba(255,128,171,0.08));
+            border: 1.5px solid var(--border);
             color: #fff;
-            padding: 12px 40px;
+            padding: 13px 42px;
             border-radius: 50px;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-size: 0.8rem;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .lock-box button:hover { 
-            background: #fff;
-            color: #000;
+            background: linear-gradient(135deg, rgba(255,183,213,0.25), rgba(255,128,171,0.15));
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.15);
         }
 
         .lock-error {
@@ -288,14 +385,18 @@
             height: 85px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1px solid var(--border);
+            border: 1.5px solid var(--border);
             padding: 5px;
             margin-bottom: 20px;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             animation: floatY 6s ease-in-out infinite;
         }
 
-        header img:hover { transform: scale(1.05); border-color: #fff; }
+        header img:hover { 
+            transform: scale(1.08);
+            border-color: var(--border-hover);
+            box-shadow: 0 8px 25px rgba(255, 183, 213, 0.15);
+        }
 
         .header-text h1 {
             font-size: 3rem;
@@ -358,25 +459,32 @@
             align-items: center;
             justify-content: center;
             background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 22px;
             color: var(--text-dim);
             text-decoration: none;
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
             backdrop-filter: blur(10px);
             cursor: pointer;
+            font-weight: 600;
         }
 
         nav a:hover, .nav-item:hover {
             color: #fff;
-            border-color: #fff;
-            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-hover);
+            background: var(--glass-hover);
             transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
+        }
+
+        .nav-item {
+            font-family: inherit;
+            outline: none;
         }
 
         /* 🆕 Badge de Notificación */
@@ -398,14 +506,14 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            top: calc(100% + 5px);
+            top: calc(100% + 8px);
             left: 50%;
             transform: translateX(-50%);
             width: max-content;
             background: rgba(5, 5, 5, 0.95);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 8px;
+            border: 1.5px solid var(--border);
+            border-radius: 18px;
+            padding: 10px 8px;
             z-index: 2000;
             flex-direction: column;
             gap: 4px;
@@ -414,7 +522,25 @@
         }
 
         .dropdown:hover .dropdown-content, .dropdown.active .dropdown-content { display: flex; }
-        .dropdown-content a { width: 100%; padding: 10px 16px; border: none; background: transparent; white-space: nowrap; }
+        .dropdown-content a { 
+            width: 100%; 
+            padding: 10px 16px; 
+            border: none; 
+            background: transparent; 
+            white-space: nowrap;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .dropdown-content a:hover { 
+            background: rgba(255,183,213,0.08); 
+            color: #fff;
+        }
 
         /* 📄 Contenido Principal */
         .container {
@@ -432,31 +558,142 @@
             padding: 30px;
             backdrop-filter: blur(20px);
             margin-bottom: 30px;
-            transition: all 0.4s ease;
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: visible;
+            box-shadow: var(--shadow-md);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            z-index: 0;
+            border-radius: 30px;
+            padding: 1px;
+            background: transparent;
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .card:hover::before {
+            opacity: 0;
+        }
+
+        .card > * { position: relative; z-index: 2; }
+
+
+        /* Nuevo estilo para el header de la card con icono */
+        .card-header { display:flex; align-items:center; justify-content:center; gap:12px; flex-direction: column; }
+        .card-header .card-icon {
+            width:44px; height:44px; flex:0 0 44px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+        }
+        
+        /* Estilos para todos los card headers */
+        .cards-grid .card .card-header {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .cards-grid .card .card-header .date {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 15px;
+        }
+        
+        /* Centrar contenido de todas las cards */
+        .card-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Botones en cards centrados */
+        .card-content > div,
+        .card-content > a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        /* Botones reutilizables */
+        .btn { 
+            display:inline-flex; align-items:center; gap:8px; padding:11px 16px; border-radius:14px; 
+            border:1.5px solid var(--border); background:rgba(255,255,255,0.03); 
+            color:var(--text-main); text-decoration:none; cursor:pointer; font-weight:600;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-hover);
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #ffb7d5, #ff80ab);
+            color:#1a1a1a; 
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(255, 128, 171, 0.25);
+        }
+        .btn-primary:hover { 
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(255, 128, 171, 0.4);
+        }
+        .btn-ghost { 
+            background: transparent; 
+            border:1.5px solid rgba(255,255,255,0.08);
+        }
+        .btn-ghost:hover {
+            border-color: rgba(255,183,213,0.4);
+            background: rgba(255,183,213,0.05);
+        }
+
+        /* Acentuar el contenido de la card al pasar el ratón */
+        .card:hover .card-content { transform: translateY(-2px); }
+        
+        /* Sin efecto para los primeros dos cards principales */
+        .cards-grid .card:nth-child(1):hover .card-content,
+        .cards-grid .card:nth-child(2):hover .card-content {
+            transform: none;
         }
 
         /* Estilos específicos para la tarjeta especial 14/02 (no afectan las demás) */
         .card.card-special {
-            background: linear-gradient(180deg, rgba(255, 235, 242, 0.06), rgba(255, 215, 230, 0.04));
-            border-color: rgba(255, 183, 213, 0.12);
+            background: linear-gradient(180deg, rgba(255, 183, 213, 0.08), rgba(255, 128, 171, 0.04));
+            border-color: rgba(255, 183, 213, 0.25);
+        }
+
+        .card.card-special:hover {
+            background: linear-gradient(180deg, rgba(255, 183, 213, 0.12), rgba(255, 128, 171, 0.06));
+            border-color: rgba(255, 183, 213, 0.4);
         }
 
         .card.card-special .card-header .date {
-            background: rgba(255, 240, 245, 0.04);
-            border-color: rgba(255, 183, 213, 0.08);
+            background: rgba(255, 183, 213, 0.08);
+            border-color: rgba(255, 183, 213, 0.2);
             color: #fff;
         }
 
         .card.card-special .card-toggle-btn {
-            background: rgba(255, 255, 255, 0.02);
-            border-color: rgba(255, 183, 213, 0.18);
-            transition: transform 220ms ease, background 220ms ease, box-shadow 220ms ease;
+            background: rgba(255, 183, 213, 0.1);
+            border-color: rgba(255, 183, 213, 0.3);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .card.card-special .card-toggle-btn:hover {
-            background: rgba(255, 183, 213, 0.08);
-            transform: scale(1.08);
-            box-shadow: 0 8px 30px rgba(255, 183, 213, 0.08);
+            background: rgba(255, 183, 213, 0.15);
+            transform: scale(1.12);
+            box-shadow: 0 8px 25px rgba(255, 183, 213, 0.2);
         }
 
         .card.card-special .card-content p { color: rgba(255,255,255,0.9); }
@@ -464,20 +701,21 @@
         .card.card-special .special-cta { display:flex; justify-content:center; margin-top:22px; }
 
         .card.card-special .special-btn {
-            background: linear-gradient(90deg,#ffd7e6,#ffb7d5);
-            color: #111;
-            padding: 12px 28px;
+            background: linear-gradient(135deg, #ffb7d5, #ff80ab);
+            color: #1a1a1a;
+            padding: 13px 32px;
             border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: none;
             text-decoration: none;
             font-weight:700;
-            box-shadow: 0 8px 30px rgba(255, 183, 213, 0.12);
-            transition: transform 260ms cubic-bezier(.2,.9,.3,1), box-shadow 260ms ease, opacity 200ms ease;
+            box-shadow: 0 10px 28px rgba(255, 183, 213, 0.25);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
         }
 
         .card.card-special .special-btn:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(255, 183, 213, 0.12);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 183, 213, 0.35);
         }
 
 
@@ -505,6 +743,16 @@
                 padding: 20px;
                 border-radius: 20px;
             }
+            .cards-grid .card:nth-child(1),
+            .cards-grid .card:nth-child(2) {
+                padding: 25px 20px;
+                min-height: 280px;
+            }
+            .cards-grid .card:nth-child(1) a,
+            .cards-grid .card:nth-child(2) a {
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
             .card-content h2 {
                 font-size: 1.2rem;
             }
@@ -516,6 +764,21 @@
             }
             .scroll-indicator {
                 display: none !important;
+            }
+            #flowerCanvas {
+                height: 250px !important;
+            }
+            #flowerCanvas svg {
+                width: 220px !important;
+                height: 220px !important;
+            }
+            /* Mejorar botones en cards para móvil */
+            .card a {
+                padding: 12px 20px !important;
+                font-size: 0.9rem !important;
+            }
+            .card-content > div a {
+                width: auto !important;
             }
         }
 
@@ -530,6 +793,26 @@
 
             .container { padding: 0 12px 50px; }
             .card { padding: 16px; border-radius: 18px; }
+            .cards-grid .card:nth-child(1),
+            .cards-grid .card:nth-child(2) {
+                padding: 20px 16px;
+                min-height: auto;
+            }
+            .cards-grid .card:nth-child(1) a,
+            .cards-grid .card:nth-child(2) a {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+                width: 100%;
+                text-align: center;
+            }
+            .cards-grid .card:nth-child(1) h2,
+            .cards-grid .card:nth-child(2) h2 {
+                font-size: 1.6rem;
+            }
+            .cards-grid .card:nth-child(1) p,
+            .cards-grid .card:nth-child(2) p {
+                font-size: 0.95rem;
+            }
             .card-toggle-btn { width: 28px; height: 28px; top: 16px; right: 18px; font-size: 1.1rem; line-height: 1; }
             .card-content h2 { font-size: 1.05rem; }
             .card-content p { font-size: 0.95rem; line-height: 1.5; }
@@ -547,11 +830,21 @@
             .dropdown.active .dropdown-content { display: flex; position: relative; top: 0; left: 0; }
 
             /* SVG de flor más pequeño y centrado */
-            #flowerCanvas { height: 220px; }
-            #flowerCanvas svg { width: 200px; height: 200px; }
+            #flowerCanvas { height: 200px !important; width: 100% !important; overflow: hidden; }
+            #flowerCanvas svg { width: 180px !important; height: 180px !important; }
 
             /* Imágenes dentro de cards mejor contenidas */
             .card img { max-height: 260px; object-fit: cover; }
+            
+            /* Botones en todas las cards en móvil */
+            .card a {
+                padding: 10px 16px !important;
+                font-size: 0.85rem !important;
+            }
+            .card-content > div a {
+                width: 100% !important;
+                text-align: center !important;
+            }
 
             /* Reducir ruido del fondo estelar en móvil para rendimiento */
             .stars::after { opacity: 0.08; }
@@ -563,8 +856,10 @@
         .card-header {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 15px;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         .card-header .date {
@@ -583,6 +878,7 @@
             font-weight: 400;
             margin-bottom: 20px;
             color: #fff;
+            text-align: center;
         }
 
         .card-content p {
@@ -590,6 +886,58 @@
             font-size: 1rem;
             line-height: 1.8;
             font-style: italic;
+        }
+        
+        /* Estilos para los botones dentro de cards */
+        .card-content > div a {
+            display: inline-block !important;
+            max-width: 100%;
+            word-break: break-word;
+        }
+        
+        /* Estilos especiales para los primeros dos cards principales */
+        .cards-grid .card:nth-child(1) .card-content,
+        .cards-grid .card:nth-child(2) .card-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+        }
+        
+        .cards-grid .card:nth-child(1) .card-content p,
+        .cards-grid .card:nth-child(2) .card-content p {
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+            line-height: 1.7;
+            font-style: normal;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .cards-grid .card:nth-child(1) a,
+        .cards-grid .card:nth-child(2) a,
+        .cards-grid .card:nth-child(3) a,
+        .cards-grid .card:nth-child(4) a {
+            display: inline-block !important;
+            background: #ffffff;
+            color: #050505;
+            padding: 14px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: initial;
+            letter-spacing: 0;
+            font-size: 0.95rem;
+            width: auto;
+            margin: 0 auto;
+        }
+        
+        .cards-grid .card:nth-child(1) a:hover,
+        .cards-grid .card:nth-child(2) a:hover,
+        .cards-grid .card:nth-child(3) a:hover,
+        .cards-grid .card:nth-child(4) a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
         }
 
         .card img {
@@ -699,8 +1047,8 @@
 
     <div id="pageLock" class="page-lock">
         <div class="lock-box">
-            <h2 id="lockPhrase">ESPERANDO POR TI</h2>
-            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">SOLO TÚ TIENES LA LLAVE</p>
+            <h2 id="lockPhrase"></h2>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
             <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <button onclick="unlockPage()">Abrir Corazón</button>
             <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
@@ -728,9 +1076,11 @@
                 <p>EST. 09 / 06 / 2025</p>
             </div>
 
-            <p class="intro">Bienvenida a Footage Archive — un espacio sencillo y creado con cariño. Explora las cartas, recuerdos y la línea de tiempo. Todo está pensado para acompañarte.</p>
+            <p class="intro">Bienvenida a Footage Archive — un espacio sencillo y creado con cariño. </p>
         </div>
     </header>
+
+    
 
     <!-- Modal Secreto -->
     <div id="secretModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; align-items:center; justify-content:center; backdrop-filter:blur(20px); padding:20px;">
@@ -741,143 +1091,64 @@
         </div>
     </div>
 
-<nav>
-    <a href="index.html" id="nav-inicio">Inicio<span class="badge"></span></a>
-    <a href="historia.html" id="nav-historia">Línea de Tiempo<span class="badge"></span></a>
-    <a href="recuerdos.html" id="nav-recuerdos">Archivos<span class="badge"></span></a>
-    <div class="dropdown">
-        <a href="#" class="nav-item">Cartas<span class="badge"></span></a>
-        <div class="dropdown-content">
-            <a href="carta1.html" id="nav-carta1">09/10/25 ❤️</a>
-            <a href="carta7.html" id="nav-carta7">09/01/26 ❤️</a>
-            <a href="carta8.html" id="nav-carta8">09/02/26 🧡</a>
-            <a href="" id="nav-carta9">09/03/26 ❤️</a>
-            <a href="" id="nav-carta10">09/04/26 ❤️</a>
-            <a href="" id="nav-carta10">09/05/26 ❤️</a>
-        </div>
-    </div>
-</nav>
+
     <div class="container">
 
         <div class="cards-grid">
 
             <div class="card">
                 <div class="card-header">
-                    <span class="date">Fecha de actualización: 07/02/2026</span>
-                    <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
+                    <span class="date">DESCUBRIMIENTO</span>
                 </div>
-                <div class="card-collapsible collapsed">
-                    <div class="card-content">
-                        <h2>¿Cómo es Footage Archive?</h2>
-                        <p>Espere una flor y recibí un jardín contigo. ¿Sabías algo? Estás leyendo esto. 😊❤️</p><br>
-                        <p>- Nueva carta disponible 09/02/26 en el menu, lista para abrirse en ese día tan especial.</p><br>
-                        <p>- Footage Archive se actualizó, nuevas cartas para los meses que quedan antes de cumplir un año juntos, secretos, funciones están disponibles, ahora a pesar de que no puedas ver los embed de spotify, añadí la opción de que los escuches con simplemente presionando en "Escuchar en Spotify" y lo escucharás en otra ventana del navegador sin necesidad de tener Spotify instalado.</p><br>
-                        <p>- Además de unas 35 nuevas funciones añadidas, te amo, linda.</p>
-
-                        <div class="spotify-embed">
-                            <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/2UxrK7r4cyQOSh7wvdQTe1?si=02cefeab135a437e" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                            <div class="spotify-fallback">
-                                <a class="spotify-open" href="https://open.spotify.com/track/2UxrK7r4cyQOSh7wvdQTe1" target="_blank" rel="noopener">🎧 Abrir en Spotify</a>
-                            </div>
-                        </div> 
+                <div class="card-content">
+                    <h2>Registros escritos</h2>
+                    <p>Archivo digital de nuestra historia compartida.</p>
+                    <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+                        <a href="historia.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Explorar Línea de tiempo</a>
                     </div>
                 </div>
             </div>
-
+<!-- card 2 -->
             <div class="card">
                 <div class="card-header">
-                    <span class="date">Fecha de actualización: 30/01/2026</span>
-                    <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
+                    <span class="date">DESCUBRIMIENTO</span>
                 </div>
-                <div class="card-collapsible collapsed">
-                    <div class="card-content">
-                        <h2>¿Footage Archive?</h2>
-                        <p>Desarrollar, programar y diseñar; todo esto es parte de mi amor por ti, preciosa.</p><br>
-                        <p>Sinceramente me relaja hacer esto por ti, aunque a veces me quedo sin creatividad ¿qué es lo que te gustaría ver o que Footage Archive tenga?</p><br>
-                        <p>Revisa todo lentamente y detalladamente, hay muchos secretos ocultos que Footage Archive espera que encuentres</p><br>
-                        <p>Se actualizó toda la página y ahora al presionar el logo del Inicio, puedes cambiar el logo por la imágen que tú quieras ❤️</p>
-
-                        <div class="spotify-embed">
-                            <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/1jecO8NeYLsVWVptITz4c1?si=8b589fba6c234d3d" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                            <div class="spotify-fallback">
-                                <a class="spotify-open" href="https://open.spotify.com/track/1jecO8NeYLsVWVptITz4c1" target="_blank" rel="noopener">🎧 Abrir en Spotify</a>
-                            </div>
-                        </div> 
+                <div class="card-content">
+                    <h2>Registros especiales</h2>
+                    <p>Cartas con significado memorable a pesar de no ser escritas físicamente, tienen mi amor y cariño para ti.</p>
+                    <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+                        <a href="carta1.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Carta 09/10/25 ❤️</a>
+                        <a href="carta7.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Carta 09/01/26 ❤️</a>
+                        <a href="carta8.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Carta 09/02/26 ❤️</a>
+                        <a href="" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Carta 09/03/26 💖</a>
+                    </div>
+                </div>
+            </div>
+<!-- card 3 -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="date">DESCUBRIMIENTO</span>
+                </div>
+                <div class="card-content">
+                    <h2>Registros visuales</h2>
+                    <p>Cada archivo es un momento preservado, esperando ser revivido.</p>
+                    <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+                        <a href="recuerdos.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Explorar Archivos Visuales</a>
                     </div>
                 </div>
             </div>
 
-        <div class="card">
-            <div class="card-header">
-                <span class="date">Fecha de actualización: 23/01/2026</span>
-                <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
-            </div>
-            <div class="card-collapsible collapsed">
-                <div class="card-content">
-                    <h2>¿Footage Archive como sentimiento?</h2>
-                    <p>Footage Archive es más que un sentimiento. Es una parte de mí. Como ya lo he escrito antes, incluso cuando las cosas pasan, cuando me siento devastado por dentro, perdido, solo o vacío, vuelvo aquí. Este lugar me sostiene. Lo que hace distinto a Footage Archive es que no es solo mío.
-                    En cada línea de código hay una parte de ti también.
-                    Quiero que mis días te incluyan, que estés presente en ellos, porque contigo no dejo de sonreír.</p><br>
-                    <p>Tienes eso que me hace bien.
-                    Mantienes vivo este sitio.
-                    Aunque yo lo construya y lo programe, Footage Archive es una parte de mí que también te pertenece. Es un obsequio. Es un sentimiento.
-
-                    Footage acompaña lo que es difícil de explicar, incómodo de decir, complejo de asimilar.
-                    No busca perfección.
-                    Busca lo real.</p><br>
-                    <p>Aún queda tanto por crear, tanto por agregar, que no puedo imaginar en qué se convertirá este lugar. Y está bien. No tiene que terminar.
-
-                        Hay veces que cuesta.
-
-                        Footage es más que un refugio, lo sé.
-                        Aún no tengo una definición exacta de lo que es, pero sí sé esto: es uno de mis regalos más sinceros hacia ti. Como otras partes de mí que hoy llevas contigo, y que en su momento fueron mías. Que lo valores me haría feliz. Incluso si este archivo no entiende mis sentimientos, yo sí entiendo algo: estás intentando mejorar, y eso importa.</p><br>
-                    <p>La verdad a veces duele y a veces incomoda.
-                    Pero Footage ayuda a transformarla en algo distinto, algo que va más allá del amor idealizado: una conexión real.
-
-                    No sé exactamente qué pienses o qué sientas, pero este lugar es para ti.
-                    Y su futuro se decide día a día.
-
-                    Desde lo más profundo y honesto de mí:
-                    quiero que te haga sentir segura, tranquila, cuidada.
-                    Que la ansiedad baje.
-                    Que sepas que te elijo en el presente, sin promesas vacías, sin soltar lo que ya existe, solo cuidándolo y mejorándolo.</p><br>
-                    <p>(La Línea de Tiempo se actualizó)</p>
-
-                    <div class="spotify-embed">
-                        <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/5sLeuS2QO4qBPIOIvWvN80?si=a5822019caca456e" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                        <div class="spotify-fallback">
-                            <a class="spotify-open" href="https://open.spotify.com/track/5sLeuS2QO4qBPIOIvWvN80" target="_blank" rel="noopener">🎧 Abrir en Spotify</a>
-                        </div>
-                    </div> 
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <span class="date">Fecha de actualización: 21/01/2026</span>
-                <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
-            </div>
-            <div class="card-collapsible collapsed">
-                <div class="card-content">
-                    <h2>Tú y yo (el detrás de Footage Archive)</h2>
-                    <p>En cada línea de Footage Archive estás tú, hay pequeños secretos en toda la página y quizá ya los descubriste pero en caso de que no pues.. es tu turno de hacerlo, presionar en lugares, imágenes, frases es una pista, te amo un montón</p>
-                    <img src="https://i.imgur.com/1QvEB7R.png" alt="update">
-                </div>
-            </div>
-        </div>
-
         <!-- 🌸 SECCIÓN DE LA FLOR -->
-        <div class="card card-flor" style="text-align: center;">
-            <div class="card-header" style="justify-content: center;">
+        <div class="card card-flor">
+            <div class="card-header">
                 <span class="date">Especial para ti</span>
             </div>
             <div class="card-content">
                 <h2>Un pequeño detalle</h2>
-                <p style="margin-bottom: 30px;">Presiona el botón para ver algo bonito ❤️</p>
+                <p style="font-style: italic;">Presiona el botón para ver algo bonito ❤️</p>
 
-                <div id="flowerCanvas" style="display: none; height: 300px; width: 100%; position: relative; justify-content: center; align-items: center; overflow: visible; margin-bottom: 20px;">
-                    <svg viewBox="0 0 200 200" style="width: 250px; height: 250px; overflow: visible;">
+                <div id="flowerCanvas" style="display: none;">
+                    <svg viewBox="0 0 200 200" style="width: 100%; max-width: 250px; height: auto; overflow: hidden;">
                         <!-- Stem -->
                         <path id="stem" d="M100 200 L100 100" stroke="#2d5a27" stroke-width="4" fill="none" stroke-dasharray="100" stroke-dashoffset="100">
                             <animate id="stemAnim" attributeName="stroke-dashoffset" from="100" to="0" dur="2s" fill="freeze" begin="indefinite" />
@@ -906,61 +1177,7 @@
                     </svg>
                 </div>
 
-                <button id="runFlower" onclick="startFlower()" style="background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 40px; border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; transition: all 0.3s;">Iniciar</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <span class="date">Fecha de actualización: 17/01/2026</span>
-                <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
-            </div>
-            <div class="card-collapsible collapsed">
-                <div class="card-content">
-                    <h2>¿Qué será del futuro de Footage Archive?</h2>
-                    <p>El futuro de Footage Archive no está cerrado.</p><br>
-                    <p>No es algo terminado, es algo que sigue creciendo con el tiempo, como nosotros. La idea no es llenarlo de cosas por llenar, sino dejar que evolucione con sentido y cuidado.</p><br>
-                    <p>Footage Archive seguirá siendo un lugar honesto.
-                    Un espacio que se adapta, que cambia, que aprende. No busca ser perfecto, busca ser real. Mientras exista respeto, comunicación y ganas, este lugar seguirá creciendo contigo.</p><br>
-                    <p>No sé exactamente en qué se convertirá,
-                    pero sí sé por qué existe: para acompañarnos, para cuidarnos mejor y para dejar constancia de lo que vamos construyendo, sin forzarlo, sin adelantar etapas.</p>
-                    <div class="spotify-embed">
-                        <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/6h9h7LDcuWowOHUhWRTwnO?si=1c7a91c648044a15" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                        <div class="spotify-fallback">
-                            <a class="spotify-open" href="https://open.spotify.com/track/6h9h7LDcuWowOHUhWRTwnO" target="_blank" rel="noopener">🎧 Abrir en Spotify</a>
-                        </div>
-                    </div> 
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <span class="date">Fecha de actualización: 13/01/2026</span>
-                <button class="card-toggle-btn collapsed" onclick="toggleCard(this)"></button>
-            </div>
-            <div class="card-collapsible collapsed">
-                <div class="card-content">
-                    <h2>¿Por qué Footage Archive?</h2>
-                    <p>Footage Archive empezó como algo de mí para ti.
-                    Una forma de decirte lo que a veces no sé cómo empezar a explicar. El amor no solo se siente, también se aprende a entender, y este espacio nació desde ahí: desde dejar que todo fluya con honestidad.</p><br>
-
-                        <p>No siempre es fácil. Hay momentos que me cuestan, cosas que me desgastan, pero sigo aquí, eligiéndote. Esto no es una promesa ni una obligación, es una elección consciente. Lo que tenemos depende de lo que ambos queramos cuidar.</p><br>
-
-                    <p>Footage Archive también es un regalo.
-                    Un lugar seguro y sincero donde te comparto una parte vulnerable de mí. Todo aquí está hecho con tiempo, cariño y atención. Cada detalle fue pensado para ti, porque así sé querer.</p><br>
-
-                    <p>Es un espacio nuestro.
-                    Para que puedas dejarme palabras, pensamientos o emociones cuando lo necesites. No reemplaza lo real, lo acompaña. Es mi forma de estar presente contigo, con verdad y calma.</p><br> 
-                    <p>Desde lo más sincero y honesto:
-                    – A</p>
-                    <div class="spotify-embed">
-                        <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/4DGwG4QsOWNhoM3jEyKnuR?si=dcc068b4a0814682" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-                        <div class="spotify-fallback">
-                            <a class="spotify-open" href="https://open.spotify.com/track/4DGwG4QsOWNhoM3jEyKnuR" target="_blank" rel="noopener">🎧 Abrir en Spotify</a>
-                        </div>
-                    </div> 
-                </div>
+                <button id="runFlower" onclick="startFlower()" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease; border: none; cursor: pointer; margin-top: 20px;">Iniciar</button>
             </div>
         </div>
         </div>
@@ -969,7 +1186,7 @@
 
 
 <footer>
-    <p>// FOOTAGE ARCHIVE 2025-206 //</p>
+    <p>// FOOTAGE ARCHIVE 2025-2026 //</p>
 </footer>
 
 <script src="lock.js"></script>
@@ -1387,11 +1604,30 @@
 
     // Frases aleatorias para la pantalla de bloqueo
     const phrases = [
-        "ESPERANDO POR TI",
-        "NECESITAS UNA SONRISA",
-        "UN LUGAR SEGURO",
-        "BIENVENIDA A CASA",
-        "UN ARCHIVO SECRETO"
+        "UN ARCHIVO SECRETO",
+        "EN CADA MOMENTO",
+        "CADA SEGUNDO CONTIGO",
+        "RECUERDOS QUE VIVEN",
+        "UN VIAJE ESPECIAL",
+        "TÚ LUGAR ESPECIAL",
+        "CORAZÓN EN LA MANO",
+        "GRAVEDAD SIN EXPLICACIÓN",
+        "COMPLETAMENTE CAUTIVADORA",
+        "ALMA NATURAL ENCONTRADA",
+        "AMOR SIN MEDIDA",
+        "UN REGALO DEL UNIVERSO",
+        "DONDE TÚ ESTÉS, IRÉ",
+        "PUNTO DE NO RETORNO",
+        "PERFECTAMENTE IMPERFECTA",
+        "UN SUEÑO HECHO REALIDAD",
+        "FORTALEZA EN TUS MANOS",
+        "ENTRE TUS BRAZOS SOY LIBRE",
+        "CADA LATIDO TE LLAMA",
+        "ERES MI DEBILIDAD MÁS HERMOSA",
+        "PARA AMARTE EN CUALQUIER MOMENTO",
+        "SUEÑO DESPIERTO CONTIGO",
+        "MI DESTINO ERES TÚ",
+        "EL TIEMPO SE DETIENE"
     ];
     const lockPhrase = document.getElementById('lockPhrase');
     if (lockPhrase) {
@@ -1466,7 +1702,7 @@
         }
 
         if (greetingElement) {
-            greetingElement.textContent = `${greeting} 💕`;
+            greetingElement.textContent = `${greeting}, Nohelia 💕`;
         }
     }
 
@@ -1516,6 +1752,20 @@
     })();
 
     // Mostrar resumen de secretos encontrados
+    // --------------------- Mejoras de interacción en cards ---------------------
+    document.addEventListener('DOMContentLoaded', () => {
+        // Reemplazar el contenido de los botones toggle por un SVG consistente
+        document.querySelectorAll('.card-toggle-btn').forEach(btn => {
+            if (!btn.dataset.enhanced) {
+                btn.innerHTML = `
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>`;
+                btn.setAttribute('aria-label', 'Expandir tarjeta');
+                btn.dataset.enhanced = 'true';
+            }
+        });
+    });
 </script>
 </body>
 </html>
