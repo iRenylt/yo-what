@@ -6,19 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="theme-color" content="#050505">
     <title>Footage Archive</title>
-    <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
+    <link rel="icon" href="https://i.imgur.com/PaRZRTN.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffffff;
-            --accent: #888888;
+            --accent: #ff80ab;
+            --accent-light: #ffb7d5;
+            --accent-dark: #ff4081;
             --bg: #050505;
-            --card-bg: rgba(20, 20, 25, 0.6);
+            --card-bg: rgba(20, 20, 25, 0.7);
+            --card-bg-hover: rgba(25, 25, 35, 0.85);
             --text-main: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.5);
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 183, 213, 0.15);
+            --border-hover: rgba(255, 183, 213, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -87,39 +94,49 @@
             margin-bottom: 30px; 
             letter-spacing: 4px; 
             color: #fff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 30px rgba(255, 183, 213, 0.2);
         }
 
         .lock-box input {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
+            border: 1.5px solid var(--border);
             color: #fff;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 15px 16px;
+            border-radius: 14px;
             outline: none;
             text-align: center;
-            font-size: 1rem;
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
             margin-bottom: 20px;
             width: 100%;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .lock-box input:focus { 
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(255, 183, 213, 0.1);
         }
 
         .lock-box button {
-            background: transparent;
-            border: 1px solid #fff;
+            background: linear-gradient(135deg, rgba(255,183,213,0.15), rgba(255,128,171,0.08));
+            border: 1.5px solid var(--border);
             color: #fff;
-            padding: 12px 40px;
+            padding: 13px 42px;
             border-radius: 50px;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-size: 0.8rem;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .lock-box button:hover { 
-            background: #fff;
-            color: #000;
+            background: linear-gradient(135deg, rgba(255,183,213,0.25), rgba(255,128,171,0.15));
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.15);
         }
 
         .lock-error {
@@ -142,19 +159,22 @@
             height: 85px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1px solid var(--border);
+            border: 1.5px solid var(--border);
             padding: 5px;
             margin-bottom: 20px;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             animation: floatY 6s ease-in-out infinite;
         }
 
-        header img:hover { transform: scale(1.05); border-color: #fff; }
+        header img:hover { 
+            transform: scale(1.08);
+            border-color: var(--border-hover);
+            box-shadow: 0 8px 25px rgba(255, 183, 213, 0.15);
+        }
 
         @keyframes floatY {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-            100% { transform: translateY(0); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         header h1 {
@@ -192,22 +212,28 @@
             align-items: center;
             justify-content: center;
             background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 10px 14px;
-            border-radius: 18px;
+            border: 1.5px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 22px;
             color: var(--text-dim);
             text-decoration: none;
             font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.4px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
             backdrop-filter: blur(10px);
             cursor: pointer;
             white-space: nowrap;
             flex-shrink: 0;
         }
 
-        nav a:hover, .nav-item:hover { color: #fff; border-color: #fff; background: rgba(255, 255, 255, 0.05); transform: translateY(-3px); }
+        nav a:hover, .nav-item:hover { 
+            color: #fff; 
+            border-color: var(--border-hover);
+            background: var(--glass-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
+        }
 
         .dropdown { position: relative; width: auto; display: inline-block; }
         .dropdown-content {
@@ -266,14 +292,15 @@
 
         .card {
             background: var(--card-bg);
-            border: 1px solid var(--border);
+            border: 1.5px solid var(--border);
             border-radius: 28px;
-            padding: 25px;
+            padding: 28px;
             backdrop-filter: blur(20px);
             margin-bottom: 0;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
             opacity: 0;
             transform: translateY(12px);
+            box-shadow: var(--shadow-md);
         }
 
         .card.in-view {
@@ -282,9 +309,10 @@
         }
 
         .card:hover { 
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-6px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border-color: var(--border-hover);
+            transform: translateY(-8px);
+            background: var(--card-bg-hover);
+            box-shadow: var(--shadow-lg);
         }
 
         .card-header {
@@ -441,8 +469,8 @@
 
 <div id="pageLock" class="page-lock">
     <div class="lock-box">
-        <h2 id="lockPhrase">ESPERANDO POR TI</h2>
-        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">SOLO TÚ TIENES LA LLAVE</p>
+        <h2 id="lockPhrase"></h2>
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
         <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
         <button onclick="unlockPage()">Abrir Corazón</button>
         <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
@@ -472,12 +500,82 @@
 
     <nav>
         <a href="index.html">Inicio</a>
-        <a href="historia.html">Línea de Tiempo</a>
-        <a href="recuerdos.html">Archivos</a>
     </nav>
 
 <div class="container">
+
+    <div class="card">
+        <div class="card-header">
+            <span class="date">09 / 02 / 26</span>
+        </div>
+        <div class="card-content">
+            <img src="https://i.imgur.com/JVUq24N.jpeg" alt="Imagen registrada">
+            <h2>Pulpito</h2>
+            <p>Empezando a cuidarlo tanto como a ti.</p>
+        </div>
+    </div>
     <!-- REGISTRO 1 -->
+
+    <div class="card">
+        <div class="card-header">
+            <span class="date">09 / 02 / 26</span>
+        </div>
+        <div class="card-content">
+            <img src="https://i.imgur.com/16AcMjO.jpeg" alt="Imagen registrada">
+            <h2>F-16 Fighting Falcon</h2>
+            <p>¿Por qué no volar juntos con tanta velocidad y poder?</p>
+        </div>
+    </div>
+    <!-- REGISTRO 2 -->
+
+    <div class="card">
+        <div class="card-header">
+            <span class="date">09 / 02 / 26</span>
+        </div>
+        <div class="card-content">
+            <img src="https://i.imgur.com/fkS1RFe.jpeg" alt="Imagen registrada">
+            <h2>Cajita de recuerdos</h2>
+            <p>Esconde muchas notas, cartas, dibujos y amor.</p>
+        </div>
+    </div>
+    <!-- REGISTRO 3 -->
+
+    <div class="card">
+        <div class="card-header">
+            <span class="date">Sin fecha</span>
+        </div>
+        <div class="card-content">
+            <img src="https://i.imgur.com/bKVJUvW.jpeg" alt="Imagen registrada">
+            <h2>Tú esencia</h2>
+            <p>Cada detalle hecho por ti para mi, eres maravillosa.</p>
+        </div>
+    </div>
+    <!-- REGISTRO 4 -->
+
+    <div class="card">
+        <div class="card-header">
+            <span class="date">09 / 11 / 25</span>
+        </div>
+        <div class="card-content">
+            <img src="https://i.imgur.com/L2C8JHd.jpeg" alt="Imagen registrada">
+            <h2>Detalles tuyos</h2>
+            <p>Todo tú amor demostrado de forma especial.</p>
+        </div>
+    </div>
+    <!-- REGISTRO 5 -->
+
+    <div class="card">
+        <div class="card-header">
+            <span class="date">Sin fecha</span>
+        </div>
+        <div class="card-content">
+            <img src="https://i.imgur.com/shwxek2.jpeg" alt="Imagen registrada">
+            <h2>Objetos tuyos</h2>
+            <p>Por alguna extraña razón tengo cosas tuyas que me recuerdan a ti, aunque ¿por qué no tenerlas?, se siente bastante bien ❤️</p>
+        </div>
+    </div>
+
+    <!-- REGISTRO 6 -->
     <div class="card">
         <div class="card-header">
             <span class="date">09 / 09 / 2025</span>
@@ -489,7 +587,7 @@
         </div>
     </div>
 
-    <!-- REGISTRO 2 -->
+    <!-- REGISTRO 7 -->
     <div class="card">
         <div class="card-header">
             <span class="date">09 / 12 / 2025</span>
@@ -501,21 +599,22 @@
         </div>
     </div>
 
-    <!-- REGISTRO 3 -->
+    <!-- REGISTRO 8 -->
     <div class="card">
         <div class="card-header">
             <span class="date">09 / 01 / 2026</span>
         </div>
         <div class="card-content">
             <img src="https://i.imgur.com/PSoyOH7.jpeg" alt="Me 262">
-            <h2>Me 262</h2>
-            <p>Me atrapaste con esto 😘</p>
+            <h2></h2>
+            <p>El Me 262, realmente me gustó mucho, ya sabes que soy amante de los aviones y jets.</p>
         </div>
     </div>
+
 </div>
 
 <footer>
-    <p>// FOOTAGE ARCHIVE 2025-206 //</p>
+    <p>// FOOTAGE ARCHIVE 2025-2026 //</p>
 </footer>
 
 <script src="lock.js"></script>
@@ -648,11 +747,30 @@
 
     // Frases aleatorias para la pantalla de bloqueo
     const phrases = [
-        "ESPERANDO POR TI",
-        "NECESITAS UNA SONRISA",
-        "UN LUGAR SEGURO",
-        "BIENVENIDA A CASA",
-        "UN ARCHIVO SECRETO"
+        "UN ARCHIVO SECRETO",
+        "EN CADA MOMENTO",
+        "CADA SEGUNDO CONTIGO",
+        "RECUERDOS QUE VIVEN",
+        "UN VIAJE ESPECIAL",
+        "TÚ LUGAR ESPECIAL",
+        "CORAZÓN EN LA MANO",
+        "GRAVEDAD SIN EXPLICACIÓN",
+        "COMPLETAMENTE CAUTIVADORA",
+        "ALMA NATURAL ENCONTRADA",
+        "AMOR SIN MEDIDA",
+        "UN REGALO DEL UNIVERSO",
+        "DONDE TÚ ESTÉS, IRÉ",
+        "PUNTO DE NO RETORNO",
+        "PERFECTAMENTE IMPERFECTA",
+        "UN SUEÑO HECHO REALIDAD",
+        "FORTALEZA EN TUS MANOS",
+        "ENTRE TUS BRAZOS SOY LIBRE",
+        "CADA LATIDO TE LLAMA",
+        "ERES MI DEBILIDAD MÁS HERMOSA",
+        "PARA AMARTE EN CUALQUIER MOMENTO",
+        "SUEÑO DESPIERTO CONTIGO",
+        "MI DESTINO ERES TÚ",
+        "EL TIEMPO SE DETIENE"
     ];
     const phraseElement = document.getElementById('lockPhrase');
     if (phraseElement) {
