@@ -5,19 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="theme-color" content="#050505">
     <title>Footage Archive</title>
-    <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
+    <link rel="icon" href="https://i.imgur.com/PaRZRTN.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffffff;
-            --accent: #888888;
+            --accent: #ff80ab;
+            --accent-light: #ffb7d5;
+            --accent-dark: #ff4081;
             --bg: #050505;
-            --card-bg: rgba(20, 20, 25, 0.6);
+            --card-bg: rgba(20, 20, 25, 0.7);
+            --card-bg-hover: rgba(25, 25, 35, 0.85);
             --text-main: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.5);
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 183, 213, 0.15);
+            --border-hover: rgba(255, 183, 213, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -75,35 +82,54 @@
             max-width: 400px;
         }
 
-        .lock-box h2 { font-weight: 400; margin-bottom: 30px; letter-spacing: 4px; color: #fff; }
+        .lock-box h2 { 
+            font-weight: 400; 
+            margin-bottom: 30px; 
+            letter-spacing: 4px; 
+            color: #fff;
+            text-shadow: 0 0 30px rgba(255, 183, 213, 0.2);
+        }
 
         .lock-box input {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
+            border: 1.5px solid var(--border);
             color: #fff;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 15px 16px;
+            border-radius: 14px;
             outline: none;
             text-align: center;
             font-size: 1rem;
             margin-bottom: 20px;
             width: 100%;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .lock-box input:focus {
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(255, 183, 213, 0.1);
         }
 
         .lock-box button {
-            background: transparent;
-            border: 1px solid #fff;
+            background: linear-gradient(135deg, rgba(255,183,213,0.15), rgba(255,128,171,0.08));
+            border: 1.5px solid var(--border);
             color: #fff;
-            padding: 12px 40px;
+            padding: 13px 42px;
             border-radius: 50px;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-size: 0.8rem;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .lock-box button:hover { background: #fff; color: #000; }
+        .lock-box button:hover { 
+            background: linear-gradient(135deg, rgba(255,183,213,0.25), rgba(255,128,171,0.15));
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.15);
+        }
 
         .lock-error {
             margin-top: 15px;
@@ -126,15 +152,15 @@
 
         nav a, .nav-item {
             background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 8px 15px;
-            border-radius: 15px;
+            border: 1.5px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 18px;
             color: var(--text-dim);
             text-decoration: none;
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
             backdrop-filter: blur(10px);
             cursor: pointer;
             white-space: nowrap;
@@ -146,12 +172,18 @@
                 gap: 8px;
             }
             nav a, .nav-item {
-                padding: 6px 12px;
+                padding: 8px 12px;
                 font-size: 0.6rem;
             }
         }
 
-        nav a:hover, .nav-item:hover { color: #fff; border-color: #fff; transform: translateY(-2px); }
+        nav a:hover, .nav-item:hover { 
+            color: #fff; 
+            border-color: var(--border-hover);
+            background: var(--glass-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
+        }
 
         .envelope-wrapper {
             position: relative;
@@ -173,17 +205,17 @@
             position: relative;
             width: 100%;
             height: 400px;
-            background: linear-gradient(135deg, rgba(30, 30, 35, 0.8) 0%, rgba(20, 20, 25, 0.6) 100%);
-            border: 1px solid var(--border);
-            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255, 183, 213, 0.08), rgba(255, 128, 171, 0.04));
+            border: 1.5px solid var(--border);
+            border-radius: 24px;
             cursor: pointer;
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            box-shadow: var(--shadow-md);
             gap: 20px;
         }
 
@@ -194,32 +226,34 @@
             letter-spacing: 8px;
             text-transform: uppercase;
             font-weight: 400;
-            opacity: 0.8;
-            transition: 0.3s;
+            opacity: 0.9;
+            transition: all 0.3s ease;
         }
 
         .envelope:hover {
-            transform: scale(1.02);
-            border-color: rgba(255,255,255,0.3);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+            transform: translateY(-8px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, rgba(255, 183, 213, 0.12), rgba(255, 128, 171, 0.06));
         }
 
         .envelope .seal {
             width: 60px;
             height: 60px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid var(--border);
+            background: rgba(255,183,213,0.08);
+            border: 1.5px solid var(--border);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            transition: 0.5s;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .envelope:hover .seal {
-            transform: rotate(360deg) scale(1.1);
-            background: rgba(255,255,255,0.2);
+            transform: rotate(360deg) scale(1.15);
+            background: rgba(255,183,213,0.15);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.15);
         }
 
         .letter {
@@ -361,17 +395,15 @@
     <div id="pageLock" class="page-lock">
         <div class="lock-box">
             <h2 id="lockPhrase">ESPERANDO POR TI</h2>
-            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">SOLO TÚ TIENES LA LLAVE</p>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
             <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
             <button onclick="unlockPage()">Abrir Corazón</button>
             <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
         </div>
-    </div>
+        </div>
 
-    <nav>
+        <nav>
         <a href="index.html">Inicio</a>
-        <a href="historia.html">Línea de Tiempo</a>
-        <a href="recuerdos.html">Archivos</a>
     </nav>
 
     <div class="envelope-wrapper">
@@ -418,7 +450,32 @@
 
     <script src="lock.js"></script>
     <script>
-        const phrases = ["ESPERANDO POR TI", "NECESITAS UNA SONRISA", "UN LUGAR SEGURO"];
+        const phrases = [
+            "UN ARCHIVO SECRETO",
+        "EN CADA MOMENTO",
+        "CADA SEGUNDO CONTIGO",
+        "RECUERDOS QUE VIVEN",
+        "UN VIAJE ESPECIAL",
+        "TÚ LUGAR ESPECIAL",
+        "CORAZÓN EN LA MANO",
+        "GRAVEDAD SIN EXPLICACIÓN",
+        "COMPLETAMENTE CAUTIVADORA",
+        "ALMA NATURAL ENCONTRADA",
+        "AMOR SIN MEDIDA",
+        "UN REGALO DEL UNIVERSO",
+        "DONDE TÚ ESTÉS, IRÉ",
+        "PUNTO DE NO RETORNO",
+        "PERFECTAMENTE IMPERFECTA",
+        "UN SUEÑO HECHO REALIDAD",
+        "FORTALEZA EN TUS MANOS",
+        "ENTRE TUS BRAZOS SOY LIBRE",
+        "CADA LATIDO TE LLAMA",
+        "ERES MI DEBILIDAD MÁS HERMOSA",
+        "PARA AMARTE EN CUALQUIER MOMENTO",
+        "SUEÑO DESPIERTO CONTIGO",
+        "MI DESTINO ERES TÚ",
+        "EL TIEMPO SE DETIENE"
+        ];
         document.getElementById('lockPhrase').textContent = phrases[Math.floor(Math.random() * phrases.length)];
 
         function openLetter() {
