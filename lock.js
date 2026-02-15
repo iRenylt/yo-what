@@ -49,19 +49,19 @@ function injectPinStyles() {
     .page-lock.active { display: flex; }
     .page-lock { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 99999; padding: 20px; }
     .page-lock.force-solid { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 18px; padding: clamp(18px, 3.2vw, 36px); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center; transform-origin: center; }
-    .lock-box h2 { font-size: clamp(1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; }
-    .lock-box p { margin: 0 0 18px; color: rgba(255,255,255,0.65); font-size: 0.85rem; letter-spacing: 2px; }
-    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: #fff; outline: none; transition: box-shadow 220ms ease, transform 200ms ease, border-color 200ms ease; text-align: center; }
-    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 14px rgba(255,183,213,0.06); border-color: rgba(255,255,255,0.18); }
-    .lock-box button { margin-top: 12px; padding: 12px 34px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); color: #fff; cursor: pointer; transition: transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms; }
-    .lock-box button:active { transform: translateY(1px) scale(0.998); }
-    .lock-box button:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-    .lock-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 12px; display: none; }
-    .lock-error.show { display: block; animation: shake 420ms ease; }
+    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 18px; padding: clamp(20px, 3.2vw, 40px); background: linear-gradient(180deg, rgba(255,183,213,0.03), rgba(255,128,171,0.01)); border: 1.5px solid rgba(255,183,213,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(255,183,213,0.05); text-align: center; transform-origin: center; }
+    .lock-box h2 { font-size: clamp(1.1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; color: #fff; text-shadow: 0 0 30px rgba(255,183,213,0.15); }
+    .lock-box p { margin: 0 0 20px; color: rgba(255,255,255,0.65); font-size: 0.85rem; letter-spacing: 2px; }
+    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1.5px solid rgba(255,183,213,0.15); background: rgba(255,255,255,0.03); color: #fff; outline: none; transition: box-shadow 220ms ease, transform 200ms ease, border-color 200ms ease; text-align: center; }
+    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 20px rgba(255,183,213,0.12); border-color: rgba(255,183,213,0.3); background: rgba(255,183,213,0.05); }
+    .lock-box button { margin-top: 14px; padding: 13px 36px; border-radius: 999px; border: 1.5px solid rgba(255,183,213,0.15); background: linear-gradient(135deg, rgba(255,183,213,0.08), rgba(255,128,171,0.04)); color: #fff; cursor: pointer; font-weight: 600; transition: transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms, all 220ms; }
+    .lock-box button:hover { background: linear-gradient(135deg, rgba(255,183,213,0.15), rgba(255,128,171,0.08)); border-color: rgba(255,183,213,0.3); box-shadow: 0 10px 30px rgba(255,183,213,0.1); transform: translateY(-2px); }
+    .lock-box button:active { transform: translateY(0) scale(0.998); }
+    .lock-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 12px; display: none; animation: shake 420ms ease; }
+    .lock-error.show { display: block; }
     @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-4px); } 100% { transform: translateX(0); } }
     .page-lock.unlocking { transition: opacity 420ms ease, transform 420ms ease; opacity: 0; transform: scale(1.03); }
-    @media (max-width: 480px) { .lock-box { padding: 14px; border-radius: 12px; } .lock-box h2 { letter-spacing: 2px; } }
+    @media (max-width: 480px) { .lock-box { padding: 16px; border-radius: 14px; } .lock-box h2 { letter-spacing: 2px; } }
     `;
 
     const style = document.createElement('style');
@@ -98,7 +98,7 @@ function showInitialLogoSplash() {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: 'rgba(0,0,0,1)',
-            zIndex: '99999',
+            zIndex: '999999',
             transition: 'opacity 600ms ease, transform 700ms ease',
             padding: '20px'
         });
@@ -115,7 +115,7 @@ function showInitialLogoSplash() {
         });
 
         // Intentamos obtener el favicon de la página; si no existe, usamos la URL por defecto
-        const iconHref = (document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]'))?.href || 'https://i.imgur.com/GtphDVv.png';
+        const iconHref = (document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]'))?.href || 'https://i.imgur.com/PaRZRTN.png';
 
         const img = document.createElement('img');
         img.src = iconHref;
@@ -169,20 +169,18 @@ function showInitialLogoSplash() {
 
         // Mantener visible un instante y luego desvanecer splash
         setTimeout(() => {
-            // Antes de hacer el splash totalmente transparente, activamos
-            // el overlay oficial de bloqueo para que haga de fondo sólido
-            // y evitar que el contenido subyacente quede visible.
-            try { verificarBloqueo(); } catch (e) { /* no bloquear si falla */ }
             splash.style.opacity = '0';
             splash.style.transform = 'scale(1.04)';
             // impedir interacciones mientras se desvanece
             splash.style.pointerEvents = 'none';
         }, 1800);
 
-        // Remover splash después de que el overlay ya esté activo
+        // Remover splash después de que se desvanezca completamente
         setTimeout(() => {
             if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
-        }, 2050);
+            // Después de remover el splash, mostrar el PIN
+            try { verificarBloqueo(); } catch (e) { /* no bloquear si falla */ }
+        }, 2250);
     } catch (err) {
         // En caso de fallo, caer al comportamiento anterior
         console.error('showInitialLogoSplash fallo:', err);
@@ -218,6 +216,30 @@ function verificarBloqueo() {
 function showWelcomeAnimation() {
     const pageLock = document.getElementById("pageLock");
     if (!pageLock) return;
+    
+    // Arrays de frases y emojis para la bienvenida
+    const welcomePhrases = [
+        "HOLA NOHELIA",
+        "ME ALEGRA VERTE",
+    ];
+    
+    const heartEmojis = [
+        "❤️",
+        "💖",
+        "❣️"
+    ];
+    
+    const subMessages = [
+        "TU ARCHIVO ESTÁ LISTO",
+        "RECUERDO COMPARTIDO LISTO",
+        "MOMENTOS ESPECIALES LISTOS",
+    ];
+    
+    // Seleccionar elementos aleatorios
+    const selectedPhrase = welcomePhrases[Math.floor(Math.random() * welcomePhrases.length)];
+    const selectedHeart = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    const selectedSub = subMessages[Math.floor(Math.random() * subMessages.length)];
+    
     // Forzar overlay opaco mientras dure la animación de bienvenida
     pageLock.style.display = 'flex';
     pageLock.style.backgroundColor = '#000';
@@ -236,16 +258,17 @@ function showWelcomeAnimation() {
 
     setTimeout(() => {
         pageLock.innerHTML = `
-            <div style="text-align: center; color: white; width: 100%; max-width: 500px; padding: 20px;">
+            <div style="text-align: center; color: white; width: 100%; max-width: 90vw; padding: clamp(16px, 4vw, 30px);">
                 <div id="welcomeIcon" style="
-                    font-size: 4rem; 
-                    margin-bottom: 20px; 
+                    font-size: clamp(2.5rem, 10vw, 4rem); 
+                    margin-bottom: clamp(12px, 3vw, 20px); 
                     opacity: 0; 
                     transform: scale(0.5);
                     transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                ">❤️</div>
+                    line-height: 1;
+                ">${selectedHeart}</div>
                 <h1 id="welcomeText" style="
-                    font-size: 3.5rem;
+                    font-size: clamp(1.8rem, 6vw, 3.5rem);
                     font-weight: 400;
                     background: linear-gradient(to bottom, #fff, #aaa);
                     -webkit-background-clip: text;
@@ -253,36 +276,46 @@ function showWelcomeAnimation() {
                     opacity: 0;
                     transform: translateY(30px);
                     transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-                    letter-spacing: 8px;
-                    margin-bottom: 15px;
+                    letter-spacing: clamp(2px, 1.5vw, 8px);
+                    margin-bottom: clamp(12px, 3vw, 15px);
+                    margin-top: 0;
                     text-transform: uppercase;
+                    word-wrap: break-word;
+                    word-break: break-word;
+                    line-height: 1.2;
                 ">
-                    HOLA NOHELIA
+                    ${selectedPhrase}
                 </h1>
                 <p id="welcomeSub" style="
-                    font-size: 0.9rem;
-                    letter-spacing: 12px;
+                    font-size: clamp(0.75rem, 2vw, 0.9rem);
+                    letter-spacing: clamp(1px, 1vw, 12px);
                     color: rgba(255,255,255,0.4);
                     opacity: 0;
                     transform: translateY(10px);
                     transition: all 1s ease 0.4s;
                     text-transform: uppercase;
+                    margin: clamp(8px, 2vw, 15px) 0;
+                    word-wrap: break-word;
+                    word-break: break-word;
+                    line-height: 1.3;
                 ">
-                    TU ARCHIVO ESTÁ LISTO
+                    ${selectedSub}
                 </p>
                 <div id="welcomeLine" style="
                     width: 0;
                     height: 1px;
                     background: linear-gradient(90deg, transparent, #fff, transparent);
-                    margin: 30px auto;
+                    margin: clamp(16px, 4vw, 30px) auto;
                     transition: width 2s cubic-bezier(0.19, 1, 0.22, 1) 0.6s;
                 "></div>
                 <p id="welcomeFinal" style="
-                    font-size: 0.7rem;
+                    font-size: clamp(0.6rem, 1.5vw, 0.7rem);
                     color: rgba(255,255,255,0.2);
                     opacity: 0;
                     transition: all 1s ease 1s;
-                    letter-spacing: 4px;
+                    letter-spacing: clamp(2px, 1vw, 4px);
+                    margin: 0;
+                    line-height: 1.2;
                 ">DESBLOQUEANDO RECUERDOS...</p>
             </div>
         `; 
