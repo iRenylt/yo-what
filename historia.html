@@ -6,19 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="theme-color" content="#050505">
     <title>Footage Archive</title>
-    <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
+    <link rel="icon" href="https://i.imgur.com/PaRZRTN.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffffff;
-            --accent: #888888;
+            --accent: #ff80ab;
+            --accent-light: #ffb7d5;
+            --accent-dark: #ff4081;
             --bg: #050505;
-            --card-bg: rgba(20, 20, 25, 0.6);
+            --card-bg: rgba(20, 20, 25, 0.7);
+            --card-bg-hover: rgba(25, 25, 35, 0.85);
             --text-main: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.5);
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 183, 213, 0.15);
+            --border-hover: rgba(255, 183, 213, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -181,22 +188,28 @@
             align-items: center;
             justify-content: center;
             background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 10px 14px;
-            border-radius: 18px;
+            border: 1.5px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 22px;
             color: var(--text-dim);
             text-decoration: none;
             font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.4px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
             backdrop-filter: blur(10px);
             cursor: pointer;
             white-space: nowrap;
             flex-shrink: 0;
         }
 
-        nav a:hover, .nav-item:hover { color: #fff; border-color: #fff; background: rgba(255, 255, 255, 0.05); transform: translateY(-3px); }
+        nav a:hover, .nav-item:hover { 
+            color: #fff; 
+            border-color: var(--border-hover);
+            background: var(--glass-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
+        }
 
         .dropdown { position: relative; width: auto; display: inline-block; }
         .dropdown-content {
@@ -208,8 +221,8 @@
             width: max-content;
             min-width: 120px;
             background: rgba(5, 5, 5, 0.98);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 18px;
             padding: 8px 4px;
             z-index: 2001;
             flex-direction: column;
@@ -218,8 +231,25 @@
             backdrop-filter: blur(20px);
         }
         .dropdown:hover .dropdown-content { display: flex; }
-        .dropdown-content a { display: block; padding: 8px 10px; border: none; background: transparent; white-space: nowrap; color: var(--text-dim); text-decoration: none; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.3px; transition: all 0.3s ease; border-radius: 9px; cursor: pointer; }
-        .dropdown-content a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .dropdown-content a { 
+            display: block; 
+            padding: 10px 14px; 
+            border: none; 
+            background: transparent; 
+            white-space: nowrap; 
+            color: var(--text-dim); 
+            text-decoration: none; 
+            font-size: 0.65rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.3px; 
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); 
+            border-radius: 10px; 
+            cursor: pointer; 
+        }
+        .dropdown-content a:hover { 
+            background: rgba(255,183,213,0.1); 
+            color: #fff;
+        }
 
         /* 🆕 Badge de Notificación */
         .badge {
@@ -278,11 +308,17 @@
             position: absolute;
             left: -35px;
             top: 0;
-            width: 9px;
-            height: 9px;
-            background: #fff;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #ffb7d5, #ff80ab);
             border-radius: 50%;
-            box-shadow: 0 0 15px #fff;
+            box-shadow: 0 0 20px rgba(255, 183, 213, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover::before {
+            transform: scale(1.4);
+            box-shadow: 0 0 30px rgba(255, 183, 213, 0.8);
         }
 
         .timeline-date {
@@ -295,18 +331,20 @@
         }
 
         .timeline-content {
-            background: var(--glass);
-            border: 1px solid var(--border);
+            background: var(--card-bg);
+            border: 1.5px solid var(--border);
             border-radius: 25px;
-            padding: 30px;
+            padding: 28px;
             backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: var(--shadow-md);
         }
 
         .timeline-content:hover {
-            border-color: rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.05);
-            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            background: var(--card-bg-hover);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
         }
 
         .timeline-content h2 {
@@ -329,9 +367,9 @@
         .book-header { display: flex; justify-content: space-between; align-items: center; margin: 6px 0 12px; }
         .book-toggle {
             background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 18px;
+            border: 1.5px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 20px;
             color: var(--text-dim);
             cursor: pointer;
             display: inline-flex;
@@ -340,6 +378,14 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            font-weight: 600;
+        }
+        .book-toggle:hover {
+            background: var(--glass-hover);
+            border-color: var(--border-hover);
+            color: #fff;
+            transform: translateY(-2px);
         }
         .book-toggle .chev { display: inline-block; transition: transform 0.25s ease; }
         .book .book-body { overflow: hidden; max-height: 0; transition: max-height 0.4s ease, opacity 0.3s ease; opacity: 0; }
@@ -500,8 +546,8 @@
 
 <div id="pageLock" class="page-lock">
     <div class="lock-box">
-        <h2 id="lockPhrase">ESPERANDO POR TI</h2>
-        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">SOLO TÚ TIENES LA LLAVE</p>
+        <h2 id="lockPhrase"></h2>
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
         <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
         <button onclick="unlockPage()">Abrir Corazón</button>
         <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
@@ -515,8 +561,6 @@
 
     <nav>
         <a href="index.html">Inicio</a>
-        <a href="historia.html">Línea de Tiempo</a>
-        <a href="recuerdos.html">Archivos</a>
     </nav>
 
 <div class="container">
@@ -736,7 +780,7 @@
 </div>
 
 <footer>
-    <p>// FOOTAGE ARCHIVE 2025-206 //</p>
+    <p>// FOOTAGE ARCHIVE 2025-2026 //</p>
 </footer>
 
 <script src="lock.js"></script>
@@ -910,7 +954,32 @@
     });
 
     // Frases aleatorias para la pantalla de bloqueo
-    const phrases = ["ESPERANDO POR TI", "NECESITAS UNA SONRISA", "UN LUGAR SEGURO"];
+    const phrases = [
+        "UN ARCHIVO SECRETO",
+        "EN CADA MOMENTO",
+        "CADA SEGUNDO CONTIGO",
+        "RECUERDOS QUE VIVEN",
+        "UN VIAJE ESPECIAL",
+        "TÚ LUGAR ESPECIAL",
+        "CORAZÓN EN LA MANO",
+        "GRAVEDAD SIN EXPLICACIÓN",
+        "COMPLETAMENTE CAUTIVADORA",
+        "ALMA NATURAL ENCONTRADA",
+        "AMOR SIN MEDIDA",
+        "UN REGALO DEL UNIVERSO",
+        "DONDE TÚ ESTÉS, IRÉ",
+        "PUNTO DE NO RETORNO",
+        "PERFECTAMENTE IMPERFECTA",
+        "UN SUEÑO HECHO REALIDAD",
+        "FORTALEZA EN TUS MANOS",
+        "ENTRE TUS BRAZOS SOY LIBRE",
+        "CADA LATIDO TE LLAMA",
+        "ERES MI DEBILIDAD MÁS HERMOSA",
+        "PARA AMARTE EN CUALQUIER MOMENTO",
+        "SUEÑO DESPIERTO CONTIGO",
+        "MI DESTINO ERES TÚ",
+        "EL TIEMPO SE DETIENE"
+    ];
     const lockPhrase = document.getElementById('lockPhrase');
     if (lockPhrase) {
         lockPhrase.textContent = phrases[Math.floor(Math.random() * phrases.length)];
