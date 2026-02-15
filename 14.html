@@ -5,11 +5,27 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#050505">
 	<title>Footage Archive</title>
-  <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
+  <link rel="icon" href="https://i.imgur.com/PaRZRTN.png" type="image/png">
 	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600,700&display=swap" rel="stylesheet">
 	<style>
-		:root{--bg:#050505;--card-bg:rgba(20,20,25,0.6);--border:rgba(255,255,255,0.08);--text:#fff;--muted:rgba(255,255,255,0.45);--accent:#ff80ab;--text-dim:rgba(255,255,255,0.5);--glass:rgba(255,255,255,0.03)}
+		:root{
+			--bg:#050505;
+			--card-bg:rgba(20,20,25,0.7);
+			--card-bg-hover:rgba(25,25,35,0.85);
+			--border:rgba(255,183,213,0.15);
+			--border-hover:rgba(255,183,213,0.3);
+			--text:#fff;
+			--muted:rgba(255,255,255,0.6);
+			--accent:#ff80ab;
+			--accent-light:#ffb7d5;
+			--text-dim:rgba(255,255,255,0.6);
+			--glass:rgba(255,255,255,0.05);
+			--glass-hover:rgba(255,255,255,0.08);
+			--shadow-sm:0 4px 12px rgba(0,0,0,0.3);
+			--shadow-md:0 12px 30px rgba(0,0,0,0.45);
+			--shadow-lg:0 30px 60px rgba(0,0,0,0.6)
+		}
 		*{box-sizing:border-box;margin:0;padding:0}
 		body{font-family:'Inter',system-ui,Segoe UI,Roboto,'Playfair Display',serif;background:var(--bg);color:var(--text);min-height:100vh}
 		.stars{position:fixed;inset:0;background:radial-gradient(circle at center,#111111 0%, #050505 100%);z-index:0}
@@ -63,44 +79,54 @@
 			margin-bottom: 30px; 
 			letter-spacing: 4px; 
 			color: #fff;
-			text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+			text-shadow: 0 0 30px rgba(255, 183, 213, 0.2);
+			font-size: 1.4rem;
 		}
 
 		.lock-box input {
 			background: rgba(255, 255, 255, 0.05);
-			border: 1px solid var(--border);
+			border: 1.5px solid var(--border);
 			color: #fff;
-			padding: 15px;
-			border-radius: 15px;
+			padding: 15px 16px;
+			border-radius: 14px;
 			outline: none;
 			text-align: center;
 			font-size: 1rem;
 			margin-bottom: 20px;
 			width: 100%;
-			transition: all 0.3s;
+			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+		}
+
+		.lock-box input:focus { 
+			border-color: var(--border-hover);
+			background: rgba(255, 255, 255, 0.08);
+			box-shadow: 0 0 20px rgba(255, 183, 213, 0.1);
 		}
 
 		.lock-box button {
-			background: transparent;
-			border: 1px solid #fff;
+			background: linear-gradient(135deg, rgba(255,183,213,0.15), rgba(255,128,171,0.08));
+			border: 1.5px solid var(--border);
 			color: #fff;
-			padding: 12px 40px;
+			padding: 13px 42px;
 			border-radius: 50px;
 			cursor: pointer;
 			text-transform: uppercase;
 			letter-spacing: 2px;
 			font-size: 0.8rem;
-			transition: all 0.3s;
+			font-weight: 600;
+			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 		}
 
 		.lock-box button:hover { 
-			background: #fff;
-			color: #000;
+			background: linear-gradient(135deg, rgba(255,183,213,0.25), rgba(255,128,171,0.15));
+			border-color: var(--border-hover);
+			transform: translateY(-3px);
+			box-shadow: 0 8px 20px rgba(255, 183, 213, 0.15);
 		}
 
 		.lock-error {
 			margin-top: 15px;
-			color: #ff4444;
+			color: #ff6b6b;
 			font-size: 0.8rem;
 			display: none;
 			letter-spacing: 1px;
@@ -128,18 +154,37 @@
 				align-items: center;
 				justify-content: center;
 				background: var(--glass);
-				border: 1px solid var(--border);
-				padding: 10px 14px;
+				border: 1.5px solid var(--border);
+				padding: 12px 16px;
 				border-radius: 18px;
 				color: var(--text-dim);
 				text-decoration: none;
 				font-size: 0.8rem;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+				transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+				cursor: pointer;
 			}
 
-			nav a:hover { color: #fff; border-color: #fff; transform: translateY(-3px); }
+			nav a:hover { 
+				color: #fff; 
+				border-color: var(--border-hover);
+				background: var(--glass-hover);
+				transform: translateY(-3px);
+				box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
+			}
 
 		.container{max-width:980px;margin:0 auto;padding:18px;position:relative;z-index:10}
-		.card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:18px;backdrop-filter:blur(10px)}
+		.card{
+			background:var(--card-bg);border:1px solid var(--border);border-radius:20px;
+			padding:22px;margin-bottom:20px;backdrop-filter:blur(10px);
+			transition:all 0.35s cubic-bezier(0.23,1,0.32,1);
+			box-shadow:var(--shadow-md);position:relative
+		}
+		.card:hover{
+			transform:translateY(-6px);background:var(--card-bg-hover);
+			border-color:var(--border-hover);box-shadow:var(--shadow-lg)
+		}
 
 		/* Carta mecanografiada */
 		.letter{min-height:140px;font-size:1.05rem;line-height:1.6;color:var(--muted);white-space:pre-wrap}
@@ -151,11 +196,32 @@
 		@media(min-width:860px){.media-grid{grid-template-columns:1fr 1fr}}
 
 		.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-		.btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer}
+		.btn{
+			padding:10px 14px;border-radius:12px;border:1.5px solid var(--border);
+			background:rgba(255,255,255,0.03);color:var(--text);cursor:pointer;
+			transition:all 0.3s cubic-bezier(0.23,1,0.32,1);font-weight:600;font-size:0.85rem
+		}
+		.btn:hover{
+			background:rgba(255,183,213,0.08);border-color:var(--border-hover);
+			transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,183,213,0.1)
+		}
 
 		/* Mini-juego */
-		#gameArea{position:relative;height:240px;background:linear-gradient(180deg,rgba(255,128,171,0.03),transparent);overflow:hidden;border-radius:12px}
-		.heart{position:absolute;width:44px;height:44px;background:radial-gradient(circle at 30% 30%,#fff,transparent 30%),linear-gradient(135deg,#ffb7d5,#ff80ab);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transform:scale(0.95);transition:transform 120ms}
+		#gameArea{
+			position:relative;height:240px;
+			background:linear-gradient(180deg,rgba(255,128,171,0.05),transparent);
+			overflow:hidden;border-radius:16px;border:1px solid var(--border);
+			transition:all 0.3s ease
+		}
+		#gameArea:hover{border-color:var(--border-hover);background:linear-gradient(180deg,rgba(255,128,171,0.08),transparent)}
+		.heart{
+			position:absolute;width:44px;height:44px;
+			background:linear-gradient(135deg,#ffb7d5,#ff80ab);border-radius:50%;
+			display:flex;align-items:center;justify-content:center;cursor:pointer;
+			transform:scale(0.95);transition:all 0.13s cubic-bezier(0.23,1,0.32,1);
+			box-shadow:0 4px 12px rgba(255,128,171,0.3)
+		}
+		.heart:hover{transform:scale(1.15);box-shadow:0 8px 20px rgba(255,128,171,0.5)}
 		.heart:active{transform:scale(1.05)}
 
 		/* secret modal */
@@ -171,8 +237,8 @@
 
 	<div id="pageLock" class="page-lock" style="display:flex">
 		<div class="lock-box">
-			<h2 id="lockPhrase">ESPECIAL 14</h2>
-			<p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">SOLO TÚ TIENES LA LLAVE</p>
+			<h2 id="lockPhrase">ESPECIAL</h2>
+			<p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
 			<input id="pinInput" type="password" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
 			<button onclick="unlockPage()">Abrir</button>
 			<div id="errorMsg" style="color:#ff6b6b;margin-top:8px;display:none">PIN incorrecto</div>
@@ -181,8 +247,7 @@
 
 	<header>
 		<img id="dynamicAvatar" src="https://i.imgur.com/iSyUemC.png" alt="avatar">
-		<div class="title">Fecha especial</div>
-		<div class="subtitle">14 / 02 / 2026</div>
+		<div class="subtitle">09 / 03 / 2026</div>
 	</header>
 
 	<nav>
@@ -277,11 +342,30 @@
 
 		// Frases aleatorias para la pantalla de bloqueo (igual que recuerdos.html)
 		const phrases = [
-			"ESPERANDO POR TI",
-			"NECESITAS UNA SONRISA",
-			"UN LUGAR SEGURO",
-			"BIENVENIDA A CASA",
-			"UN ARCHIVO SECRETO"
+			"UN ARCHIVO SECRETO",
+        "EN CADA MOMENTO",
+        "CADA SEGUNDO CONTIGO",
+        "RECUERDOS QUE VIVEN",
+        "UN VIAJE ESPECIAL",
+        "TÚ LUGAR ESPECIAL",
+        "CORAZÓN EN LA MANO",
+        "GRAVEDAD SIN EXPLICACIÓN",
+        "COMPLETAMENTE CAUTIVADORA",
+        "ALMA NATURAL ENCONTRADA",
+        "AMOR SIN MEDIDA",
+        "UN REGALO DEL UNIVERSO",
+        "DONDE TÚ ESTÉS, IRÉ",
+        "PUNTO DE NO RETORNO",
+        "PERFECTAMENTE IMPERFECTA",
+        "UN SUEÑO HECHO REALIDAD",
+        "FORTALEZA EN TUS MANOS",
+        "ENTRE TUS BRAZOS SOY LIBRE",
+        "CADA LATIDO TE LLAMA",
+        "ERES MI DEBILIDAD MÁS HERMOSA",
+        "PARA AMARTE EN CUALQUIER MOMENTO",
+        "SUEÑO DESPIERTO CONTIGO",
+        "MI DESTINO ERES TÚ",
+        "EL TIEMPO SE DETIENE"
 		];
 		const phraseElement = document.getElementById('lockPhrase');
 		if (phraseElement) {
