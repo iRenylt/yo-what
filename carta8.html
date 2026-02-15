@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="theme-color" content="#050505">
     <title>Footage Archive</title>
-    <link rel="icon" href="https://i.imgur.com/GtphDVv.png" type="image/png">
+    <link rel="icon" href="https://i.imgur.com/PaRZRTN.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -185,7 +185,8 @@
         }
         .close-letter:hover { background: #fff; color: #000; }
         .sections-grid {
-            margin-top: 60px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;
+            margin: 60px auto 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;
+            max-width: 800px; width: 100%; padding: 0 20px;
         }
         .section-card {
             background: var(--glass); border: 1px solid var(--border); border-radius: 30px;
@@ -228,13 +229,15 @@
     </div>
     <nav>
         <a href="index.html">Inicio</a>
-        <a href="historia.html">Línea de Tiempo</a>
-        <a href="recuerdos.html">Archivos</a>
     </nav>
+
     <div class="envelope-wrapper">
         <div class="envelope" id="envelope" onclick="openLetter()">
             <div class="seal">✉️</div>
             <p style="font-size: 0.7rem; letter-spacing: 4px; color: var(--text-dim); margin-top: 10px;">CLICK PARA ABRIR</p>
+        </div>
+
+    
         </div>
         <div class="sections-grid">
             <div class="section-card">
