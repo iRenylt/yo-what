@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="theme-color" content="#050505">
     <title>Footage Archive</title>
-    <link rel="icon" href="https://i.imgur.com/vBqkyX1.png" type="image/png">
+    <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffffff;
-            --accent: #ff80ab;
-            --accent-light: #ffb7d5;
-            --accent-dark: #ff4081;
+            --accent: #9a9aaa;
+            --accent-light: #d8d8e8;
+            --accent-dark: #6a6a7a;
             --bg: #050505;
             --card-bg: rgba(20, 20, 25, 0.7);
             --card-bg-hover: rgba(25, 25, 35, 0.85);
@@ -21,8 +21,8 @@
             --text-dim: rgba(255, 255, 255, 0.6);
             --glass: rgba(255, 255, 255, 0.05);
             --glass-hover: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 183, 213, 0.15);
-            --border-hover: rgba(255, 183, 213, 0.3);
+            --border: rgba(150, 150, 170, 0.15);
+            --border-hover: rgba(150, 150, 170, 0.3);
             --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
             --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
         }
@@ -388,14 +388,57 @@
             .envelope { height: 300px; }
         }
     </style>
-</head>
+    <style>
+        /* 🌸 HOJAS DE SAKURA */
+        .sakura {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .sakura-leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+            animation: sakuraFall linear forwards;
+            filter: drop-shadow(0 0 2px rgba(255, 183, 213, 0.4));
+        }
+
+        .sakura-leaf::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23ffb7d5"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%23ff80ab"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23ffb7d5"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%23ff80ab"/><circle cx="50" cy="50" r="8" fill="%23ffd54f"/></svg>') center / contain no-repeat;
+        }
+
+        @keyframes sakuraFall {
+            0% {
+                top: -20px;
+                opacity: 0.8;
+                transform: translateX(0) rotateZ(0deg);
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+                transform: translateX(var(--tx, 100px)) rotateZ(360deg);
+            }
+        }
+    </style>
 <body>
     <div class="stars"></div>
+    <div class="sakura" id="sakura"></div>
 
     <div id="pageLock" class="page-lock">
         <div class="lock-box">
             <h2 id="lockPhrase">ESPERANDO POR TI</h2>
-            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
             <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
             <button onclick="unlockPage()">Abrir Corazón</button>
             <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
@@ -493,6 +536,45 @@
                 document.body.style.overflow = 'auto';
             }, 800);
         }
+
+        // 🌸 SISTEMA DE HOJAS DE SAKURA CAYENDO
+        (function() {
+            const sakuraContainer = document.getElementById('sakura');
+            if (!sakuraContainer) return;
+
+            function createSakuraLeaf() {
+                const leaf = document.createElement('div');
+                leaf.className = 'sakura-leaf';
+                
+                const size = Math.random() * 10 + 15;
+                leaf.style.width = size + 'px';
+                leaf.style.height = size + 'px';
+                
+                const xPos = Math.random() * 100;
+                leaf.style.left = xPos + '%';
+                
+                const duration = Math.random() * 8 + 8;
+                leaf.style.animationDuration = duration + 's';
+                
+                const txVariation = Math.random() * 200 - 100;
+                leaf.style.setProperty('--tx', txVariation + 'px');
+                
+                const opacity = Math.random() * 0.3 + 0.5;
+                leaf.style.opacity = opacity;
+                
+                sakuraContainer.appendChild(leaf);
+                
+                setTimeout(() => leaf.remove(), duration * 1000);
+            }
+
+            setInterval(() => {
+                createSakuraLeaf();
+            }, Math.random() * 300 + 500);
+
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createSakuraLeaf(), i * 200);
+            }
+        })();
     </script>
 </body>
 </html>
