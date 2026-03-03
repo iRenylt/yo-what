@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es" style="background:#050505;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="theme-color" content="#050505">
+    <title>Footage Archive</title>
+    <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffffff;
+            --accent: #9a9aaa;
+            --accent-light: #d8d8e8;
+            --accent-dark: #6a6a7a;
+            --bg: #050505;
+            --card-bg: rgba(20, 20, 25, 0.7);
+            --card-bg-hover: rgba(25, 25, 35, 0.85);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(150, 150, 170, 0.15);
+            --border-hover: rgba(150, 150, 170, 0.3);
+            --muted: rgba(255, 255, 255, 0.2);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Playfair Display', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #111111 0%, #050505 100%);
+            z-index: 0;
+        }
+
+        .stars::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.15;
+            animation: starsMove 150s linear infinite;
+        }
+
+        @keyframes starsMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        /* 🌸 HOJAS DE SAKURA */
+        .sakura {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .sakura-leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+            animation: sakuraFall linear forwards;
+            filter: drop-shadow(0 0 2px rgba(200, 200, 220, 0.4));
+        }
+
+        .sakura-leaf::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23d8d8e8"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%239a9aaa"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23d8d8e8"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%239a9aaa"/><circle cx="50" cy="50" r="8" fill="%23d8d8e8"/></svg>') center / contain no-repeat;
+        }
+
+        @keyframes sakuraFall {
+            0% {
+                top: -20px;
+                opacity: 0.8;
+                transform: translateX(0) rotateZ(0deg);
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+                transform: translateX(var(--tx, 100px)) rotateZ(360deg);
+            }
+        }
+
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 36px 18px 8px;
+            text-align: center;
+        }
+
+        header img {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border);
+            animation: floatY 6s ease-in-out infinite;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 200ms ease;
+        }
+
+        header img:hover { transform: scale(1.05); border-color: #fff; }
+
+        @keyframes floatY {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-top: 12px;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            letter-spacing: 3px;
+            font-size: 0.75rem;
+            margin-bottom: 18px;
+        }
+
+        nav {
+            position: relative;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 12px auto 20px;
+            padding: 0 12px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border: 1.5px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 18px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: #fff;
+            border-color: var(--border-hover);
+            background: var(--glass-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(200, 200, 220, 0.1);
+        }
+
+        nav a.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(150, 150, 170, 0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 18px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .page-title p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-light) 0%, transparent 100%);
+        }
+
+        .timeline-item {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid var(--bg);
+            box-shadow: 0 0 0 3px var(--accent-light);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover::before {
+            transform: scale(1.4);
+            box-shadow: 0 0 0 5px var(--accent-light);
+        }
+
+        .update-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .update-card:hover {
+            transform: translateY(-6px);
+            background: rgba(25, 25, 35, 0.85);
+            border-color: rgba(150, 150, 170, 0.3);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .update-date {
+            font-size: 0.8rem;
+            color: var(--accent-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .update-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+        }
+
+        .update-category {
+            display: inline-block;
+            font-size: 0.7rem;
+            background: rgba(200, 200, 220, 0.1);
+            border: 1px solid var(--accent-light);
+            color: var(--accent-light);
+            padding: 4px 10px;
+            border-radius: 999px;
+            margin-right: 8px;
+            margin-bottom: 12px;
+        }
+
+        .update-description {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .update-features {
+            list-style: none;
+            margin: 12px 0 0 0;
+        }
+
+        .update-features li {
+            padding: 6px 0 6px 24px;
+            position: relative;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .update-features li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            color: var(--accent-light);
+        }
+
+        .update-link {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: rgba(150, 150, 170, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .update-link:hover {
+            background: rgba(150, 150, 170, 0.2);
+            transform: translateX(2px);
+        }
+
+        .version-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
+        }
+
+        footer {
+            padding: 28px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 🔒 BLOQUEO */
+        body.locked { overflow: hidden !important; height: 100vh !important; }
+        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
+
+        .page-lock {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .lock-box {
+            text-align: center;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            animation: lockFadeIn 1s ease-out;
+        }
+
+        @keyframes lockFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .lock-box h2 { 
+            font-weight: 400; 
+            margin-bottom: 30px; 
+            letter-spacing: 4px; 
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .lock-box input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            outline: none;
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .lock-box button {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 12px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .lock-box button:hover { 
+            background: #fff;
+            color: #000;
+        }
+
+        .lock-error {
+            margin-top: 15px;
+            color: #ff4444;
+            font-size: 0.8rem;
+            display: none;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .page-title h1 { font-size: 1.8rem; }
+            .timeline { padding-left: 20px; }
+            .timeline-item::before { left: -28px; }
+            .update-card { padding: 16px; }
+            .update-title { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="sakura" id="sakura"></div>
+
+    <div id="pageLock" class="page-lock">
+        <div class="lock-box">
+            <h2 id="lockPhrase"></h2>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">CAMBIOS DEL SISTEMA</p>
+            <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
+            <button onclick="unlockPage()">Abrir Archivo</button>
+            <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
+        </div>
+    </div>
+
+    <header>
+        <img id="dynamicAvatar" src="https://i.imgur.com/iSyUemC.png" alt="avatar">
+        <div class="title">Footage Archive</div>
+        <div class="subtitle">REGISTRO DE CAMBIOS Y ACTUALIZACIONES</div>
+    </header>
+
+    <nav>
+        <a href="index.html">Inicio</a>
+    </nav>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>📋 Registro de Cambios</h1>
+            <p>Todas las actualizaciones y mejoras que hacemos para ti</p>
+        </div>
+
+        <div class="timeline">
+            <!-- UPDATE 1: Minijuegos de desbloqueo -->
+            <div class="timeline-item">
+                <div class="update-card">
+                    <div class="update-date">03 de Marzo, 2026</div>
+                    <div class="update-title">
+                         Minijuegos de Desbloqueo en Especial
+                        <span class="version-badge">v1.5</span>
+                    </div>
+                    <div>
+                        <span class="update-category">Experiencia</span>
+                        <span class="update-category">Interactivo</span>
+                    </div>
+                    <div class="update-description">
+                        Se añadieron 3 minijuegos emocionantes antes de desbloquear la página especial de la carta 03/03/26. 
+                        Cada minijuego es progresivo y desbloquea el siguiente, creando una experiencia más divertida y romántica.
+                    </div>
+                    <ul class="update-features">
+                        <li>Minijuego 1: Pregunta sobre..</li>
+                        <li>Minijuego 2: Repite una secuencia..</li>
+                        <li>Minijuego 3: Escribe una palabra secreta..</li>
+                        <li>PIN tradicional final para desbloqueo completo</li>
+                    </ul>
+                    <a href="carta.html" class="update-link">Ver página →</a>
+                </div>
+            </div>
+
+            <!-- UPDATE 2: Card Styling Refinement -->
+            <div class="timeline-item">
+                <div class="update-card">
+                    <div class="update-date">02 de Marzo, 2026</div>
+                    <div class="update-title">
+                         Refinamiento de Transparencia de Tarjetas
+                        <span class="version-badge">v1.4</span>
+                    </div>
+                    <div>
+                        <span class="update-category">Diseño</span>
+                        <span class="update-category">Visual</span>
+                    </div>
+                    <div class="update-description">
+                        Las tarjetas ahora lucen más elegantes y sutiles con una transparencia reducida.
+                        Cambié de una opacidad más pesada a un efecto glassmorphism más delicado.
+                    </div>
+                    <ul class="update-features">
+                        <li>Reducción de opacidad: de 0.7 a 0.04 para un aspecto más refinado</li>
+                        <li>Reducción de blur-filter: de 20px a 12px</li>
+                        <li>Aplicado en todas las páginas del proyecto</li>
+                    </ul>
+                    <a href="index.html" class="update-link">Ver cambios →</a>
+                </div>
+            </div>
+
+            <!-- UPDATE 3: Sakura System -->
+            <div class="timeline-item">
+                <div class="update-card">
+                    <div class="update-date">01 de Marzo, 2026</div>
+                    <div class="update-title">
+                        🌸 Sistema de Pétalos de Sakura Cayendo
+                        <span class="version-badge">v1.3</span>
+                    </div>
+                    <div>
+                        <span class="update-category">Visual</span>
+                        <span class="update-category">Animación</span>
+                    </div>
+                    <div class="update-description">
+                        Se agregó un sistema de hojas de sakura (cerezo de anime) cayendo continuamente como fondo decorativo.
+                        Cada hoja tiene animación única con rotación y movimiento horizontal variable.
+                    </div>
+                    <ul class="update-features">
+                        <li>Hojas de sakura generadas dinámicamente en JavaScript</li>
+                        <li>Animaciones suaves de caída con rotación de 360°</li>
+                        <li>Variación aleatoria en tamaño, posición y duración</li>
+                        <li>Aplicado a todas las 6 páginas del archivo</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- UPDATE 4: Letters Card Reorganization -->
+            <div class="timeline-item">
+                <div class="update-card">
+                    <div class="update-date">28 de Febrero, 2026</div>
+                    <div class="update-title">
+                        📝 Reorganización de Cartas por Año
+                        <span class="version-badge">v1.2</span>
+                    </div>
+                    <div>
+                        <span class="update-category">Funcionalidad</span>
+                        <span class="update-category">Estructura</span>
+                    </div>
+                    <div class="update-description">
+                        La tarjeta de cartas ahora está organizada en secciones expandibles por año.
+                        Las secciones permanecen cerradas por defecto hasta que las abres manualmente.
+                    </div>
+                    <ul class="update-features">
+                        <li>Secciones colapsables: 2025 y 2026</li>
+                        <li>Botones de toggling con indicadores visuales</li>
+                        <li>Las secciones se abren/cierran con animación suave</li>
+                        <li>Contador de cartas disponibles</li>
+                    </ul>
+                    <a href="index.html" class="update-link">Ver página →</a>
+                </div>
+            </div>
+
+            <!-- UPDATE 5: Animation Unification -->
+            <div class="timeline-item">
+                <div class="update-card">
+                    <div class="update-date">27 de Febrero, 2026</div>
+                    <div class="update-title">
+                         Unificación de Animaciones en Todas las Tarjetas
+                        <span class="version-badge">v1.1</span>
+                    </div>
+                    <div>
+                        <span class="update-category">Animación</span>
+                        <span class="update-category">Mejora</span>
+                    </div>
+                    <div class="update-description">
+                        Se eliminaron diferencias de animación entre las primeras 2 tarjetas y las últimas 2.
+                        Ahora todas las tarjetas tienen las mismas animaciones fluidas y al cargar.
+                    </div>
+                    <ul class="update-features">
+                        <li>Animación de levantamiento al presionar (hover lift)</li>
+                        <li>Animación de entrada suave (fade-up) mediante IntersectionObserver</li>
+                        <li>Transiciones de 280ms con easing cubic-bezier</li>
+                    </ul>
+                    <a href="index.html" class="update-link">Ver página →</a>
+                </div>
+            </div>
+
+            <!-- UPDATE 6: Mobile Secret Fix -->
+            <div class="timeline-item">
+                <div class="update-card">
+                    <div class="update-date">26 de Febrero, 2026</div>
+                    <div class="update-title">
+                         Corrección de Secretos Móviles
+                        <span class="version-badge">v1.0</span>
+                    </div>
+                    <div>
+                        <span class="update-category">Bug Fix</span>
+                        <span class="update-category">Móvil</span>
+                    </div>
+                    <div class="update-description">
+                        Se corrigió un error donde los secretos no funcionaban en el dispositivo móvil.
+                        El problema era causado por múltiples event listeners conflictivos.
+                    </div>
+                    <ul class="update-features">
+                        <li>Consolidación de listeners de secretos (SECRETO 4 y 6)</li>
+                        <li>Eliminación de eventos touchstart conflictivos</li>
+                        <li>Mantención de compatibilidad completa al presionar</li>
+                    </ul>
+                    <a href="index.html" class="update-link">Ver página →</a>
+                </div>
+            </div>
+
+            <!-- COMING SOON -->
+            <div class="timeline-item">
+                <div class="update-card">
+                    <div class="update-date">Próximamente...</div>
+                    <div class="update-title">
+                         Más Sorpresas en Camino
+                    </div>
+                    <div class="update-description">
+                        Estaré trabajando en nuevas funcionalidades y mejoras para hacer este archivo aún más especial.
+                        ¡Mantente atenta a las actualizaciones! 💕
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Footage Archive 2025-2026 · Construido con amor 💕
+    </footer>
+
+    <script src="lock.js"></script>
+    <script>
+        // Frases aleatorias para el lock
+        const phrases = [
+            "UN ARCHIVO SECRETO",
+        "EN CADA MOMENTO",
+        "CADA SEGUNDO CONTIGO",
+        "RECUERDOS QUE VIVEN",
+        "UN VIAJE ESPECIAL",
+        "TÚ LUGAR ESPECIAL",
+        "CORAZÓN EN LA MANO",
+        "GRAVEDAD SIN EXPLICACIÓN",
+        "COMPLETAMENTE CAUTIVADORA",
+        "ALMA NATURAL ENCONTRADA",
+        "AMOR SIN MEDIDA",
+        "UN REGALO DEL UNIVERSO",
+        "DONDE TÚ ESTÉS, IRÉ",
+        "PUNTO DE NO RETORNO",
+        "PERFECTAMENTE IMPERFECTA",
+        "UN SUEÑO HECHO REALIDAD",
+        "FORTALEZA EN TUS MANOS",
+        "ENTRE TUS BRAZOS SOY LIBRE",
+        "CADA LATIDO TE LLAMA",
+        "ERES MI DEBILIDAD MÁS HERMOSA",
+        "PARA AMARTE EN CUALQUIER MOMENTO",
+        "SUEÑO DESPIERTO CONTIGO",
+        "MI DESTINO ERES TÚ",
+        "EL TIEMPO SE DETIENE"
+        ];
+        const lockPhrase = document.getElementById('lockPhrase');
+        if (lockPhrase) {
+            lockPhrase.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+        }
+
+        // 🌸 SISTEMA DE HOJAS DE SAKURA CAYENDO
+        (function() {
+            const sakuraContainer = document.getElementById('sakura');
+            if (!sakuraContainer) return;
+
+            function createSakuraLeaf() {
+                const leaf = document.createElement('div');
+                leaf.className = 'sakura-leaf';
+                
+                const size = Math.random() * 10 + 15;
+                leaf.style.width = size + 'px';
+                leaf.style.height = size + 'px';
+                
+                const xPos = Math.random() * 100;
+                leaf.style.left = xPos + '%';
+                
+                const duration = Math.random() * 8 + 8;
+                leaf.style.animationDuration = duration + 's';
+                
+                const txVariation = Math.random() * 200 - 100;
+                leaf.style.setProperty('--tx', txVariation + 'px');
+                
+                const opacity = Math.random() * 0.3 + 0.5;
+                leaf.style.opacity = opacity;
+                
+                sakuraContainer.appendChild(leaf);
+                
+                setTimeout(() => leaf.remove(), duration * 1000);
+            }
+
+            setInterval(() => {
+                createSakuraLeaf();
+            }, Math.random() * 300 + 500);
+
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createSakuraLeaf(), i * 200);
+            }
+        })();
+
+        // Avatar dinámico (si existe)
+        const avatarInput = document.getElementById('avatarInput');
+        const dynamicAvatar = document.getElementById('dynamicAvatar');
+        
+        if (dynamicAvatar && !avatarInput) {
+            const inp = document.createElement('input');
+            inp.type = 'file';
+            inp.id = 'avatarInput';
+            inp.accept = 'image/*';
+            inp.style.display = 'none';
+            document.body.appendChild(inp);
+        }
+    </script>
+</body>
+</html>
