@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es" style="background:#050505;">
+
+<head>
+    <meta name="theme-color" content="#050505">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Footage Archive</title>
+    <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffffff;
+            --accent: #9a9aaa;
+            --accent-light: #d8d8e8;
+            --accent-dark: #6a6a7a;
+            --bg: #050505;
+            --card-bg: rgba(20, 20, 25, 0.7);
+            --card-bg-hover: rgba(25, 25, 35, 0.85);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(150, 150, 170, 0.15);
+            --border-hover: rgba(150, 150, 170, 0.3);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #050505 0%, #0f0f15 100%);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffffff, #9a9aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card:hover {
+            background: var(--card-bg-hover);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .comment-content {
+            margin-bottom: 20px;
+        }
+
+        .comment-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .comment-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .comment-time {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .comment-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(154, 154, 170, 0.2);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--accent-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--text-dim);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--glass);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .update-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .card.updated {
+            animation: highlight 0.6s ease;
+        }
+
+        @keyframes highlight {
+            0% { border-color: #4ade80; box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+            100% { border-color: var(--border); }
+        }
+
+        /* 🔒 BLOQUEO */
+        body.locked { overflow: hidden !important; height: 100vh !important; }
+        body.locked > *:not(.page-lock) { display: none !important; }
+
+        .page-lock {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .page-lock.active {
+            display: flex;
+        }
+
+        .lock-box {
+            text-align: center;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            animation: lockFadeIn 1s ease-out;
+            background: linear-gradient(180deg, rgba(200,200,220,0.03), rgba(170,170,190,0.01));
+            border: 1.5px solid rgba(200,200,220,0.15);
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(200,200,220,0.05);
+        }
+
+        @keyframes lockFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .lock-box h2 {
+            font-weight: 400;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .lock-box input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1.5px solid rgba(200,200,220,0.15);
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .lock-box input:focus {
+            border-color: rgba(200,200,220,0.3);
+            background: rgba(200,200,220,0.05);
+            box-shadow: 0 0 20px rgba(200,200,220,0.1);
+        }
+
+        .lock-box button {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1.5px solid rgba(200,200,220,0.15);
+            background: linear-gradient(135deg, rgba(200,200,220,0.08), rgba(170,170,190,0.04));
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lock-box button:hover {
+            background: linear-gradient(135deg, rgba(200,200,220,0.15), rgba(170,170,190,0.08));
+            border-color: rgba(200,200,220,0.3);
+            box-shadow: 0 10px 30px rgba(200,200,220,0.1);
+            transform: translateY(-2px);
+        }
+
+        .lock-error {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .lock-error.show {
+            display: block;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        /* NAV */
+        nav {
+            position: relative;
+            z-index: 1000;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-width: 100%;
+            margin: 0 auto 50px;
+            padding: 0 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border: 1.5px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 22px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        nav a:hover {
+            color: #fff;
+            border-color: var(--border-hover);
+            background: var(--glass-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .comment-text {
+                font-size: 1rem;
+            }
+
+            nav {
+                gap: 6px;
+                margin-bottom: 35px;
+                padding: 0 8px;
+            }
+
+            nav a {
+                padding: 9px 12px;
+                font-size: 0.68rem;
+                border-radius: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="pageLock" class="page-lock">
+    <div class="lock-box">
+        <h2 id="lockPhrase"></h2>
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
+        <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
+        <button onclick="unlockPage()">Abrir Corazón</button>
+        <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
+    </div>
+</div>
+    <nav>
+        <a href="index.html">Inicio</a>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Tú comentario</h1>
+            <p>Actualización en tiempo real</p>
+        </div>
+
+        <div id="commentCard" class="card">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Cargando comentarios...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Supabase
+        const SUPABASE_URL = "https://xcjzydmprmbpbqkacjwb.supabase.co/";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhjanp5ZG1wcm1icGJxa2FjandiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgwNzY1NjEsImV4cCI6MjA4MzY1MjU2MX0.Bpr4H2iZPl5JWW8rTXp4nBiB1Z_c7pIhKXiThydeNUw";
+
+        let ultimoComentarioId = null;
+
+        async function cargarComentarios() {
+            try {
+                const respuesta = await fetch(
+                    `${SUPABASE_URL}rest/v1/comentarios?order=created_at.desc&limit=1`,
+                    {
+                        headers: {
+                            "apikey": SUPABASE_KEY,
+                            "Authorization": "Bearer " + SUPABASE_KEY,
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
+
+                if (!respuesta.ok) throw new Error("Error al obtener comentarios");
+
+                const datos = await respuesta.json();
+                
+                if (!datos || datos.length === 0) {
+                    mostrarEstadoVacio();
+                    return;
+                }
+
+                const comentario = datos[0];
+                
+                // Detectar si es un comentario nuevo
+                const esNuevo = ultimoComentarioId !== comentario.id;
+                ultimoComentarioId = comentario.id;
+
+                mostrarComentario(comentario, esNuevo);
+            } catch (error) {
+                console.error("Error:", error);
+                mostrarError(error.message);
+            }
+        }
+
+        function mostrarComentario(comentario, esNuevo = false) {
+            const card = document.getElementById("commentCard");
+            const fechaCreacion = new Date(comentario.created_at);
+            const tiempoFormateado = formatearFecha(fechaCreacion);
+
+            card.innerHTML = `
+                <div class="comment-content">
+                    <p class="comment-text">${escaparHTML(comentario.mensaje)}</p>
+                    <div class="comment-meta">
+                        <span class="comment-time">${tiempoFormateado}</span>
+                        <span class="comment-badge">Último</span>
+                    </div>
+                </div>
+            `;
+
+            if (esNuevo) {
+                card.classList.remove("updated");
+                void card.offsetWidth; // Forzar reflow
+                card.classList.add("updated");
+            }
+        }
+
+        function mostrarEstadoVacio() {
+            const card = document.getElementById("commentCard");
+            card.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">💬</div>
+                    <p>Aún no hay comentarios</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Los nuevos comentarios aparecerán aquí</p>
+                </div>
+            `;
+        }
+
+        function mostrarError(mensaje) {
+            const card = document.getElementById("commentCard");
+            card.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <p>Error al cargar comentarios</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px; color: #ff6b6b;">${mensaje}</p>
+                </div>
+            `;
+        }
+
+        function formatearFecha(fecha) {
+            const ahora = new Date();
+            const diferencia = ahora - fecha;
+            const segundos = Math.floor(diferencia / 1000);
+            const minutos = Math.floor(segundos / 60);
+            const horas = Math.floor(minutos / 60);
+            const dias = Math.floor(horas / 24);
+
+            if (segundos < 60) return "Justo ahora";
+            if (minutos < 60) return `${minutos} min atrás`;
+            if (horas < 24) return `${horas}h atrás`;
+            if (dias < 7) return `${dias}d atrás`;
+
+            return fecha.toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function escaparHTML(texto) {
+            const mapa = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return texto.replace(/[&<>"']/g, m => mapa[m]);
+        }
+
+        // Cargar comentarios inicialmente
+        cargarComentarios();
+
+        // Actualizar cada 3 segundos
+        setInterval(cargarComentarios, 3000);
+    </script>
+
+    <script src="lock.js"></script>
+    <script>
+        // Asegurar que el bloqueo se inicializa después de cargar lock.js
+        if (typeof verificarBloqueo === 'function') {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', verificarBloqueo);
+            } else {
+                verificarBloqueo();
+            }
+        }
+    </script>
+
+    
+</body>
+
+</html>
+
