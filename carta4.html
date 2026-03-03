@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#050505">
 	<title>Footage Archive</title>
-  <link rel="icon" href="https://i.imgur.com/vBqkyX1.png" type="image/png">
+  <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
 	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600,700&display=swap" rel="stylesheet">
 	<style>
@@ -13,12 +13,12 @@
 			--bg:#050505;
 			--card-bg:rgba(20,20,25,0.7);
 			--card-bg-hover:rgba(25,25,35,0.85);
-			--border:rgba(255,183,213,0.15);
-			--border-hover:rgba(255,183,213,0.3);
+			--border:rgba(150,150,170,0.15);
+			--border-hover:rgba(150,150,170,0.3);
 			--text:#fff;
 			--muted:rgba(255,255,255,0.6);
-			--accent:#ff80ab;
-			--accent-light:#ffb7d5;
+			--accent:#9a9aaa;
+			--accent-light:#d8d8e8;
 			--text-dim:rgba(255,255,255,0.6);
 			--glass:rgba(255,255,255,0.05);
 			--glass-hover:rgba(255,255,255,0.08);
@@ -230,24 +230,99 @@
 		.secret-content{background:var(--card-bg);padding:20px;border-radius:14px;max-width:520px;color:var(--text)}
 
 		footer{padding:28px;text-align:center;color:var(--muted);font-size:0.8rem}
+
+		/* 🌸 HOJAS DE SAKURA */
+		.sakura {
+			position: fixed;
+			inset: 0;
+			z-index: 1;
+			pointer-events: none;
+			overflow: hidden;
+		}
+
+		.sakura-leaf {
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			opacity: 0.7;
+			animation: sakuraFall linear forwards;
+			filter: drop-shadow(0 0 2px rgba(255, 183, 213, 0.4));
+		}
+
+		.sakura-leaf::before {
+			content: '';
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23ffb7d5"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%23ff80ab"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23ffb7d5"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%23ff80ab"/><circle cx="50" cy="50" r="8" fill="%23ffd54f"/></svg>') center / contain no-repeat;
+		}
+
+		@keyframes sakuraFall {
+			0% {
+				top: -20px;
+				opacity: 0.8;
+				transform: translateX(0) rotateZ(0deg);
+			}
+			50% {
+				opacity: 0.8;
+			}
+			100% {
+				top: 100vh;
+				opacity: 0;
+				transform: translateX(var(--tx, 100px)) rotateZ(360deg);
+			}
+		}
 	</style>
 </head>
 <body style="background:#050505;color:#fff">
 	<div class="stars"></div>
+	<div class="sakura" id="sakura"></div>
 
 	<div id="pageLock" class="page-lock" style="display:flex">
 		<div class="lock-box">
 			<h2 id="lockPhrase">ESPECIAL</h2>
-			<p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
-			<input id="pinInput" type="password" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-			<button onclick="unlockPage()">Abrir</button>
-			<div id="errorMsg" style="color:#ff6b6b;margin-top:8px;display:none">PIN incorrecto</div>
+			<p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
+			
+			<!-- MINIJUEGO 1: Pregunta romántica -->
+			<div id="minigame1" style="display:flex;flex-direction:column;gap:12px">
+				<p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:8px">¿Qué fecha celebramos hoy? 📅</p>
+				<input id="dateInput" type="text" placeholder="DD/MM/YYYY" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;padding:12px;border-radius:12px;outline:none;text-align:center">
+				<button onclick="checkDate()" style="background:linear-gradient(135deg,rgba(255,183,213,0.15),rgba(255,128,171,0.08));border:1.5px solid var(--border);color:#fff;padding:10px;border-radius:10px;cursor:pointer;transition:all 0.3s;font-size:0.9rem">Responder</button>
+				<div id="game1Error" style="color:#ff6b6b;font-size:0.8rem;display:none;margin-top:4px"></div>
+			</div>
+
+			<!-- MINIJUEGO 2: Secuencia de botones (oculto hasta terminar 1) -->
+			<div id="minigame2" style="display:none;flex-direction:column;gap:12px">
+				<p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:8px">Memoriza la secuencia 🎮</p>
+				<div id="buttonSequence" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+					<button class="seq-btn" data-color="pink" style="padding:12px;border-radius:10px;border:1px solid rgba(255,183,213,0.3);background:rgba(255,183,213,0.1);color:#ffb7d5;cursor:pointer;transition:all 0.2s;font-weight:600">💗</button>
+					<button class="seq-btn" data-color="purple" style="padding:12px;border-radius:10px;border:1px solid rgba(200,150,255,0.3);background:rgba(200,150,255,0.1);color:#d8a5ff;cursor:pointer;transition:all 0.2s;font-weight:600">✨</button>
+					<button class="seq-btn" data-color="cyan" style="padding:12px;border-radius:10px;border:1px solid rgba(150,200,255,0.3);background:rgba(150,200,255,0.1);color:#96c8ff;cursor:pointer;transition:all 0.2s;font-weight:600">🌙</button>
+					<button class="seq-btn" data-color="gold" style="padding:12px;border-radius:10px;border:1px solid rgba(255,215,0,0.3);background:rgba(255,215,0,0.1);color:#ffd700;cursor:pointer;transition:all 0.2s;font-weight:600">⭐</button>
+				</div>
+				<div id="game2Status" style="color:var(--text-dim);font-size:0.8rem;text-align:center;margin-top:4px"></div>
+			</div>
+
+			<!-- MINIJUEGO 3: Escribir palabra mágica (oculto hasta terminar 2) -->
+			<div id="minigame3" style="display:none;flex-direction:column;gap:12px">
+				<p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:8px">Escribe la palabra secreta ❤️</p>
+				<input id="secretWordInput" type="text" placeholder="Una palabra que me represente" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;padding:12px;border-radius:12px;outline:none;text-align:center">
+				<button onclick="checkSecretWord()" style="background:linear-gradient(135deg,rgba(255,183,213,0.15),rgba(255,128,171,0.08));border:1.5px solid var(--border);color:#fff;padding:10px;border-radius:10px;cursor:pointer;transition:all 0.3s;font-size:0.9rem">Desbloquear</button>
+				<div id="game3Error" style="color:#ff6b6b;font-size:0.8rem;display:none;margin-top:4px"></div>
+			</div>
+
+			<!-- PIN tradicional (oculto hasta terminar minijuegos) -->
+			<div id="pinSection" style="display:none;flex-direction:column;gap:12px;border-top:1px solid var(--border);padding-top:16px;margin-top:12px">
+				<p style="color:var(--muted);font-size:0.8rem">Ingresa el PIN</p>
+				<input id="pinInput" type="password" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" autocomplete="off" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;padding:12px;border-radius:12px;outline:none;text-align:center">
+				<button onclick="unlockPage()" style="background:linear-gradient(135deg,rgba(255,183,213,0.15),rgba(255,128,171,0.08));border:1.5px solid var(--border);color:#fff;padding:10px;border-radius:10px;cursor:pointer;transition:all 0.3s;font-size:0.9rem">Abrir</button>
+				<div id="errorMsg" style="color:#ff6b6b;margin-top:4px;display:none;font-size:0.8rem"></div>
+			</div>
 		</div>
 	</div>
 
 	<header>
 		<img id="dynamicAvatar" src="https://i.imgur.com/iSyUemC.png" alt="avatar">
-		<div class="subtitle">09 / 03 / 2026</div>
 	</header>
 
 	<nav>
@@ -258,7 +333,7 @@
 
 		<div class="card">
 			<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-				<strong style="font-size:1.1rem">Carta digital</strong>
+				<strong style="font-size:1.1rem">Carta 03/03/26</strong>
 				<div class="controls">
 					<button id="playLetter" class="btn">Reproducir</button>
 					<button id="pauseLetter" class="btn">Pausar</button>
@@ -269,8 +344,8 @@
 		</div>
 
 		<div class="card">
-			<strong>Videos para ver</strong>
-			<div style="color:var(--muted);font-size:0.9rem;margin-top:8px">Puedes sustituir las fuentes en el HTML o subir un archivo aquí para probar localmente.</div>
+			<strong>Video de corazón para ti</strong>
+			<div style="color:var(--muted);font-size:0.9rem;margin-top:8px">Todo especialmente pensado en ti ❤️</div>
 			<div class="media-grid" style="margin-top:12px">
 				<div>
 					<video id="userVideo" controls style="width:100%;border-radius:12px;max-height:360px">
@@ -278,25 +353,16 @@
 						<source src="videos/video1.mp4" type="video/mp4">
 						Tu navegador no soporta video.
 					</video>
-					<div style="margin-top:8px;color:var(--muted);font-size:0.9rem">Sustituye las rutas de `videos/` en el HTML para usar tus clips locales.</div>
 				</div>
 
-				<div>
-					<video id="sampleVideo" controls style="width:100%;border-radius:12px;max-height:360px">
-						<source src="videos/video2.mp4" type="video/mp4">
-					</video>
-					<div style="margin-top:8px;color:var(--muted);font-size:0.9rem">Puedes colocar aquí un clip corto de recuerdos.</div>
-				</div>
 			</div>
 		</div>
 
 		<div class="card">
-			<strong>Audios</strong>
-			<div style="margin-top:8px;color:var(--muted)">Añade aquí audios tuyos que ella pueda escuchar.</div>
+			<strong>Audio especial</strong>
+			<div style="margin-top:8px;color:var(--muted)">Es un audio extraído que te grabé exclusivamente con mi voz para ti aunque la caliad sea muy baja 😓</div>
 			<div style="margin-top:12px;display:flex;gap:12px;flex-direction:column">
 				<audio controls src="audios/mensaje1.mp3"></audio>
-				<audio controls src="audios/mensaje2.mp3"></audio>
-				<div style="margin-top:8px;color:var(--muted);font-size:0.9rem">Añade tus audios en la carpeta `audios/` o indica rutas en el HTML.</div>
 			</div>
 		</div>
 
@@ -310,21 +376,22 @@
 			</div>
 		</div>
 
-		<div class="card">
-			<strong>Secretos y mini-sorpresas</strong>
-			<div style="margin-top:8px;color:var(--muted)">Encuentra palabras escondidas: <span class="secret-word" style="color:var(--accent);cursor:pointer">amor</span>, <span class="secret-word" style="color:var(--accent);cursor:pointer">cariño</span></div>
-		</div>
-
 	</div>
 
 	<div id="secretModal" class="secret-modal"><div class="secret-content" id="secretContent"></div></div>
 
-	<footer>Footage Archive · Especial San Valentín</footer>
+	<footer>Footage Archive 2025-2026 · Construido con amor 💕</footer>
 
 	<script src="lock.js"></script>
 	<script>
 		// Texto de la carta (edítalo aquí). Mantener saltos de línea con \n.
-		const LETTER_TEXT = `Mi amor,\n\nHoy quise escribirte una carta que se vaya formando sola, como si cada pensamiento apareciera uno a uno.\n\nGracias por ser compañía, sostén y risa. Te regalo este archivo, estas palabras y todos mis intentos por hacerlo bonito para ti.\n\nCon mucho amor,\nA.`;
+		const LETTER_TEXT = `Mi corazón,\n\nNueve meses. Suena a número, pero para mí se siente como proceso. Como construcción. Como algo que no apareció de la nada, sino que se ha ido armando con intención, con decisiones pequeñas que repetimos todos los días.\n\nNo quiero escribirte lo típico. No quiero palabras grandes que suenen bonito pero que ya estén gastadas. Prefiero decirte algo más real: me gusta lo que estamos creando. Me gusta cómo se siente cuando estamos bien, pero también me gusta que incluso cuando algo nos mueve el piso, no salimos corriendo. Nos quedamos. Hablamos. Ajustamos.\n\nEso para mí vale más que cualquier promesa exagerada.
+		\n\nSé que a veces tu mente se adelanta. Que te preguntas cosas en silencio. Que quieres sentir estabilidad, pero tu ansiedad intenta buscar grietas donde no las hay. Por eso hoy no vengo a decirte “todo será perfecto”. Vengo a decirte algo más sólido: lo que siento por ti no depende de un día bueno o uno raro. No depende de la intensidad del momento. Es una decisión constante.\n\nNo estoy contigo por emoción pasajera. Estoy porque contigo puedo proyectarme creciendo, no perdiéndome. Porque contigo no siento presión de ser alguien más. Porque cuando estoy a tu lado, no siento ruido, siento enfoque.\n\nY quiero que algo te quede muy claro: no tienes que competir con nadie, no tienes que demostrarme nada extra, no tienes que esforzarte por “merecer” mi cariño. No estoy evaluándote a pesar de que el momento ciertas veces requiera que me lo demuestres. Estoy contigo.
+		\n\nAdmiro mucho tu forma de sentir. Sí, incluso esa parte intensa que a veces te asusta. Porque demuestra que amas en serio. Y yo no quiero apagar eso. Solo quiero que aprendas que conmigo puedes amar sin miedo a que el suelo desaparezca.\n\nMe acuerdo cuando me regalaste el Me 262 de papel. Tal vez para alguien más era solo un detalle creativo. Para mí fue una prueba de algo más profundo: tú observas, tú escuchas, tú cuidas. Y eso no se encuentra fácil.
+
+No quiero que nuestra relación sea una montaña rusa emocional. Quiero que sea como una base firme desde donde podamos crecer en todo lo demás: estudios, metas, planes, sueños. Que cuando el mundo esté pesado, no seamos un problema más, sino un lugar seguro.\n\nSi algún día dudas, prefiero que me lo digas. Si algo te duele, quiero saberlo. Si algo te da miedo, no lo cargues sola. Yo no quiero una versión perfecta tuya; quiero la versión real, incluso cuando está confundida.
+
+Y también quiero que sepas algo importante: estoy aprendiendo contigo. A ser más paciente. A escuchar mejor. A no responder desde el orgullo. Esto no es solo que tú crezcas; yo también estoy creciendo.\n\nNueve meses no son una eternidad. Pero tampoco son casualidad. Son prueba de que lo nuestro tiene intención.\n\nNo voy a prometerte un “para siempre” escrito en piedra porque no somos eternos, no vivíremos en este mundo para siempre, los humanos morimos como tal. Voy a prometerte algo más honesto: mientras esté contigo, voy a hacerlo bien. Con respeto. Con claridad. Sin juegos. Sin ambigüedades.\n\nQuiero que cuando pienses en mí, sientas calma. No incertidumbre. Quiero que cuando alguien te pregunte por nosotros, no tengas que defender nada, porque lo que vivimos habla solo.\n\nGracias por elegir quedarte. Gracias por confiar. Gracias por abrir tu mundo conmigo.\n\nYo te elijo hoy. Sin exageraciones. Con firmeza.\n\nCon todo el amor del mundo: — A.`;
 
 		// Máquina de escribir
 		const letterArea = document.getElementById('letterArea');
@@ -372,6 +439,143 @@
 			phraseElement.textContent = phrases[Math.floor(Math.random() * phrases.length)];
 		}
 
+		// ===== MINIJUEGOS DE DESBLOQUEO =====
+		
+		// MINIJUEGO 1: Fecha romántica
+		window.checkDate = function() {
+			const input = document.getElementById('dateInput').value.trim();
+			const correctDate = "0903"; // 09/03 - La fecha especial
+			const errorDiv = document.getElementById('game1Error');
+			
+			// Acepta varios formatos
+			const isCorrect = input === correctDate || input === "09/03/26" || input === "09032026" || input === "0903/2026" || input === "09/03/2026";
+			
+			if (isCorrect) {
+				errorDiv.style.display = 'none';
+				document.getElementById('minigame1').style.display = 'none';
+				document.getElementById('minigame2').style.display = 'flex';
+				const allBtns = document.querySelectorAll('.seq-btn');
+				allBtns.forEach(btn => btn.style.opacity = '0.5');
+				setTimeout(setupSequenceGame, 200);
+			} else {
+				errorDiv.style.display = 'block';
+				errorDiv.textContent = '❌ Esa no es la fecha... piensa en hoy.';
+				document.getElementById('dateInput').value = '';
+				setTimeout(() => {
+					document.getElementById('dateInput').focus();
+				}, 100);
+			}
+		};
+
+		// MINIJUEGO 2: Secuencia de botones
+		let sequenceToMemorize = ['pink', 'cyan', 'gold', 'cyan', 'purple', 'purple', 'purple', 'gold', 'pink', 'cyan', 'gold', 'pink'];
+		let playerSequence = [];
+		let gameRound = 1;
+		let isPlayingSequence = false;
+
+		function playSequence() {
+			isPlayingSequence = true;
+			playerSequence = [];
+			document.getElementById('game2Status').textContent = '🎮 Observa la secuencia...';
+			
+			let delay = 0;
+			sequenceToMemorize.forEach((color, index) => {
+				setTimeout(() => {
+					const btn = document.querySelector(`.seq-btn[data-color="${color}"]`);
+					btn.style.opacity = '1';
+					btn.style.transform = 'scale(1.1)';
+					setTimeout(() => {
+						btn.style.opacity = '0.5';
+						btn.style.transform = 'scale(1)';
+					}, 400);
+				}, delay);
+				delay += 600;
+			});
+			
+			setTimeout(() => {
+				isPlayingSequence = false;
+				document.getElementById('game2Status').textContent = '¡Ahora tu turno! Repite la secuencia';
+			}, delay);
+		}
+
+		function setupSequenceGame() {
+			const buttons = document.querySelectorAll('.seq-btn');
+			buttons.forEach(btn => {
+				btn.style.opacity = '0.5';
+				btn.addEventListener('click', function() {
+					if (isPlayingSequence) return;
+					
+					playerSequence.push(this.dataset.color);
+					this.style.opacity = '1';
+					this.style.transform = 'scale(1.1)';
+					
+					setTimeout(() => {
+						this.style.opacity = '0.5';
+						this.style.transform = 'scale(1)';
+					}, 200);
+					
+					// Verificar si es correcto
+					const correctIndex = playerSequence.length - 1;
+					if (playerSequence[correctIndex] !== sequenceToMemorize[correctIndex]) {
+						document.getElementById('game2Status').textContent = '❌ ¡Fallaste! Intentemos de nuevo...';
+						playerSequence = [];
+						setTimeout(playSequence, 1200);
+						return;
+					}
+					
+					// Verificar si completó la secuencia
+					if (playerSequence.length === sequenceToMemorize.length) {
+						document.getElementById('game2Status').textContent = '✅ ¡Lo lograste! Ahora la palabra mágica...';
+						document.getElementById('minigame2').style.display = 'none';
+						document.getElementById('minigame3').style.display = 'flex';
+						setTimeout(() => {
+							document.getElementById('secretWordInput').focus();
+						}, 200);
+					}
+				});
+			});
+			
+			playSequence();
+		}
+
+		// MINIJUEGO 3: Palabra secreta
+		window.checkSecretWord = function() {
+			const input = document.getElementById('secretWordInput').value.trim().toLowerCase();
+			// Acepta varias respuestas válidas
+			const correctWords = ['aviones', 'andresito', 'jets', 'engreido', 'delicado', 'amoroso', 'te amo', 'dieguito', 'mi niño bello', 'precioso', 'corazón', 'volar'];
+			const errorDiv = document.getElementById('game3Error');
+			
+			if (correctWords.includes(input)) {
+				errorDiv.style.display = 'none';
+				document.getElementById('minigame3').style.display = 'none';
+				document.getElementById('pinSection').style.display = 'flex';
+				document.getElementById('pinInput').focus();
+			} else {
+				errorDiv.style.display = 'block';
+				errorDiv.textContent = '❌ Esa palabra no resuena... intenta una que me defina o que represente.';
+				document.getElementById('secretWordInput').value = '';
+				setTimeout(() => {
+					document.getElementById('secretWordInput').focus();
+				}, 100);
+			}
+		};
+
+		// Event listeners para Enter en inputs
+		document.getElementById('dateInput')?.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') window.checkDate();
+		});
+		document.getElementById('secretWordInput')?.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') window.checkSecretWord();
+		});
+		document.getElementById('pinInput')?.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') window.unlockPage();
+		});
+
+		// Inicializar el primer minijuego cuando carga la página
+		setTimeout(() => {
+			document.getElementById('dateInput')?.focus();
+		}, 300);
+
 		// Preparar secretos: envolver palabras clave en la carta cuando termine la escritura
 		function finalizeLetter() {
 			const html = letterArea.textContent
@@ -417,6 +621,45 @@
 
 		// Small compatibility: ensure dynamicAvatar + avatarInput exist for lock.js features
 		(function ensureAvatarInput(){ if(!document.getElementById('avatarInput')){ const inp = document.createElement('input'); inp.type='file'; inp.id='avatarInput'; inp.accept='image/*'; inp.style.display='none'; document.body.appendChild(inp); }})();
+
+		// 🌸 SISTEMA DE HOJAS DE SAKURA CAYENDO
+		(function() {
+			const sakuraContainer = document.getElementById('sakura');
+			if (!sakuraContainer) return;
+
+			function createSakuraLeaf() {
+				const leaf = document.createElement('div');
+				leaf.className = 'sakura-leaf';
+				
+				const size = Math.random() * 10 + 15;
+				leaf.style.width = size + 'px';
+				leaf.style.height = size + 'px';
+				
+				const xPos = Math.random() * 100;
+				leaf.style.left = xPos + '%';
+				
+				const duration = Math.random() * 8 + 8;
+				leaf.style.animationDuration = duration + 's';
+				
+				const txVariation = Math.random() * 200 - 100;
+				leaf.style.setProperty('--tx', txVariation + 'px');
+				
+				const opacity = Math.random() * 0.3 + 0.5;
+				leaf.style.opacity = opacity;
+				
+				sakuraContainer.appendChild(leaf);
+				
+				setTimeout(() => leaf.remove(), duration * 1000);
+			}
+
+			setInterval(() => {
+				createSakuraLeaf();
+			}, Math.random() * 300 + 500);
+
+			for (let i = 0; i < 5; i++) {
+				setTimeout(() => createSakuraLeaf(), i * 200);
+			}
+		})();
 	</script>
 </body>
 </html>
