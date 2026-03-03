@@ -49,13 +49,13 @@ function injectPinStyles() {
     .page-lock.active { display: flex; }
     .page-lock { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 99999; padding: 20px; }
     .page-lock.force-solid { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 18px; padding: clamp(20px, 3.2vw, 40px); background: linear-gradient(180deg, rgba(255,183,213,0.03), rgba(255,128,171,0.01)); border: 1.5px solid rgba(255,183,213,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(255,183,213,0.05); text-align: center; transform-origin: center; }
-    .lock-box h2 { font-size: clamp(1.1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; color: #fff; text-shadow: 0 0 30px rgba(255,183,213,0.15); }
+    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 18px; padding: clamp(20px, 3.2vw, 40px); background: linear-gradient(180deg, rgba(200,200,220,0.03), rgba(170,170,190,0.01)); border: 1.5px solid rgba(200,200,220,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(200,200,220,0.05); text-align: center; transform-origin: center; }
+    .lock-box h2 { font-size: clamp(1.1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; color: #fff; text-shadow: 0 0 30px rgba(200,200,220,0.15); }
     .lock-box p { margin: 0 0 20px; color: rgba(255,255,255,0.65); font-size: 0.85rem; letter-spacing: 2px; }
-    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1.5px solid rgba(255,183,213,0.15); background: rgba(255,255,255,0.03); color: #fff; outline: none; transition: box-shadow 220ms ease, transform 200ms ease, border-color 200ms ease; text-align: center; }
-    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 20px rgba(255,183,213,0.12); border-color: rgba(255,183,213,0.3); background: rgba(255,183,213,0.05); }
-    .lock-box button { margin-top: 14px; padding: 13px 36px; border-radius: 999px; border: 1.5px solid rgba(255,183,213,0.15); background: linear-gradient(135deg, rgba(255,183,213,0.08), rgba(255,128,171,0.04)); color: #fff; cursor: pointer; font-weight: 600; transition: transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms, all 220ms; }
-    .lock-box button:hover { background: linear-gradient(135deg, rgba(255,183,213,0.15), rgba(255,128,171,0.08)); border-color: rgba(255,183,213,0.3); box-shadow: 0 10px 30px rgba(255,183,213,0.1); transform: translateY(-2px); }
+    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1.5px solid rgba(200,200,220,0.15); background: rgba(255,255,255,0.03); color: #fff; outline: none; transition: box-shadow 220ms ease, transform 200ms ease, border-color 200ms ease; text-align: center; }
+    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 20px rgba(200,200,220,0.12); border-color: rgba(200,200,220,0.3); background: rgba(200,200,220,0.05); }
+    .lock-box button { margin-top: 14px; padding: 13px 36px; border-radius: 999px; border: 1.5px solid rgba(200,200,220,0.15); background: linear-gradient(135deg, rgba(200,200,220,0.08), rgba(170,170,190,0.04)); color: #fff; cursor: pointer; font-weight: 600; transition: transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms, all 220ms; }
+    .lock-box button:hover { background: linear-gradient(135deg, rgba(200,200,220,0.15), rgba(170,170,190,0.08)); border-color: rgba(200,200,220,0.3); box-shadow: 0 10px 30px rgba(200,200,220,0.1); transform: translateY(-2px); }
     .lock-box button:active { transform: translateY(0) scale(0.998); }
     .lock-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 12px; display: none; animation: shake 420ms ease; }
     .lock-error.show { display: block; }
