@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="theme-color" content="#050505">
     <title>Footage Archive</title>
-    <link rel="icon" href="https://i.imgur.com/vBqkyX1.png" type="image/png">
+    <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #fff;
-            --accent: #ffb6c1;
+            --accent: #9a9aaa;
             --bg: #050505;
             --card-bg: rgba(30, 20, 40, 0.7);
             --text-main: #fff;
             --text-dim: rgba(255,255,255,0.5);
             --glass: rgba(255,255,255,0.06);
-            --border: rgba(255,255,255,0.13);
-            --petal: #ffb6c1;
-            --petal-dark: #e75480;
+            --border: rgba(150, 150, 170, 0.15);
+            --petal: #9a9aaa;
+            --petal-dark: #6a6a7a;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -185,39 +185,204 @@
         }
         .close-letter:hover { background: #fff; color: #000; }
         .sections-grid {
-            margin: 60px auto 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;
-            max-width: 800px; width: 100%; padding: 0 20px;
+            margin: 60px auto 0 auto; 
+            display: grid; 
+            grid-template-columns: 1fr;
+            gap: 30px;
+            max-width: 900px; 
+            width: 100%; 
+            padding: 0 20px;
         }
+
         .section-card {
-            background: var(--glass); border: 1px solid var(--border); border-radius: 30px;
-            padding: 40px; text-align: center; transition: 0.4s; backdrop-filter: blur(10px);
+            background: var(--glass); 
+            border: 1px solid var(--border); 
+            border-radius: 30px;
+            padding: 30px 25px; 
+            text-align: center; 
+            transition: 0.4s; 
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
         }
+
+        .section-card .section-title {
+            margin-bottom: 20px;
+        }
+
+        .section-card .spotify-embed,
+        .section-card iframe[src*="youtube"] {
+            width: 100%;
+            max-width: 100%;
+            margin: 8px 0;
+            border-radius: 15px;
+        }
+
+        .section-card .spotify-iframe {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 152px !important;
+            margin: 15px 0 !important;
+        }
+
+        .section-card iframe[src*="youtube"] {
+            width: 100%;
+            height: 280px;
+            max-width: 100%;
+            border-radius: 15px;
+        }
+
+        .section-card .section-text {
+            margin-top: 20px;
+            word-break: break-word;
+        }
+
         .section-card:hover {
-            transform: translateY(-10px); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05);
+            transform: translateY(-10px); 
+            border-color: rgba(255,255,255,0.3); 
+            background: rgba(255,255,255,0.05);
         }
+
         .section-card img {
-            width: 100%; border-radius: 20px; margin-bottom: 20px; filter: grayscale(0.3); transition: 0.5s;
+            width: 100%; 
+            border-radius: 20px; 
+            margin-bottom: 20px; 
+            filter: grayscale(0.3); 
+            transition: 0.5s;
         }
-        .section-card:hover img { filter: grayscale(0); }
+
+        .section-card:hover img { 
+            filter: grayscale(0); 
+        }
+
         .section-title {
-            font-size: 0.7rem; color: var(--text-dim); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; display: block;
+            font-size: 0.7rem; 
+            color: var(--text-dim); 
+            letter-spacing: 4px; 
+            text-transform: uppercase; 
+            display: block;
         }
+
         .section-text {
-            font-style: italic; font-size: 1rem; line-height: 1.8; opacity: 0.8;
+            font-style: italic; 
+            font-size: 1rem; 
+            line-height: 1.8; 
+            opacity: 0.8;
         }
+
+        .spotify-embed {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0px;
+        }
+
+        .spotify-fallback {
+            width: 100%;
+            margin-top: 0px;
+        }
+
         @media (max-width: 768px) {
-            .sections-grid { grid-template-columns: 1fr; }
-            .letter-inner { padding: 40px 10px; }
-            .envelope { height: 300px; }
+            .sections-grid { 
+                grid-template-columns: 1fr; 
+                gap: 20px;
+                padding: 0 15px;
+            }
+            .section-card {
+                padding: 22px 18px;
+            }
+            .letter-inner { 
+                padding: 40px 20px; 
+            }
+            .envelope { 
+                height: 300px; 
+            }
+            .section-card iframe[src*="youtube"] {
+                height: 240px;
+            }
+            .section-card .spotify-iframe {
+                height: 140px !important;
+            }
         }
+
         @media (max-width: 500px) {
-            .envelope-wrapper { padding: 2px; }
-            .envelope { height: 220px; }
+            .sections-grid {
+                padding: 0 12px;
+                gap: 16px;
+            }
+            .section-card {
+                padding: 18px 14px;
+                border-radius: 20px;
+            }
+            .envelope-wrapper { 
+                padding: 8px; 
+            }
+            .envelope { 
+                height: 220px; 
+            }
+            .section-card iframe[src*="youtube"] {
+                height: 200px;
+            }
+            .section-card .spotify-iframe {
+                height: 130px !important;
+            }
+            .section-title {
+                font-size: 0.65rem;
+            }
+            .section-text {
+                font-size: 0.95rem;
+            }
         }
     </style>
-</head>
+    <style>
+        /* 🌸 HOJAS DE SAKURA */
+        .sakura {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .sakura-leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+            animation: sakuraFall linear forwards;
+            filter: drop-shadow(0 0 2px rgba(255, 183, 213, 0.4));
+        }
+
+        .sakura-leaf::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23ffb7d5"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%23ff80ab"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23ffb7d5"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%23ff80ab"/><circle cx="50" cy="50" r="8" fill="%23ffd54f"/></svg>') center / contain no-repeat;
+        }
+
+        @keyframes sakuraFall {
+            0% {
+                top: -20px;
+                opacity: 0.8;
+                transform: translateX(0) rotateZ(0deg);
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+                transform: translateX(var(--tx, 100px)) rotateZ(360deg);
+            }
+        }
+    </style>
 <body>
     <div class="stars"></div>
+    <div class="sakura" id="sakura"></div>
     <div id="pageLock" class="page-lock">
         <div class="lock-box">
             <h2 id="lockPhrase">¡8 MESES!</h2>
@@ -237,17 +402,15 @@
             <p style="font-size: 0.7rem; letter-spacing: 4px; color: var(--text-dim); margin-top: 10px;">CLICK PARA ABRIR</p>
         </div>
 
-    
-        </div>
         <div class="sections-grid">
             <div class="section-card">
                 <span class="section-title">En bucle desde que te conocí</span>
                 <div class="spotify-embed">
-                    <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/2plbrEY59IikOBgBGLjaoe?si=dbebfae879204cc3" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/2plbrEY59IikOBgBGLjaoe?si=dbebfae879204cc3" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                     <div class="spotify-fallback">
                         <a class="spotify-open" href="https://open.spotify.com/track/2plbrEY59IikOBgBGLjaoe" target="_blank" rel="noopener" style="
                             display: inline-block;
-                            margin: 12px auto 0 auto;
+                            margin: 0 auto 0 auto;
                             padding: 8px 18px;
                             background: rgba(255,255,255,0.03);
                             border: 1px solid rgba(255,255,255,0.13);
@@ -255,7 +418,7 @@
                             color: #fff;
                             font-weight: 600;
                             text-decoration: none;
-                            font-size: 1rem;
+                            font-size: 0.9rem;
                             transition: all 0.3s;
                         ">🎧 Abrir en Spotify</a>
                     </div>
@@ -264,12 +427,12 @@
             </div>
             <div class="section-card">
                 <span class="section-title">"Amarilla"</span>
-                <iframe width="100%" height="180" src="https://www.youtube.com/embed/1f2Xht0UKVw" title="YouTube video" frameborder="0" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/1f2Xht0UKVw" title="YouTube video" frameborder="0" allowfullscreen></iframe>
                 <p class="section-text">Beneficios forma parte de este álbum que me recuerda a ti.</p>
             </div>
             <div class="section-card">
                 <span class="section-title">Secreto especial</span>
-                <p class="section-text" id="secretText" style="cursor:pointer;">Haz click aquí para descubrir un secreto...</p>
+                <p class="section-text" id="secretText" style="cursor:pointer; margin-top: 30px;">Haz click aquí para descubrir un secreto...</p>
             </div>
         </div>
     </div>
@@ -462,6 +625,45 @@ Gracias por confiarme algo tan delicado como tu corazón.</p><br>
                 });
             }
         });
+
+        // 🌸 SISTEMA DE HOJAS DE SAKURA CAYENDO
+        (function() {
+            const sakuraContainer = document.getElementById('sakura');
+            if (!sakuraContainer) return;
+
+            function createSakuraLeaf() {
+                const leaf = document.createElement('div');
+                leaf.className = 'sakura-leaf';
+                
+                const size = Math.random() * 10 + 15;
+                leaf.style.width = size + 'px';
+                leaf.style.height = size + 'px';
+                
+                const xPos = Math.random() * 100;
+                leaf.style.left = xPos + '%';
+                
+                const duration = Math.random() * 8 + 8;
+                leaf.style.animationDuration = duration + 's';
+                
+                const txVariation = Math.random() * 200 - 100;
+                leaf.style.setProperty('--tx', txVariation + 'px');
+                
+                const opacity = Math.random() * 0.3 + 0.5;
+                leaf.style.opacity = opacity;
+                
+                sakuraContainer.appendChild(leaf);
+                
+                setTimeout(() => leaf.remove(), duration * 1000);
+            }
+
+            setInterval(() => {
+                createSakuraLeaf();
+            }, Math.random() * 300 + 500);
+
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createSakuraLeaf(), i * 200);
+            }
+        })();
     </script>
 </body>
 </html>
