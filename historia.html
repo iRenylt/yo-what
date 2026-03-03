@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="theme-color" content="#050505">
     <title>Footage Archive</title>
-    <link rel="icon" href="https://i.imgur.com/vBqkyX1.png" type="image/png">
+    <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffffff;
-            --accent: #ff80ab;
-            --accent-light: #ffb7d5;
-            --accent-dark: #ff4081;
+            --accent: #9a9aaa;
+            --accent-light: #d8d8e8;
+            --accent-dark: #6a6a7a;
             --bg: #050505;
             --card-bg: rgba(20, 20, 25, 0.7);
             --card-bg-hover: rgba(25, 25, 35, 0.85);
@@ -22,8 +22,8 @@
             --text-dim: rgba(255, 255, 255, 0.6);
             --glass: rgba(255, 255, 255, 0.05);
             --glass-hover: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 183, 213, 0.15);
-            --border-hover: rgba(255, 183, 213, 0.3);
+            --border: rgba(150, 150, 170, 0.15);
+            --border-hover: rgba(150, 150, 170, 0.3);
             --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
             --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
         }
@@ -247,7 +247,7 @@
             cursor: pointer; 
         }
         .dropdown-content a:hover { 
-            background: rgba(255,183,213,0.1); 
+            background: rgba(200,200,220,0.1); 
             color: #fff;
         }
 
@@ -270,31 +270,31 @@
         .container {
             position: relative;
             z-index: 10;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 16px 70px;
         }
 
         .timeline {
             position: relative;
-            padding-left: 30px;
+            padding-left: 40px;
         }
 
         .timeline::before {
             content: '';
             position: absolute;
-            left: 0;
+            left: 7px;
             top: 0;
             height: 100%;
-            width: 1px;
+            width: 2px;
             background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
         }
 
         .timeline-item {
             position: relative;
-            margin-bottom: 60px;
+            margin-bottom: 70px;
             opacity: 0;
-            transform: translateY(12px);
+            transform: translateY(20px);
             transition: all 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
         }
 
@@ -306,92 +306,147 @@
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -35px;
-            top: 0;
-            width: 12px;
-            height: 12px;
-            background: linear-gradient(135deg, #ffb7d5, #ff80ab);
+            left: -20px;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 30% 30%, #fff, #d8d8e8);
             border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 183, 213, 0.5);
+            box-shadow: 0 0 0 3px var(--card-bg);
             transition: all 0.3s ease;
+            z-index: 2;
         }
 
         .timeline-item:hover::before {
-            transform: scale(1.4);
-            box-shadow: 0 0 30px rgba(255, 183, 213, 0.8);
+            box-shadow: 0 0 0 3px var(--card-bg);
         }
 
         .timeline-date {
             font-size: 0.7rem;
-            color: var(--text-dim);
-            letter-spacing: 3px;
+            color: #d8d8e8;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             display: block;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(200, 200, 220, 0.2);
         }
 
         .timeline-content {
-            background: var(--card-bg);
+            background: linear-gradient(135deg, rgba(20, 20, 25, 0.8), rgba(25, 25, 35, 0.6));
             border: 1.5px solid var(--border);
-            border-radius: 25px;
-            padding: 28px;
+            border-radius: 20px;
+            padding: 32px;
             backdrop-filter: blur(20px);
             transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
         }
 
         .timeline-content:hover {
             border-color: var(--border-hover);
-            background: var(--card-bg-hover);
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, rgba(25, 25, 35, 0.9), rgba(30, 30, 40, 0.8));
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
         }
 
         .timeline-content h2 {
-            font-size: 1.2rem;
-            font-weight: 400;
-            margin-bottom: 20px;
-            color: #fff;
-            letter-spacing: 1px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: #d8d8e8;
+            letter-spacing: 0.8px;
+            font-family: 'Playfair Display', serif;
         }
 
         .timeline-content p {
             color: var(--text-dim);
-            font-size: 1rem;
-            line-height: 1.8;
+            font-size: 0.95rem;
+            line-height: 1.85;
             font-style: italic;
+            animation: typewriter 3s steps(60, end) forwards;
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        @keyframes typewriter {
+            from { max-height: 0; opacity: 0; }
+            to { max-height: 400px; opacity: 1; }
         }
 
         /* � Books collapsible (accordion) */
-        .book { margin-bottom: 18px; }
-        .book-header { display: flex; justify-content: space-between; align-items: center; margin: 6px 0 12px; }
+        .book { 
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+
+        .book.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .book-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin: 0 0 0 0;
+            padding-bottom: 10px;
+        }
+
         .book-toggle {
-            background: var(--glass);
+            background: linear-gradient(135deg, rgba(200,200,220,0.12), rgba(170,170,190,0.05));
             border: 1.5px solid var(--border);
-            padding: 10px 14px;
-            border-radius: 20px;
-            color: var(--text-dim);
+            padding: 14px 24px;
+            border-radius: 28px;
+            color: #d8d8e8;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.8rem;
+            gap: 12px;
+            font-size: 0.82rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            font-weight: 600;
+            font-weight: 700;
+            width: 100%;
+            justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
+
         .book-toggle:hover {
-            background: var(--glass-hover);
+            background: linear-gradient(135deg, rgba(200,200,220,0.2), rgba(170,170,190,0.1));
             border-color: var(--border-hover);
             color: #fff;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
-        .book-toggle .chev { display: inline-block; transition: transform 0.25s ease; }
-        .book .book-body { overflow: hidden; max-height: 0; transition: max-height 0.4s ease, opacity 0.3s ease; opacity: 0; }
-        .book.open .book-body { opacity: 1; }
+
+        .book-title { flex: 1; text-align: left; }
+        .book-toggle .chev { 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
         .book.open .chev { transform: rotate(90deg); }
-        /* ensure timeline items inside collapsed body are hidden from interaction */
+
+        .book-body { 
+            overflow: hidden; 
+            max-height: 0; 
+            transition: max-height 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease; 
+            opacity: 0;
+        }
+
+        .book.open .book-body { 
+            opacity: 1;
+        }
+
         .book .book-body .timeline-item { pointer-events: auto; }
 
         /* �💬 AREA DE MENSAJES */
@@ -468,7 +523,7 @@
 
         /* 🎁 SECRETOS ESTILOS */
         .secret-word { cursor: pointer; position: relative; transition: all 0.3s; }
-        .secret-word:hover { color: #ffb7d5; text-shadow: 0 0 10px rgba(255, 183, 213, 0.5); }
+        .secret-word:hover { color: #d8d8e8; text-shadow: 0 0 10px rgba(200, 200, 220, 0.5); }
 
         .secret-modal { 
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
@@ -512,9 +567,26 @@
             nav a, .nav-item { padding: 9px 12px; font-size: 0.68rem; border-radius: 15px; }
             .dropdown-content { min-width: 115px; padding: 6px 3px; }
             .dropdown-content a { padding: 7px 8px; font-size: 0.6rem; }
-            .container { padding: 0 14px 55px; }
-            .timeline-content { padding: 25px 20px; }
+            .container { padding: 0 14px 55px; max-width: 100%; }
+            .timeline { padding-left: 35px; }
+            .timeline-item { margin-bottom: 60px; }
+            .timeline-item::before { left: -18px; width: 14px; height: 14px; }
+            .timeline-content { padding: 24px 20px; border-radius: 18px; }
+            .timeline-content h2 { font-size: 1.1rem; margin-bottom: 15px; }
+            .timeline-content p { font-size: 0.92rem; }
+            .timeline-date { font-size: 0.68rem; margin-bottom: 10px; }
+            .book-toggle { padding: 12px 18px; font-size: 0.78rem; letter-spacing: 0.8px; }
+            .book-toggle .chev { width: 22px; height: 22px; }
             .message-box { padding: 20px; }
+            #mensaje { padding: 15px; font-size: 15px; }
+            #enviar { padding: 11px 35px; font-size: 0.75rem; }
+        }
+
+        @media (max-width: 580px) {
+            .container { padding: 0 12px 50px; }
+            .timeline { padding-left: 32px; }
+            .timeline-item { margin-bottom: 55px; }
+            .timeline-item::before { left: -17px; width: 13px; height: 13px; top: 6px; }
         }
 
         @media (max-width: 480px) {
@@ -526,28 +598,99 @@
             .dropdown-content { min-width: 105px; padding: 5px 2px; }
             .dropdown-content a { padding: 6px 7px; font-size: 0.55rem; }
             .container { padding: 0 12px 50px; }
-            .timeline { padding-left: 25px; }
+            .timeline { padding-left: 28px; }
             .timeline-item { margin-bottom: 50px; }
-            .timeline-item::before { left: -30px; width: 7px; height: 7px; }
-            .timeline-content { padding: 20px; border-radius: 18px; }
-            .timeline-content h2 { font-size: 1rem; }
-            .timeline-content p { font-size: 0.9rem; }
-            .timeline-date { font-size: 0.65rem; }
-            .message-box { padding: 16px; margin-bottom: 40px; }
-            #mensaje { padding: 15px; font-size: 14px; }
-            #enviar { padding: 10px 30px; font-size: 0.75rem; }
+            .timeline-item::before { left: -15px; width: 11px; height: 11px; top: 4px; }
+            .timeline::before { left: 4px; }
+            .timeline-content { padding: 18px 16px; border-radius: 16px; }
+            .timeline-content h2 { font-size: 0.95rem; margin-bottom: 12px; }
+            .timeline-content p { font-size: 0.85rem; line-height: 1.6; }
+            .timeline-date { font-size: 0.6rem; margin-bottom: 8px; letter-spacing: 2px; }
+            .book-toggle { 
+                padding: 10px 14px; 
+                font-size: 0.72rem; 
+                letter-spacing: 0.6px;
+                border-radius: 24px;
+            }
+            .book-toggle .chev { width: 20px; height: 20px; font-size: 0.9rem; }
+            .book-title { font-size: 0.7rem; }
+            .message-box { padding: 14px; margin-bottom: 40px; }
+            #mensaje { padding: 12px; font-size: 14px; margin-bottom: 15px; }
+            #enviar { padding: 9px 25px; font-size: 0.7rem; }
+        }
+
+        @media (max-width: 360px) {
+            header { padding: 45px 10px 25px; }
+            .nohelia-name { font-size: 1.5rem; letter-spacing: 4px; margin-bottom: 10px; }
+            .header-sub { font-size: 0.6rem; }
+            nav { gap: 4px; margin-bottom: 22px; padding: 0 4px; }
+            nav a, .nav-item { padding: 7px 9px; font-size: 0.58rem; }
+            .container { padding: 0 10px 40px; }
+            .timeline { padding-left: 26px; }
+            .timeline-item::before { left: -14px; width: 10px; height: 10px; top: 3px; }
+            .timeline::before { left: 3px; }
+            .timeline-content { padding: 16px 14px; }
+            .timeline-content h2 { font-size: 0.85rem; }
+            .timeline-content p { font-size: 0.8rem; }
+            .book-toggle { padding: 9px 12px; font-size: 0.65rem; }
+            .book-toggle .chev { width: 18px; height: 18px; }
+            .message-box { padding: 12px; }
+            #mensaje { padding: 10px; font-size: 13px; }
         }
     </style>
-</head>
+    <style>
+        /* 🌸 HOJAS DE SAKURA */
+        .sakura {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .sakura-leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+            animation: sakuraFall linear forwards;
+            filter: drop-shadow(0 0 2px rgba(255, 183, 213, 0.4));
+        }
+
+        .sakura-leaf::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23d8d8e8"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%239a9aaa"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23d8d8e8"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%239a9aaa"/><circle cx="50" cy="50" r="8" fill="%23d8d8e8"/></svg>') center / contain no-repeat;
+        }
+
+        @keyframes sakuraFall {
+            0% {
+                top: -20px;
+                opacity: 0.8;
+                transform: translateX(0) rotateZ(0deg);
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+                transform: translateX(var(--tx, 100px)) rotateZ(360deg);
+            }
+        }
+    </style>
 
 <body>
 
 <div class="stars"></div>
+<div class="sakura" id="sakura"></div>
 
 <div id="pageLock" class="page-lock">
     <div class="lock-box">
         <h2 id="lockPhrase"></h2>
-        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
         <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
         <button onclick="unlockPage()">Abrir Corazón</button>
         <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
@@ -765,22 +908,61 @@
             <span class="timeline-date">LIBRO VI - CAPÍTULO I</span>
             <div class="timeline-content">
                 <h2>En paz con el tiempo</h2>
-                <p>La dualidad presente que nos une siempre.</p><br>
+                <p>La dualidad presente que nos une siempre, es la calma, tú calidez, todo lo tuyo, me transmites todo lo que yo necesito, pero incluso en todos mis malos momentos, siempre serás tú la paz que necesito.</p><br>
+            <div class="spotify-embed">
+                    <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/6PQc1dYKcIjQGmHZReUTvk?si=dbebfae879204cc3" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <div class="spotify-fallback">
+                        <a class="spotify-open" href="https://open.spotify.com/track/6PQc1dYKcIjQGmHZReUTvk" target="_blank" rel="noopener" style="
+                            display: inline-block;
+                            margin: 0 auto 0 auto;
+                            padding: 8px 18px;
+                            background: rgba(255,255,255,0.03);
+                            border: 1px solid rgba(255,255,255,0.13);
+                            border-radius: 12px;
+                            color: #fff;
+                            font-weight: 600;
+                            text-decoration: none;
+                            font-size: 0.9rem;
+                            transition: all 0.3s;
+                        ">🎧 Abrir en Spotify</a>
+                    </div>
+                    </div>
             </div>
         </div>
+
 
         <div class="timeline-item">
             <span class="timeline-date">LIBRO VI - CAPÍTULO II</span>
             <div class="timeline-content">
                 <h2>Járdines</h2>
-                <p>Próximamente..</p><br>
+                <p>Siempre pienso en lo que somos ahora, después de ser tan solo amigos, compañeros de aula. Tú has logrado muchas en mi que yo nunca noté de mi, no pensé en lo tan bien que lo intentas y lo logras cada día conmigo, no exite una puerta trasera para nignuno de los dos, dísculpame por los malos momentos, a veces no entiendo que me ocurre.. pero a pesar de eso, nunca voy a dejarte sola, porque te eso se trata estar juntos, el trabajo en equipo y aprender contigo es mucho mejor que cualquier otra cosa, yo de ti aprendo sin recibir nada a cambio porque eso me hace lo soy.</p><br>
+            <div class="spotify-embed">
+                    <iframe class="spotify-iframe" src="https://open.spotify.com/embed/track/16gJmoOqRt2lKmlXtDpWgH?si=dbebfae879204cc3" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <div class="spotify-fallback">
+                        <a class="spotify-open" href="https://open.spotify.com/track/16gJmoOqRt2lKmlXtDpWgH" target="_blank" rel="noopener" style="
+                            display: inline-block;
+                            margin: 0 auto 0 auto;
+                            padding: 8px 18px;
+                            background: rgba(255,255,255,0.03);
+                            border: 1px solid rgba(255,255,255,0.13);
+                            border-radius: 12px;
+                            color: #fff;
+                            font-weight: 600;
+                            text-decoration: none;
+                            font-size: 0.9rem;
+                            transition: all 0.3s;
+                        ">🎧 Abrir en Spotify</a>
+                        </div>
+                 </div>
+
+              </div>
             </div>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>// FOOTAGE ARCHIVE 2025-2026 //</p>
+    <p>Footage Archive 2025-2026 · Construido con amor 💕</p>
 </footer>
 
 <script src="lock.js"></script>
@@ -810,17 +992,22 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Agrupar capítulos por libro y crear controles colapsables (evita scroll largo)
+        // Agrupar capítulos por libro
         function makeBooksCollapsible() {
             const container = document.querySelector('.timeline');
             if (!container) return;
+            
             const items = Array.from(container.querySelectorAll('.timeline-item'));
             if (!items.length) return;
+            
             const groups = [];
             items.forEach(item => {
                 const dateEl = item.querySelector('.timeline-date');
-                const match = dateEl ? dateEl.textContent.match(/LIBRO\s+([IVXLCDM]+)/i) : null;
+                if (!dateEl) return;
+                
+                const match = dateEl.textContent.match(/LIBRO\s+([IVXLCDM]+)/i);
                 const bookLabel = match ? `LIBRO ${match[1]}` : 'SIN LIBRO';
+                
                 let group = groups.find(g => g.label === bookLabel);
                 if (!group) {
                     group = { label: bookLabel, items: [] };
@@ -828,78 +1015,67 @@
                 }
                 group.items.push(item);
             });
-            // Reconstruir el contenedor con la estructura por libros
-            container.innerHTML = '';
-            groups.forEach(g => {
-                const book = document.createElement('div');
-                book.className = 'book';
-                book.dataset.book = g.label;
-                const header = document.createElement('div');
-                header.className = 'book-header';
-                header.innerHTML = `<button class="book-toggle" aria-expanded="false"><span class="book-title">${g.label}</span><span class="chev">▸</span></button>`;
-                const body = document.createElement('div');
-                body.className = 'book-body';
-                g.items.forEach(it => body.appendChild(it));
-                book.appendChild(header);
-                book.appendChild(body);
-                container.appendChild(book);
-            });
-            // Añadir handlers a los toggles
+            
+            // Reconstruir el contenedor
+            const newHTML = groups.map(g => {
+                const itemsHTML = g.items.map(item => item.outerHTML).join('');
+                return `
+                    <div class="book">
+                        <div class="book-header">
+                            <button class="book-toggle" aria-expanded="false">
+                                <span class="book-title">${g.label}</span>
+                                <span class="chev">▸</span>
+                            </button>
+                        </div>
+                        <div class="book-body">
+                            ${itemsHTML}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = newHTML;
+            
+            // Eventos de toggle
             container.querySelectorAll('.book-toggle').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const book = btn.closest('.book');
+                btn.addEventListener('click', function() {
+                    const book = this.closest('.book');
                     const body = book.querySelector('.book-body');
-                    const expanded = btn.getAttribute('aria-expanded') === 'true';
-                    btn.setAttribute('aria-expanded', String(!expanded));
-                    book.classList.toggle('open', !expanded);
-                    if (!expanded) {
-                        // expandir
-                        body.style.maxHeight = body.scrollHeight + 'px';
-                        body.style.opacity = '1';
-                        // marcar items visibles para animación
-                        body.querySelectorAll('.timeline-item').forEach(it => it.classList.add('visible'));
-                    } else {
-                        // colapsar
+                    const isOpen = book.classList.contains('open');
+                    
+                    if (isOpen) {
+                        book.classList.remove('open');
+                        btn.setAttribute('aria-expanded', 'false');
                         body.style.maxHeight = '0';
                         body.style.opacity = '0';
-                        body.querySelectorAll('.timeline-item').forEach(it => it.classList.remove('visible'));
+                    } else {
+                        book.classList.add('open');
+                        btn.setAttribute('aria-expanded', 'true');
+                        body.style.maxHeight = body.scrollHeight + 'px';
+                        body.style.opacity = '1';
+                        body.querySelectorAll('.timeline-item').forEach(it => it.classList.add('visible'));
                     }
                 });
             });
+            
+            // Todos los libros permanecen cerrados al abrir la página
         }
-        // Ejecutar agrupación antes de asignar eventos a títulos para que los selectores sigan funcionando
+        
         makeBooksCollapsible();
 
-        // SECRETO 1: Click en títulos de la línea de tiempo
-        document.querySelectorAll('.timeline-item h2').forEach(title => {
-            title.style.cursor = 'pointer';
-            title.addEventListener('click', () => {
-                const year = title.textContent;
-                if (!secrets.revealed.has(`timeline-${year}`)) {
-                    showSecret('Momento Especial', `${year} marca un momento importante en nuestra historia. Cada fecha es un recuerdo que llevamos juntos.`);
-                    secrets.revealed.add(`timeline-${year}`);
-                }
+        // SECRETO 1: Click en títulos
+        setTimeout(() => {
+            document.querySelectorAll('.timeline-item h2').forEach(title => {
+                title.style.cursor = 'pointer';
+                title.addEventListener('click', () => {
+                    const year = title.textContent;
+                    if (!secrets.revealed.has(`timeline-${year}`)) {
+                        showSecret('Momento Especial', `${year} marca un momento importante en nuestra historia.`);
+                        secrets.revealed.add(`timeline-${year}`);
+                    }
+                });
             });
-        });
-
-        // SECRETO 2: Click en la palabra "historia" - usando TreeWalker para no afectar estructura
-        function highlightWordInNode(node, word, className) {
-            if (node.nodeType === Node.TEXT_NODE) {
-                const regex = new RegExp(`\\b${word}\\b`, 'gi');
-                if (regex.test(node.textContent)) {
-                    const span = document.createElement('span');
-                    span.innerHTML = node.textContent.replace(regex, `<span class="${className}">$&</span>`);
-                    node.parentNode.replaceChild(span, node);
-                }
-            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE') {
-                Array.from(node.childNodes).forEach(child => highlightWordInNode(child, word, className));
-            }
-        }
-
-        const messageBox = document.querySelector('.message-box');
-        if (messageBox) {
-            highlightWordInNode(messageBox, 'historia', 'secret-word');
-        }
+        }, 100);
 
         // SECRETO 3: Click en "Nohelia"
         const header = document.querySelector('.nohelia-name');
@@ -907,35 +1083,11 @@
             header.style.cursor = 'pointer';
             header.addEventListener('click', () => {
                 if (!secrets.revealed.has('nohelia-click')) {
-                    showSecret('Tu Nombre', 'Nohelia. Un nombre que representa todo lo hermoso que veo en ti. Cada sílaba es especial.');
+                    showSecret('Tu Nombre', 'Nohelia. Un nombre que representa todo lo hermoso que veo en ti.');
                     secrets.revealed.add('nohelia-click');
                 }
             });
         }
-
-        // SECRETO 4: Footer limpio - sin eventos de secreto
-
-        // SECRETO 5: Click en palabras clave dentro de timeline-content
-        document.querySelectorAll('.timeline-content p').forEach(para => {
-            highlightWordInNode(para, 'capítulo', 'secret-word');
-            highlightWordInNode(para, 'recuerdo', 'secret-word');
-            highlightWordInNode(para, 'encuentro', 'secret-word');
-        });
-
-        document.querySelectorAll('.timeline-content .secret-word').forEach(word => {
-            word.addEventListener('click', () => {
-                const word_text = word.textContent.toLowerCase();
-                if (!secrets.revealed.has(`word-${word_text}`)) {
-                    const messages = {
-                        'capítulo': 'Cada capítulo de nuestra historia es importante y merece ser recordado.',
-                        'recuerdo': 'Los recuerdos son lo que nos mantiene unidos, incluso en los momentos difíciles.',
-                        'encuentro': 'Nuestro encuentro fue el comienzo de algo hermoso que sigue creciendo.'
-                    };
-                    showSecret('En la Línea de Tiempo', messages[word_text] || 'Un momento importante en nuestra historia.');
-                    secrets.revealed.add(`word-${word_text}`);
-                }
-            });
-        });
     });
 
     // KONAMI CODE
@@ -953,7 +1105,7 @@
         }
     });
 
-    // Frases aleatorias para la pantalla de bloqueo
+    // Frases aleatorias
     const phrases = [
         "UN ARCHIVO SECRETO",
         "EN CADA MOMENTO",
@@ -1011,7 +1163,7 @@
     }
 
     // Sistema de Notificaciones
-    const pages = ['inicio', 'historia', 'recuerdos', '', ''];
+    const pages = ['inicio', 'historia', 'recuerdos'];
 
     function checkUpdates() {
         pages.forEach(page => {
@@ -1035,19 +1187,58 @@
         });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
+    // Observar books
+    setTimeout(() => {
+        document.querySelectorAll('.book').forEach(book => observer.observe(book));
+        document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
+    }, 100);
 
-    // Ocultar indicador de scroll al bajar
+    // Scroll indicator
     window.addEventListener('scroll', () => {
         const indicator = document.querySelector('.scroll-indicator');
         if (indicator) {
-            if (window.scrollY > 100) {
-                indicator.style.opacity = '0';
-            } else {
-                indicator.style.opacity = '0.6';
-            }
+            indicator.style.opacity = window.scrollY > 100 ? '0' : '0.6';
         }
     });
+
+    // 🌸 SISTEMA DE HOJAS DE SAKURA CAYENDO
+    (function() {
+        const sakuraContainer = document.getElementById('sakura');
+        if (!sakuraContainer) return;
+
+        function createSakuraLeaf() {
+            const leaf = document.createElement('div');
+            leaf.className = 'sakura-leaf';
+            
+            const size = Math.random() * 10 + 15;
+            leaf.style.width = size + 'px';
+            leaf.style.height = size + 'px';
+            
+            const xPos = Math.random() * 100;
+            leaf.style.left = xPos + '%';
+            
+            const duration = Math.random() * 8 + 8;
+            leaf.style.animationDuration = duration + 's';
+            
+            const txVariation = Math.random() * 200 - 100;
+            leaf.style.setProperty('--tx', txVariation + 'px');
+            
+            const opacity = Math.random() * 0.3 + 0.5;
+            leaf.style.opacity = opacity;
+            
+            sakuraContainer.appendChild(leaf);
+            
+            setTimeout(() => leaf.remove(), duration * 1000);
+        }
+
+        setInterval(() => {
+            createSakuraLeaf();
+        }, Math.random() * 300 + 500);
+
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => createSakuraLeaf(), i * 200);
+        }
+    })();
 </script>
 </body>
 </html>
