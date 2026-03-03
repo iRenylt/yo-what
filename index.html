@@ -6,15 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Footage Archive</title>
-    <link rel="icon" href="https://i.imgur.com/vBqkyX1.png" type="image/png">
+    <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ffffff;
-            --accent: #ff80ab;
-            --accent-light: #ffb7d5;
-            --accent-dark: #ff4081;
+            --accent: #9a9aaa;
+            --accent-light: #d8d8e8;
+            --accent-dark: #6a6a7a;
             --bg: #050505;
             --card-bg: rgba(20, 20, 25, 0.7);
             --card-bg-hover: rgba(25, 25, 35, 0.85);
@@ -22,8 +22,8 @@
             --text-dim: rgba(255, 255, 255, 0.6);
             --glass: rgba(255, 255, 255, 0.05);
             --glass-hover: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 183, 213, 0.15);
-            --border-hover: rgba(255, 183, 213, 0.3);
+            --border: rgba(150, 150, 170, 0.15);
+            --border-hover: rgba(150, 150, 170, 0.3);
             --max-width: 1100px;
             --muted: rgba(255, 255, 255, 0.2);
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -50,16 +50,16 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            gap: 18px;
-            padding: 24px;
+            gap: 16px;
+            padding: 20px;
             max-width: var(--max-width);
             margin: 0 auto;
         }
 
-        .hero .intro { max-width: 900px; text-align: center; color: var(--text-dim); font-size: 1rem; }
-        .cta-buttons { display:flex; gap:12px; align-items:center; justify-content:center; }
+        .hero .intro { max-width: 900px; text-align: center; color: var(--text-dim); font-size: 0.95rem; line-height: 1.5; }
+        .cta-buttons { display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap: wrap; }
         .cta-buttons a, .cta-buttons button { 
-            background: linear-gradient(135deg, rgba(255,183,213,0.1), rgba(255,128,171,0.05)); 
+            background: linear-gradient(135deg, rgba(200,200,220,0.1), rgba(170,170,190,0.05)); 
             border: 1.5px solid var(--border);
             padding:12px 20px; 
             border-radius: 999px; 
@@ -77,7 +77,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(255,183,213,0.2), rgba(255,128,171,0.15));
+            background: linear-gradient(135deg, rgba(200,200,220,0.2), rgba(170,170,190,0.15));
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -93,8 +93,8 @@
         }
 
         /* GRID de tarjetas */
-        .cards-grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
-        @media (min-width: 900px) { .cards-grid { grid-template-columns: 1fr 1fr; } }
+        .cards-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 900px) { .cards-grid { grid-template-columns: 1fr 1fr; gap: 24px; } }
         /* Mantener separación entre tarjetas dentro de la grid */
         .cards-grid .card { margin: 0; }
         
@@ -104,8 +104,8 @@
         .cards-grid .card:nth-child(3),
         .cards-grid .card:nth-child(4) {
             grid-column: 1;
-            padding: 40px 30px;
-            min-height: 320px;
+            padding: 32px 24px;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -115,12 +115,12 @@
             .cards-grid .card:nth-child(1) { grid-column: 1; }
             .cards-grid .card:nth-child(2) { grid-column: 2; grid-row: 1; }
             .cards-grid .card:nth-child(3) { grid-column: 1; }
-            .cards-grid .card:nth-child(4) { grid-column: 1; }
+            .cards-grid .card:nth-child(4) { grid-column: 2; }
         }
 
         /* Sección destacada */
-        .featured { display:flex; gap:20px; align-items:center; flex-direction:row; }
-        .featured .cover { width: 140px; height:140px; border-radius:18px; object-fit:cover; border:1px solid var(--border); }
+        .featured { display:flex; gap:16px; align-items:center; flex-direction:row; }
+        .featured .cover { width: 120px; height:120px; border-radius:16px; object-fit:cover; border:1px solid var(--border); }
         .featured .meta { flex:1; }
         .featured p { color: var(--text-dim); }
 
@@ -177,18 +177,11 @@
         /* Card hover micro-lift */
         .card { transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease; }
         .card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px rgba(0,0,0,0.45); }
-        
-        /* Sin efecto hover para los primeros dos cards principales */
-        .cards-grid .card:nth-child(1):hover,
-        .cards-grid .card:nth-child(2):hover {
-            transform: none;
-            box-shadow: var(--shadow-md);
-        }
 
         /* Card colapsibles */
         .card-toggle-btn { 
             display: none; align-items: center; justify-content: center; width: 36px; height: 36px; 
-            background: rgba(255,183,213,0.08); border: 1.5px solid rgba(255,183,213,0.22);
+            background: rgba(200,200,220,0.08); border: 1.5px solid rgba(200,200,220,0.22);
             border-radius: 50%; cursor: pointer; font-size: 1.3rem; line-height: 1; 
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); position: absolute; top: 18px; right: 20px;
             z-index: 60;
@@ -200,9 +193,9 @@
         }
         
         .card-toggle-btn:hover { 
-            background: rgba(255,183,213,0.15); 
+            background: rgba(200,200,220,0.15); 
             transform: scale(1.12);
-            border-color: rgba(255,183,213,0.5);
+            border-color: rgba(200,200,220,0.5);
             box-shadow: 0 8px 20px rgba(255, 183, 213, 0.12);
         }
         
@@ -268,9 +261,51 @@
             to { background-position: 1000px 1000px; }
         }
 
+        /* 🌸 HOJAS DE SAKURA */
+        .sakura {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .sakura-leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+            animation: sakuraFall linear forwards;
+            filter: drop-shadow(0 0 2px rgba(255, 183, 213, 0.4));
+        }
+
+        .sakura-leaf::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23ffb7d5"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%23ff80ab"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23ffb7d5"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%23ff80ab"/><circle cx="50" cy="50" r="8" fill="%23ffd54f"/></svg>') center / contain no-repeat;
+        }
+
+        @keyframes sakuraFall {
+            0% {
+                top: -20px;
+                opacity: 0.8;
+                transform: translateX(0) rotateZ(0deg);
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+                transform: translateX(var(--tx, 100px)) rotateZ(360deg);
+            }
+        }
+
         /* 🔒 BLOQUEO */
         body.locked { overflow: hidden !important; height: 100vh !important; }
-        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
+        body.locked > *:not(.page-lock):not(.stars):not(.sakura) { display: none !important; }
 
         .page-lock {
             position: fixed;
@@ -345,7 +380,7 @@
         }
 
         .lock-box button {
-            background: linear-gradient(135deg, rgba(255,183,213,0.15), rgba(255,128,171,0.08));
+            background: linear-gradient(135deg, rgba(200,200,220,0.15), rgba(170,170,190,0.08));
             border: 1.5px solid var(--border);
             color: #fff;
             padding: 13px 42px;
@@ -359,7 +394,7 @@
         }
 
         .lock-box button:hover { 
-            background: linear-gradient(135deg, rgba(255,183,213,0.25), rgba(255,128,171,0.15));
+            background: linear-gradient(135deg, rgba(200,200,220,0.25), rgba(170,170,190,0.15));
             border-color: var(--border-hover);
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(255, 183, 213, 0.15);
@@ -376,18 +411,18 @@
         header {
             position: relative;
             z-index: 10;
-            padding: 80px 20px 45px;
+            padding: 70px 20px 35px;
             text-align: center;
         }
 
         header img {
-            width: 85px;
-            height: 85px;
+            width: 92px;
+            height: 92px;
             border-radius: 50%;
             object-fit: cover;
             border: 1.5px solid var(--border);
-            padding: 5px;
-            margin-bottom: 20px;
+            padding: 4px;
+            margin-bottom: 16px;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             animation: floatY 6s ease-in-out infinite;
         }
@@ -399,9 +434,9 @@
         }
 
         .header-text h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 400;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             background: linear-gradient(to bottom, #fff, #888);
             background-clip: text;
             -webkit-background-clip: text;
@@ -410,9 +445,9 @@
         }
 
         .header-text p {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-dim);
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             text-transform: uppercase;
         }
 
@@ -538,7 +573,7 @@
             cursor: pointer;
         }
         .dropdown-content a:hover { 
-            background: rgba(255,183,213,0.08); 
+            background: rgba(200,200,220,0.08); 
             color: #fff;
         }
 
@@ -548,16 +583,16 @@
             z-index: 10;
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 0 20px 80px;
+            padding: 0 20px 60px;
         }
 
         .card {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 30px;
-            backdrop-filter: blur(20px);
-            margin-bottom: 30px;
+            border-radius: 24px;
+            padding: 28px 24px;
+            backdrop-filter: blur(12px);
+            margin-bottom: 0;
             transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
             overflow: visible;
@@ -613,7 +648,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
         }
         
         /* Botones en cards centrados */
@@ -623,7 +658,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
+            width: 100%;
         }
 
         /* Botones reutilizables */
@@ -639,11 +675,11 @@
             border-color: var(--border-hover);
         }
         .btn-primary { 
-            background: linear-gradient(135deg, #ffb7d5, #ff80ab);
+            background: linear-gradient(135deg, #d8d8e8, #9a9aaa);
             color:#1a1a1a; 
             border: none;
             font-weight: 700;
-            box-shadow: 0 8px 20px rgba(255, 128, 171, 0.25);
+            box-shadow: 0 8px 20px rgba(170, 170, 190, 0.25);
         }
         .btn-primary:hover { 
             transform: translateY(-4px);
@@ -654,18 +690,12 @@
             border:1.5px solid rgba(255,255,255,0.08);
         }
         .btn-ghost:hover {
-            border-color: rgba(255,183,213,0.4);
-            background: rgba(255,183,213,0.05);
+            border-color: rgba(200,200,220,0.4);
+            background: rgba(200,200,220,0.05);
         }
 
         /* Acentuar el contenido de la card al pasar el ratón */
         .card:hover .card-content { transform: translateY(-2px); }
-        
-        /* Sin efecto para los primeros dos cards principales */
-        .cards-grid .card:nth-child(1):hover .card-content,
-        .cards-grid .card:nth-child(2):hover .card-content {
-            transform: none;
-        }
 
         /* Estilos específicos para la tarjeta especial 14/02 (no afectan las demás) */
         .card.card-special {
@@ -698,17 +728,17 @@
 
         .card.card-special .card-content p { color: rgba(255,255,255,0.9); }
 
-        .card.card-special .special-cta { display:flex; justify-content:center; margin-top:22px; }
+        .card.card-special .special-cta { display:flex; justify-content:center; margin-top:16px; }
 
         .card.card-special .special-btn {
-            background: linear-gradient(135deg, #ffb7d5, #ff80ab);
+            background: linear-gradient(135deg, #d8d8e8, #9a9aaa);
             color: #1a1a1a;
-            padding: 13px 32px;
-            border-radius: 999px;
+            padding: 11px 28px;
+            border-radius: 25px;
             border: none;
             text-decoration: none;
-            font-weight:700;
-            box-shadow: 0 10px 28px rgba(255, 183, 213, 0.25);
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(200, 200, 220, 0.2);
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: pointer;
         }
@@ -721,43 +751,46 @@
 
         @media (max-width: 600px) {
             header {
-                padding: 60px 20px 40px;
+                padding: 50px 20px 30px;
             }
             .header-text h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
             nav {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-                margin-bottom: 40px;
-            }
-            .dropdown {
-                grid-column: span 1;
+                gap: 6px;
+                margin-bottom: 30px;
             }
             nav a, .nav-item {
-                padding: 12px;
+                padding: 10px 12px;
                 font-size: 0.65rem;
-                border-radius: 15px;
+                border-radius: 14px;
             }
             .card {
-                padding: 20px;
-                border-radius: 20px;
+                padding: 20px 16px;
+                border-radius: 18px;
+            }
+            .cards-grid {
+                gap: 16px;
             }
             .cards-grid .card:nth-child(1),
             .cards-grid .card:nth-child(2) {
-                padding: 25px 20px;
-                min-height: 280px;
+                padding: 22px 16px;
+                min-height: auto;
             }
             .cards-grid .card:nth-child(1) a,
             .cards-grid .card:nth-child(2) a {
-                padding: 12px 24px;
-                font-size: 0.9rem;
+                padding: 11px 24px;
+                font-size: 0.85rem;
             }
             .card-content h2 {
-                font-size: 1.2rem;
+                font-size: 1.15rem;
             }
             .card-content p {
-                font-size: 0.9rem;
+                font-size: 0.88rem;
+            }
+            .card-header .date {
+                font-size: 0.6rem;
+                padding: 5px 12px;
             }
             iframe {
                 height: 80px !important;
@@ -766,126 +799,116 @@
                 display: none !important;
             }
             #flowerCanvas {
-                height: 250px !important;
+                height: 200px !important;
             }
             #flowerCanvas svg {
-                width: 220px !important;
-                height: 220px !important;
+                width: 160px !important;
+                height: 160px !important;
             }
-            /* Mejorar botones en cards para móvil */
             .card a {
-                padding: 12px 20px !important;
-                font-size: 0.9rem !important;
-            }
-            .card-content > div a {
-                width: auto !important;
+                padding: 10px 20px !important;
+                font-size: 0.85rem !important;
             }
         }
 
         /* Mejoras específicas para móviles pequeños y táctiles */
         @media (max-width: 480px) {
-            header { padding: 50px 12px 30px; }
-            header img { width: 72px; height: 72px; }
-            .header-text h1 { font-size: 1.6rem; }
+            header { padding: 45px 16px 25px; }
+            header img { width: 78px; height: 78px; }
+            .header-text h1 { font-size: 1.5rem; }
 
-            nav { gap: 5px; max-width: 100%; padding: 0 8px; }
-            nav a, .nav-item { padding: 12px 14px; font-size: 0.75rem; border-radius: 14px; min-height: 44px; }
+            nav { gap: 5px; max-width: 100%; padding: 0 10px; }
+            nav a, .nav-item { padding: 10px 12px; font-size: 0.65rem; border-radius: 12px; min-height: 40px; }
 
-            .container { padding: 0 12px 50px; }
-            .card { padding: 16px; border-radius: 18px; }
+            .container { padding: 0 14px 40px; }
+            .card { padding: 16px 14px; border-radius: 16px; }
+            .cards-grid { gap: 14px; }
             .cards-grid .card:nth-child(1),
             .cards-grid .card:nth-child(2) {
-                padding: 20px 16px;
+                padding: 18px 14px;
                 min-height: auto;
             }
             .cards-grid .card:nth-child(1) a,
             .cards-grid .card:nth-child(2) a {
                 padding: 10px 20px;
-                font-size: 0.85rem;
-                width: 100%;
-                text-align: center;
+                font-size: 0.82rem;
             }
             .cards-grid .card:nth-child(1) h2,
             .cards-grid .card:nth-child(2) h2 {
-                font-size: 1.6rem;
+                font-size: 1.1rem;
             }
             .cards-grid .card:nth-child(1) p,
             .cards-grid .card:nth-child(2) p {
-                font-size: 0.95rem;
+                font-size: 0.88rem;
             }
-            .card-toggle-btn { width: 28px; height: 28px; top: 16px; right: 18px; font-size: 1.1rem; line-height: 1; }
-            .card-content h2 { font-size: 1.05rem; }
-            .card-content p { font-size: 0.95rem; line-height: 1.5; }
+            .card-toggle-btn { width: 28px; height: 28px; top: 14px; right: 14px; font-size: 1rem; }
+            .card-content h2 { font-size: 1rem; }
+            .card-content p { font-size: 0.88rem; line-height: 1.5; }
+            .card-header .date { font-size: 0.58rem; padding: 4px 10px; }
 
-            /* Iframes embebidos se adaptan mejor en alto según pantalla */
-            iframe { height: clamp(110px, 20vh, 160px); }
+            iframe { height: clamp(100px, 18vh, 140px); }
 
-            /* Lock overlay más compacta en móviles */
-            .lock-box { padding: 20px; width: 92%; max-width: 340px; border-radius: 16px; }
-            .lock-box input { padding: 12px; font-size: 0.95rem; border-radius: 12px; }
-            .lock-box button { padding: 10px 26px; font-size: 0.85rem; }
+            .lock-box { padding: 20px; width: 90%; max-width: 320px; border-radius: 16px; }
+            .lock-box input { padding: 11px; font-size: 0.95rem; border-radius: 12px; }
+            .lock-box button { padding: 10px 24px; font-size: 0.8rem; }
 
-            /* Dropdown en móviles se comporta como bloque (tocar para desplegar) */
             .dropdown-content { position: static; display: none; width: 100%; flex-direction: column; box-shadow: none; transform: none; }
             .dropdown.active .dropdown-content { display: flex; position: relative; top: 0; left: 0; }
 
-            /* SVG de flor más pequeño y centrado */
-            #flowerCanvas { height: 200px !important; width: 100% !important; overflow: hidden; }
-            #flowerCanvas svg { width: 180px !important; height: 180px !important; }
+            #flowerCanvas { height: 180px !important; width: 100% !important; overflow: hidden; }
+            #flowerCanvas svg { width: 140px !important; height: 140px !important; }
 
-            /* Imágenes dentro de cards mejor contenidas */
-            .card img { max-height: 260px; object-fit: cover; }
+            .card img { max-height: 240px; object-fit: cover; }
             
-            /* Botones en todas las cards en móvil */
             .card a {
-                padding: 10px 16px !important;
-                font-size: 0.85rem !important;
+                padding: 9px 16px !important;
+                font-size: 0.82rem !important;
             }
             .card-content > div a {
-                width: 100% !important;
+                width: auto !important;
                 text-align: center !important;
             }
 
-            /* Reducir ruido del fondo estelar en móvil para rendimiento */
             .stars::after { opacity: 0.08; }
         }
         .card:hover {
-            border-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 183, 213, 0.2);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.5);
         }
 
         .card-header {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 18px;
             text-align: center;
         }
 
         .card-header .date {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #fff;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 5px 15px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 6px 14px;
+            border-radius: 18px;
             border: 1px solid var(--border);
         }
 
         .card-content h2 {
-            font-size: 1.4rem;
-            font-weight: 400;
-            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 14px;
             color: #fff;
             text-align: center;
         }
 
         .card-content p {
             color: var(--text-dim);
-            font-size: 1rem;
-            line-height: 1.8;
-            font-style: italic;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-style: normal;
         }
         
         /* Estilos para los botones dentro de cards */
@@ -893,6 +916,7 @@
             display: inline-block !important;
             max-width: 100%;
             word-break: break-word;
+            margin-bottom: 6px;
         }
         
         /* Estilos especiales para los primeros dos cards principales */
@@ -900,17 +924,17 @@
         .cards-grid .card:nth-child(2) .card-content {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             flex: 1;
         }
         
         .cards-grid .card:nth-child(1) .card-content p,
         .cards-grid .card:nth-child(2) .card-content p {
-            font-size: 1.05rem;
-            margin-bottom: 30px;
-            line-height: 1.7;
+            font-size: 0.98rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
             font-style: normal;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.85);
         }
         
         .cards-grid .card:nth-child(1) a,
@@ -920,16 +944,16 @@
             display: inline-block !important;
             background: #ffffff;
             color: #050505;
-            padding: 14px 32px;
-            border-radius: 30px;
+            padding: 12px 28px;
+            border-radius: 25px;
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 600;
             transition: all 0.3s ease;
             text-transform: initial;
             letter-spacing: 0;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             width: auto;
-            margin: 0 auto;
+            margin: 6px auto 0;
         }
         
         .cards-grid .card:nth-child(1) a:hover,
@@ -970,11 +994,11 @@
         footer {
             position: relative;
             z-index: 10;
-            padding: 40px 20px;
+            padding: 30px 20px;
             text-align: center;
             color: var(--text-dim);
-            font-size: 0.6rem;
-            letter-spacing: 3px;
+            font-size: 0.55rem;
+            letter-spacing: 2px;
             background: linear-gradient(to bottom, transparent, rgba(5, 5, 5, 0.8));
             margin-top: auto;
             width: 100%;
@@ -1008,7 +1032,7 @@
 
         /* 🎁 SECRETOS ESTILOS */
         .secret-word { cursor: pointer; position: relative; transition: all 0.3s; }
-        .secret-word:hover { color: #ffb7d5; text-shadow: 0 0 10px rgba(255, 183, 213, 0.5); }
+        .secret-word:hover, .secret-word.active { color: #d8d8e8; text-shadow: 0 0 10px rgba(200, 200, 220, 0.5); }
 
         .secret-modal { 
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
@@ -1033,6 +1057,69 @@
         .secret-button:hover { background: #fff; color: #000; }
 
         .konami-sequence { position: fixed; bottom: 80px; right: 20px; background: rgba(255, 183, 213, 0.9); color: #000; padding: 15px 25px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; animation: slideUp 0.4s ease; z-index: 5000; }
+    
+        /* 📅 ESTILOS PARA CARTAS POR AÑO */
+        .cartas-container { width: 100%; }
+        
+        .year-toggle {
+            background: linear-gradient(135deg, rgba(200,200,220,0.15), rgba(170,170,190,0.1)) !important;
+            border: 1.5px solid rgba(200,200,220,0.3) !important;
+            color: #d8d8e8 !important;
+            padding: 14px 20px !important;
+            border-radius: 20px !important;
+            font-weight: 700 !important;
+            font-size: 1rem !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            width: 100% !important;
+            text-align: left !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+        
+        .year-toggle:hover {
+            border-color: rgba(200,200,220,0.5) !important;
+            background: linear-gradient(135deg, rgba(200,200,220,0.2), rgba(170,170,190,0.15)) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 20px rgba(200, 200, 220, 0.15) !important;
+        }
+        
+        .year-toggle:active {
+            transform: translationY(0) !important;
+        }
+        
+        .year-indicator {
+            transition: transform 0.3s ease !important;
+            display: inline-block !important;
+        }
+        
+        .year-content {
+            flex-direction: column !important;
+            gap: 10px !important;
+            animation: slideDown 0.3s ease !important;
+        }
+        
+        .year-content a {
+            transition: all 0.3s ease !important;
+        }
+        
+        .year-content a:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        @media (max-width: 768px) {
+            .year-toggle {
+                padding: 12px 16px !important;
+                font-size: 0.95rem !important;
+            }
+            
+            .year-content a {
+                padding: 10px 16px !important;
+                font-size: 0.9rem !important;
+            }
+        }
     </style>
     <style>
         /* Visual cue for locked links */
@@ -1044,11 +1131,12 @@
 <body style="background:#050505;color:#fff;">
 
 <div class="stars"></div>
+<div class="sakura" id="sakura"></div>
 
     <div id="pageLock" class="page-lock">
         <div class="lock-box">
             <h2 id="lockPhrase"></h2>
-            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
             <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <button onclick="unlockPage()">Abrir Corazón</button>
             <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
@@ -1098,47 +1186,66 @@
 
             <div class="card">
                 <div class="card-header">
-                    <span class="date">DESCUBRIMIENTO</span>
+                    <span class="date">Actualizado el: 03/03/26</span>
                 </div>
                 <div class="card-content">
                     <h2>Registros escritos</h2>
                     <p>Archivo digital de nuestra historia compartida.</p>
-                    <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
-                        <a href="historia.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Explorar Línea de tiempo</a>
+                    <div style="margin-top: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+                        <a href="historia.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">Explorar Línea de tiempo</a>
+                    <a href="comentarios.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">Explorar comentario más reciente</a>
                     </div>
                 </div>
             </div>
 <!-- card 2 -->
             <div class="card">
                 <div class="card-header">
-                    <span class="date">DESCUBRIMIENTO</span>
+                    <span class="date">Actualizado el: 01/03/26</span>
                 </div>
                 <div class="card-content">
                     <h2>Registros especiales</h2>
                     <p>Cartas con significado memorable a pesar de no ser escritas físicamente, tienen mi amor y cariño para ti.</p>
-                    <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
-                        <a href="carta1.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Carta 09/10/25 ❤️</a>
-                        <a href="carta7.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Carta 09/01/26 ❤️</a>
-                        <a href="carta8.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Carta 09/02/26 ❤️</a>
-                        <a href="" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Carta 09/03/26 💖</a>
+                    <div class="cartas-container" style="margin-top: 24px; display: flex; flex-direction: column; gap: 12px; width: 100%;">
+                        
+                        <!-- Sección 2025 -->
+                        <button class="year-toggle" data-year="2025" onclick="toggleYear(this)">
+                            <span>📅 Cartas 2025</span>
+                            <span class="year-indicator">▼</span>
+                        </button>
+                        <div class="year-content" data-year="2025" style="display: none; flex-direction: column; gap: 10px; animation: slideDown 0.3s ease;">
+                            <a href="carta1.html" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem;">Carta 09/10/25 ❤️</a>
+                        </div>
+
+                        <!-- Sección 2026 -->
+                        <button class="year-toggle" data-year="2026" onclick="toggleYear(this)">
+                            <span>📅 Cartas 2026</span>
+                            <span class="year-indicator">▼</span>
+                        </button>
+                        <div class="year-content" data-year="2026" style="display: none; flex-direction: column; gap: 10px; animation: slideDown 0.3s ease;">
+                            <a href="carta2.html" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem;">Carta 09/01/26 ❤️</a>
+                            <a href="carta3.html" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem;">Carta 09/02/26 ❤️</a>
+                            <a href="" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem; cursor: not-allowed; opacity: 0.6;">Carta 09/03/26 💖</a>
+                            <a href="" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem; cursor: not-allowed; opacity: 0.6;">Carta 09/04/26 ❤️</a>
+                        </div>
+
                     </div>
                 </div>
             </div>
 <!-- card 3 -->
             <div class="card">
                 <div class="card-header">
-                    <span class="date">DESCUBRIMIENTO</span>
+                    <span class="date">Actualizado el: 03/03/26</span>
                 </div>
                 <div class="card-content">
                     <h2>Registros visuales</h2>
                     <p>Cada archivo es un momento preservado, esperando ser revivido.</p>
-                    <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
-                        <a href="recuerdos.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">Explorar Archivos Visuales</a>
+                    <div style="margin-top: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+                        <a href="recuerdos.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">Explorar Archivos Visuales</a>
+                        <a href="actualizaciones.html" style="display: inline-block; background: #ffffff; color: #050505; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">Explorar Actualizaciones</a>
                     </div>
                 </div>
             </div>
 
-        <!-- 🌸 SECCIÓN DE LA FLOR -->
         <div class="card card-flor">
             <div class="card-header">
                 <span class="date">Especial para ti</span>
@@ -1148,7 +1255,7 @@
                 <p style="font-style: italic;">Presiona el botón para ver algo bonito ❤️</p>
 
                 <div id="flowerCanvas" style="display: none;">
-                    <svg viewBox="0 0 200 200" style="width: 100%; max-width: 250px; height: auto; overflow: hidden;">
+                    <svg viewBox="0 0 200 200" style="width: 100%; max-width: 220px; height: auto; overflow: hidden;">
                         <!-- Stem -->
                         <path id="stem" d="M100 200 L100 100" stroke="#2d5a27" stroke-width="4" fill="none" stroke-dasharray="100" stroke-dashoffset="100">
                             <animate id="stemAnim" attributeName="stroke-dashoffset" from="100" to="0" dur="2s" fill="freeze" begin="indefinite" />
@@ -1177,7 +1284,7 @@
                     </svg>
                 </div>
 
-                <button id="runFlower" onclick="startFlower()" style="display: inline-block; background: #ffffff; color: #050505; padding: 14px 32px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease; border: none; cursor: pointer; margin-top: 20px;">Iniciar</button>
+                <button id="runFlower" onclick="startFlower()" style="display: inline-block; background: #ffffff; color: #050505; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; margin-top: 18px;">Iniciar</button>
             </div>
         </div>
         </div>
@@ -1186,22 +1293,22 @@
 
 
 <footer>
-    <p>// FOOTAGE ARCHIVE 2025-2026 //</p>
+    <p>Footage Archive 2025-2026 · Construido con amor 💕</p>
 </footer>
 
 <script src="lock.js"></script>
 <script>
     // Bloqueo de carta8 hasta el 9 de febrero de 2026
     document.addEventListener('DOMContentLoaded', function() {
-        const carta8 = document.getElementById('nav-carta8');
-        if (carta8) {
-            carta8.addEventListener('click', function(e) {
-                // Fecha de desbloqueo: 9 de febrero de 2026 (año, mes-1, día)
-                const unlockDate = new Date(2026, 1, 9); // Mes es 0-indexado
+        const carta4 = document.getElementById('nav-carta4');
+        if (carta4) {
+            carta4.addEventListener('click', function(e) {
+                // Fecha de desbloqueo: 9 de //// de 2026 (año, mes-1, día)
+                const unlockDate = new Date(2026, 3, 9); // Mes es 0-indexado
                 const now = new Date();
                 if (now < unlockDate) {
                     e.preventDefault();
-                    alert('Esta carta estará disponible el 9 de febrero de 2026.');
+                    alert('Esta carta estará disponible el 9 de marzo de 2026. ❤️');
                 }
             });
         }
@@ -1371,20 +1478,43 @@
     // SECRETO 3: Doble click en el footer - REMOVIDO, footer limpio
     // (sin eventos de secreto)
 
-    // SECRETO 4: Presionar "Footage Archive" en el intro
+    // SECRETO 4 y 6: Presionar "Footage Archive" o "cariño" en el intro
     document.addEventListener('DOMContentLoaded', () => {
         const intro = document.querySelector('.hero .intro');
         if (intro) {
-            const text = intro.innerHTML;
-            intro.innerHTML = text.replace(/Footage Archive/g, '<span class="secret-word">Footage Archive</span>');
+            let text = intro.innerHTML;
+            // Hacer ambos reemplazos en una sola pasada
+            text = text.replace(/Footage Archive/g, '<span class="secret-word" data-secret="footage">Footage Archive</span>');
+            text = text.replace(/cariño/g, '<span class="secret-word" data-secret="carino">cariño</span>');
+            intro.innerHTML = text;
 
             document.querySelectorAll('.secret-word').forEach(word => {
-                word.addEventListener('click', () => {
-                    if (!secrets.revealed.has('footage-archive-click')) {
-                        showSecret('El Origen', 'Footage Archive es mi forma de estar completamente presente contigo, sin guardar nada, sin filtros. Es amor en código.');
-                        secrets.revealed.add('footage-archive-click');
-                    }
-                });
+                const secretType = word.getAttribute('data-secret');
+                let handleActivation;
+                
+                if (secretType === 'footage') {
+                    handleActivation = () => {
+                        if (!secrets.revealed.has('footage-archive-click')) {
+                            showSecret('El Origen', 'Footage Archive es mi forma de estar completamente presente contigo, sin guardar nada, sin filtros. Es amor en código.');
+                            secrets.revealed.add('footage-archive-click');
+                        }
+                        word.classList.add('active');
+                        setTimeout(() => word.classList.remove('active'), 300);
+                    };
+                } else if (secretType === 'carino') {
+                    handleActivation = () => {
+                        if (!secrets.revealed.has('carino-click')) {
+                            showSecret('Cuidado', 'Eres mi cariño. Mi forma de cuidarte es a través de gestos como este: un archivo lleno de secretos, de detalles, de ti y de mí.');
+                            secrets.revealed.add('carino-click');
+                        }
+                        word.classList.add('active');
+                        setTimeout(() => word.classList.remove('active'), 300);
+                    };
+                }
+                
+                if (handleActivation) {
+                    word.addEventListener('click', handleActivation);
+                }
             });
         }
     });
@@ -1404,25 +1534,6 @@
             setTimeout(() => greetingClicks = 0, 5000);
         });
     }
-
-    // SECRETO 6: Presionar la palabra "cariño" en intro
-    document.addEventListener('DOMContentLoaded', () => {
-        const intro = document.querySelector('.hero .intro');
-        if (intro) {
-            intro.innerHTML = intro.innerHTML.replace(/cariño/g, '<span class="secret-word">cariño</span>');
-
-            document.querySelectorAll('.secret-word').forEach(word => {
-                if (word.textContent === 'cariño') {
-                    word.addEventListener('click', () => {
-                        if (!secrets.revealed.has('carino-click')) {
-                            showSecret('Cuidado', 'Eres mi cariño. Mi forma de cuidarte es a través de gestos como este: un archivo lleno de secretos, de detalles, de ti y de mí.');
-                            secrets.revealed.add('carino-click');
-                        }
-                    });
-                }
-            });
-        }
-    });
 
     // SECRETO 7: Click en primer card header
     document.addEventListener('DOMContentLoaded', () => {
@@ -1602,6 +1713,26 @@
         }
     });
 
+    // SISTEMA DE TOGGLE PARA CARTAS POR AÑO
+    function toggleYear(button) {
+        const year = button.getAttribute('data-year');
+        const content = document.querySelector(`.year-content[data-year="${year}"]`);
+        const indicator = button.querySelector('.year-indicator');
+        
+        if (content) {
+            const isHidden = content.style.display === 'none';
+            content.style.display = isHidden ? 'flex' : 'none';
+            indicator.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+            indicator.style.transition = 'transform 0.3s ease';
+            
+            // Animación suave
+            button.style.borderColor = isHidden ? 'rgba(255,183,213,0.5)' : 'rgba(255,183,213,0.3)';
+        }
+    }
+
+    // Inicializar cartas cerradas por defecto
+    // El usuario las abrirá manualmente presionando los botones
+
     // Frases aleatorias para la pantalla de bloqueo
     const phrases = [
         "UN ARCHIVO SECRETO",
@@ -1749,6 +1880,53 @@
             if (!el.classList.contains('fade-in') && !el.classList.contains('fade-up')) el.classList.add('fade-up');
             observer.observe(el);
         });
+    })();
+
+    // 🌸 SISTEMA DE HOJAS DE SAKURA CAYENDO
+    (function() {
+        const sakuraContainer = document.getElementById('sakura');
+        if (!sakuraContainer) return;
+
+        function createSakuraLeaf() {
+            const leaf = document.createElement('div');
+            leaf.className = 'sakura-leaf';
+            
+            // Tamaño aleatorio entre 15-25px
+            const size = Math.random() * 10 + 15;
+            leaf.style.width = size + 'px';
+            leaf.style.height = size + 'px';
+            
+            // Posición horizontal aleatoria
+            const xPos = Math.random() * 100;
+            leaf.style.left = xPos + '%';
+            
+            // Velocidad aleatoria entre 8-16 segundos
+            const duration = Math.random() * 8 + 8;
+            leaf.style.animationDuration = duration + 's';
+            
+            // Desplazamiento horizontal aleatorio
+            const txVariation = Math.random() * 200 - 100;
+            leaf.style.setProperty('--tx', txVariation + 'px');
+            
+            // Opacidad aleatoria
+            const opacity = Math.random() * 0.3 + 0.5;
+            leaf.style.opacity = opacity;
+            
+            sakuraContainer.appendChild(leaf);
+            
+            // Eliminar la hoja después de que termine la animación
+            setTimeout(() => leaf.remove(), duration * 1000);
+        }
+
+        // Crear hojas cada 500-800ms
+        setInterval(() => {
+            createSakuraLeaf();
+        }, Math.random() * 300 + 500);
+
+        // Crear algunas hojas iniciales
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => createSakuraLeaf(), i * 200);
+        }
     })();
 
     // Mostrar resumen de secretos encontrados
