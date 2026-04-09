@@ -224,7 +224,7 @@
             max-width: 350px;
             height: auto;
             overflow: visible;
-            display: flex;
+            display: none !important;
             justify-content: center;
             align-items: center;
             margin: 4px auto;
@@ -1126,6 +1126,24 @@
         .locked-until-date { opacity: 0.6; cursor: not-allowed !important; pointer-events: auto; }
         .locked-until-date:hover { transform: none; }
     </style>
+    <style>
+        /* Efecto de Respiración para Carta Nueva */
+        @keyframes breathingBorder {
+            0%, 100% {
+                border-color: rgba(255, 215, 0, 0.3);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.2), var(--shadow-md);
+            }
+            50% {
+                border-color: rgba(255, 215, 0, 0.8);
+                box-shadow: 0 0 40px rgba(255, 215, 0, 0.5), var(--shadow-md);
+            }
+        }
+        
+        .card.breathing {
+            animation: breathingBorder 2s ease-in-out infinite;
+            border-color: rgba(255, 215, 0, 0.3) !important;
+        }
+    </style>
 </head>
 
 <body style="background:#050505;color:#fff;">
@@ -1224,9 +1242,11 @@
                         <div class="year-content" data-year="2026" style="display: none; flex-direction: column; gap: 10px; animation: slideDown 0.3s ease;">
                             <a href="carta2.html" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem;">Carta 09/01/26 ❤️</a>
                             <a href="carta3.html" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem;">Carta 09/02/26 ❤️</a>
-                            <a href="carta4.html" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem; cursor: not-allowed; opacity: 0.6;">Carta 09/03/26 💖</a>
-                            <a href="" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem; cursor: not-allowed; opacity: 0.6;">Carta 09/04/26 ❤️</a>
-                        </div>
+                            <a href="carta4.html" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem;">Carta 09/03/26 ❤️</a>
+                            <a href="carta5.html" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem;">Carta 09/04/26 💖</a>
+                        <a href="" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem;">Carta 09/05/26 ❤️</a>
+                        <a href="" style="display: block; background: #ffffff; color: #050505; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem;">Carta 09/06/26 💜</a>
+                    </div>
 
                     </div>
                 </div>
@@ -1854,7 +1874,7 @@
     function startFlower() {
         const canvas = document.getElementById('flowerCanvas');
         const btn = document.getElementById('runFlower');
-        canvas.style.display = 'flex';
+        canvas.style.setProperty('display', 'flex', 'important');
         btn.style.display = 'none';
 
         setTimeout(() => {
@@ -1943,6 +1963,20 @@
                 btn.dataset.enhanced = 'true';
             }
         });
+    });
+
+    // 🎁 EFECTO DE RESPIRACIÓN PARA CARTA NUEVA (solo el 9 de abril de 2026)
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const isApril9 = today.getDate() === 9 && today.getMonth() === 3 && today.getFullYear() === 2026; // Mes 3 = abril (0-indexado)
+        
+        if (isApril9) {
+            const cards = document.querySelectorAll('.cards-grid .card');
+            if (cards.length >= 2) {
+                // Agregar clase "breathing" a la segunda card (index 1)
+                cards[1].classList.add('breathing');
+            }
+        }
     });
 </script>
 </body>
