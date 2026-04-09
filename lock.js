@@ -6,8 +6,8 @@ const PIN_CORRECTO = "0906";
 (function ensureInitialSplashPriority() {
     try {
         const css = `
-        /* Oculta todo menos #initialSplash y #pageLock durante la inicialización */
-        .initializing > *:not(#initialSplash):not(#pageLock) { visibility: hidden !important; }
+        /* Oculta todo menos #initialSplash, #pageLock, #devModal y .sakura durante la inicialización */
+        .initializing > *:not(#initialSplash):not(#pageLock):not(#devModal):not(.sakura) { visibility: hidden !important; }
         html.initializing, body.initializing { background: #000 !important; }
         `;
 
@@ -339,8 +339,20 @@ function showWelcomeAnimation() {
 
             setTimeout(() => {
                 pageLock.style.display = 'none';
+                pageLock.style.visibility = 'hidden';
+                pageLock.style.pointerEvents = 'none';
                 pageLock.classList.remove('force-solid');
                 document.body.classList.remove("locked");
+                document.body.classList.remove("initializing");
+                
+                // Restaurar visibilidad de todos los elementos
+                const allElements = document.body.querySelectorAll('*');
+                allElements.forEach(el => {
+                    if (el.id !== 'pageLock' && el.id !== 'devModal' && !el.id.startsWith('initialSplash')) {
+                        el.style.visibility = 'visible';
+                    }
+                });
+                
                 if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
                 actualizarUltimaActividad();
                 loadAvatarFromDB(); // 👈 AQUI TAMBIÉN
@@ -365,6 +377,24 @@ function unlockPage() {
         if (isIndex) {
             showWelcomeAnimation();
         } else {
+            // Remover clases de bloqueo
+            document.body.classList.remove('locked');
+            document.body.classList.remove('initializing');
+            
+            // Remover el CSS de initializing si existe
+            const initializingStyle = document.getElementById('initializing-style');
+            if (initializingStyle && initializingStyle.parentNode) {
+                initializingStyle.parentNode.removeChild(initializingStyle);
+            }
+            
+            // Restaurar visibilidad de todos los elementos
+            const allElements = document.body.querySelectorAll('*');
+            allElements.forEach(el => {
+                if (el.id !== 'pageLock' && el.id !== 'devModal' && !el.id.startsWith('initialSplash')) {
+                    el.style.visibility = 'visible';
+                }
+            });
+            
             const pageLock = document.getElementById("pageLock");
             if (pageLock) {
                 // animación de salida suave
@@ -373,6 +403,8 @@ function unlockPage() {
                     pageLock.classList.remove('active');
                     pageLock.classList.remove('unlocking');
                     pageLock.style.display = 'none';
+                    pageLock.style.visibility = 'hidden';
+                    pageLock.style.pointerEvents = 'none';
                 }, 420);
             }
             document.body.classList.remove("locked");
