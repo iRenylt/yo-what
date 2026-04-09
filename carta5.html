@@ -1,1 +1,1674 @@
+<!DOCTYPE html>
+<html lang="es" style="background:#050505">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#050505">
+	<title>Footage Archive</title>
+	<link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600,700&display=swap" rel="stylesheet">
+	<style>
+		:root{
+			--bg:#050505;
+			--card-bg:rgba(20,20,25,0.7);
+			--card-bg-hover:rgba(25,25,35,0.85);
+			--border:rgba(150,150,170,0.15);
+			--border-hover:rgba(150,150,170,0.3);
+			--text:#fff;
+			--muted:rgba(255,255,255,0.6);
+			--accent:#ff96d4;
+			--accent-light:#ffc0e0;
+			--text-dim:rgba(255,255,255,0.6);
+			--glass:rgba(255,255,255,0.05);
+			--glass-hover:rgba(255,255,255,0.08);
+			--shadow-sm:0 4px 12px rgba(0,0,0,0.3);
+			--shadow-md:0 12px 30px rgba(0,0,0,0.45);
+			--shadow-lg:0 30px 60px rgba(0,0,0,0.6);
+			--pink-primary:#ff80ab;
+			--pink-secondary:#ffb7d5;
+			--glow-pink: 0 0 20px rgba(255,128,171,0.3)
+		}
+		*{box-sizing:border-box;margin:0;padding:0}
+		body{font-family:'Inter',system-ui,Segoe UI,Roboto,'Playfair Display',serif;background:var(--bg);color:var(--text);min-height:100vh}
+		.stars{position:fixed;inset:0;background:radial-gradient(circle at center,#111111 0%, #050505 100%);z-index:0}
+
+		.stars::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: url('https://www.transparenttextures.com/patterns/stardust.png');
+			opacity: 0.15;
+			animation: starsMove 150s linear infinite;
+		}
+
+		@keyframes starsMove {
+			from { background-position: 0 0; }
+			to { background-position: 1000px 1000px; }
+		}
+
+		.page-lock {
+			position: fixed;
+			inset: 0;
+			background: #000;
+			z-index: 99999;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			backdrop-filter: blur(20px);
+		}
+
+		.lock-box {
+			text-align: center;
+			padding: 40px;
+			width: 90%;
+			max-width: 420px;
+			animation: lockFadeIn 1s ease-out;
+		}
+
+		@keyframes lockFadeIn {
+			from { opacity: 0; transform: scale(0.9); }
+			to { opacity: 1; transform: scale(1); }
+		}
+
+		.lock-box h2 { 
+			font-weight: 400; 
+			margin-bottom: 12px; 
+			letter-spacing: 4px; 
+			color: #fff;
+			text-shadow: 0 0 30px rgba(255, 128, 171, 0.3);
+			font-size: 1.5rem;
+		}
+
+		.lock-subtitle {
+			color: var(--pink-secondary);
+			font-size: 0.75rem;
+			letter-spacing: 3px;
+			margin-bottom: 25px;
+			text-transform: uppercase;
+		}
+
+		.lock-box input, .lock-box textarea {
+			background: rgba(255, 255, 255, 0.05);
+			border: 1.5px solid var(--pink-secondary);
+			color: #fff;
+			padding: 15px 16px;
+			border-radius: 14px;
+			outline: none;
+			text-align: center;
+			font-size: 1rem;
+			margin-bottom: 16px;
+			width: 100%;
+			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+			font-family: inherit;
+		}
+
+		.lock-box input::placeholder, .lock-box textarea::placeholder {
+			color: rgba(255,255,255,0.4);
+		}
+
+		.lock-box input:focus, .lock-box textarea:focus { 
+			border-color: var(--pink-primary);
+			background: rgba(255, 255, 255, 0.08);
+			box-shadow: 0 0 20px rgba(255, 128, 171, 0.2);
+		}
+
+		.lock-box button {
+			background: linear-gradient(135deg, rgba(255,128,171,0.2), rgba(255,183,213,0.1));
+			border: 1.5px solid var(--pink-primary);
+			color: #fff;
+			padding: 13px 42px;
+			border-radius: 50px;
+			cursor: pointer;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			font-size: 0.8rem;
+			font-weight: 600;
+			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+			width: 100%;
+		}
+
+		.lock-box button:hover { 
+			background: linear-gradient(135deg, rgba(255,128,171,0.3), rgba(255,183,213,0.15));
+			border-color: var(--pink-secondary);
+			transform: translateY(-3px);
+			box-shadow: var(--glow-pink);
+		}
+
+		.lock-box button:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+
+		.lock-error {
+			margin-top: 12px;
+			color: #ff6b6b;
+			font-size: 0.8rem;
+			display: none;
+			letter-spacing: 1px;
+		}
+
+		.game-success {
+			margin-top: 12px;
+			color: #4ade80;
+			font-size: 0.8rem;
+			display: none;
+			letter-spacing: 1px;
+			animation: successPulse 0.6s;
+		}
+
+		@keyframes successPulse {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.7; }
+		}
+
+		.minigame-container {
+			display: none;
+			flex-direction: column;
+			gap: 12px;
+			animation: slideIn 0.4s ease-out;
+		}
+
+		.minigame-container.active {
+			display: flex;
+		}
+
+		@keyframes slideIn {
+			from { opacity: 0; transform: translateY(10px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		header{position:relative;z-index:10;padding:36px 18px 8px;text-align:center}
+		header img{width:92px;height:92px;border-radius:50%;object-fit:cover;border:1.5px solid var(--pink-primary); box-shadow: var(--glow-pink); animation: floatY 6s ease-in-out infinite; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 200ms ease; }
+		
+		@keyframes floatY {
+			0%, 100% { transform: translateY(0); }
+			50% { transform: translateY(-6px); }
+		}
+		
+		header img:hover { transform: scale(1.05); border-color: var(--pink-secondary); }
+		
+		.title{font-family:'Playfair Display',serif;font-size:2rem;margin-top:12px;background: linear-gradient(135deg, var(--pink-primary), var(--pink-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;}
+		
+		.subtitle{color:var(--muted);letter-spacing:3px;font-size:0.75rem;margin-bottom:18px}
+
+		nav {
+			position: relative;
+			z-index: 1000;
+			display: flex;
+			justify-content: center;
+			gap: 8px;
+			margin: 12px auto 20px;
+			padding: 0 12px;
+		}
+
+		nav a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			background: var(--glass);
+			border: 1.5px solid var(--border);
+			padding: 12px 16px;
+			border-radius: 18px;
+			color: var(--text-dim);
+			text-decoration: none;
+			font-size: 0.8rem;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+			cursor: pointer;
+		}
+
+		nav a:hover { 
+			color: #fff; 
+			border-color: var(--pink-primary);
+			background: rgba(255,128,171,0.08);
+			transform: translateY(-3px);
+			box-shadow: var(--glow-pink);
+		}
+
+		.container{max-width:980px;margin:0 auto;padding:18px;position:relative;z-index:10}
+		.card{
+			background:var(--card-bg);border:1px solid var(--border);border-radius:20px;
+			padding:22px;margin-bottom:20px;backdrop-filter:blur(10px);
+			transition:all 0.35s cubic-bezier(0.23,1,0.32,1);
+			box-shadow:var(--shadow-md);position:relative
+		}
+		.card:hover{
+			transform:translateY(-6px);background:var(--card-bg-hover);
+			border-color:var(--border-hover);box-shadow:var(--shadow-lg)
+		}
+
+		.envelope-wrapper {
+			position: relative;
+			z-index: 10;
+			width: 100%;
+			max-width: 800px;
+			margin: 40px auto;
+			perspective: 1000px;
+			padding: 20px;
+			animation: fadeIn 1.5s ease-out;
+		}
+
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(20px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		.envelope {
+			position: relative;
+			width: 100%;
+			height: 400px;
+			background: linear-gradient(135deg, rgba(255,128,171,0.12), rgba(255,183,213,0.06));
+			border: 1.5px solid var(--pink-primary);
+			border-radius: 24px;
+			cursor: pointer;
+			transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			overflow: hidden;
+			box-shadow: var(--shadow-md);
+			gap: 20px;
+		}
+
+		.envelope::before {
+			content: "Para: Mi Niña Especial";
+			color: var(--text);
+			font-size: 1.4rem;
+			letter-spacing: 6px;
+			text-transform: uppercase;
+			font-weight: 400;
+			opacity: 0.9;
+			transition: all 0.3s ease;
+			background: linear-gradient(135deg, var(--pink-primary), var(--pink-secondary));
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+
+		.envelope:hover {
+			transform: translateY(-8px);
+			border-color: var(--pink-secondary);
+			box-shadow: var(--shadow-lg);
+			background: linear-gradient(135deg, rgba(255,128,171,0.15), rgba(255,183,213,0.08));
+		}
+
+		.envelope .seal {
+			width: 70px;
+			height: 70px;
+			background: linear-gradient(135deg, rgba(255,128,171,0.15), rgba(255,183,213,0.08));
+			border: 1.5px solid var(--pink-secondary);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.8rem;
+			transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+		}
+
+		.envelope:hover .seal {
+			transform: rotate(360deg) scale(1.15);
+			background: rgba(255,128,171,0.25);
+			box-shadow: var(--glow-pink);
+		}
+
+		.letter {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.98);
+			z-index: 2000;
+			display: none;
+			padding: 40px 20px;
+			overflow-y: auto;
+			backdrop-filter: blur(30px);
+		}
+
+		.letter-inner {
+			max-width: 700px;
+			margin: 60px auto;
+			background: linear-gradient(135deg, #fff 0%, #fff5f7 100%);
+			color: #1a1a1a;
+			padding: 80px;
+			border-radius: 2px;
+			box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+			position: relative;
+			transform: translateY(50px);
+			opacity: 0;
+			transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+		}
+
+		.letter.active .letter-inner {
+			transform: translateY(0);
+			opacity: 1;
+		}
+
+		.letter-header {
+			border-bottom: 2px solid var(--pink-secondary);
+			padding-bottom: 20px;
+			margin-bottom: 40px;
+			text-align: right;
+			font-size: 0.9rem;
+			text-transform: uppercase;
+			letter-spacing: 3px;
+			color: var(--pink-primary);
+		}
+
+		.letter-body {
+			font-size: 1.15rem;
+			line-height: 2;
+			font-style: italic;
+			text-align: justify;
+		}
+
+		.letter-body p {
+			margin-bottom: 20px;
+		}
+
+		.letter-footer {
+			margin-top: 60px;
+			text-align: right;
+			border-top: 2px solid var(--pink-secondary);
+			padding-top: 30px;
+		}
+
+		.letter-footer p:last-child {
+			color: var(--pink-primary);
+			font-weight: 600;
+			font-size: 1.5rem;
+		}
+
+		.close-letter {
+			position: fixed;
+			top: 30px;
+			right: 30px;
+			background: transparent;
+			border: 1px solid rgba(255,255,255,0.2);
+			color: #fff;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.2rem;
+			transition: 0.3s;
+			z-index: 2100;
+		}
+
+		.close-letter:hover {
+			background: var(--pink-primary);
+			color: #fff;
+			border-color: var(--pink-primary);
+		}
+
+		.sections-grid {
+			margin: 60px auto 0 auto;
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 30px;
+			max-width: 900px;
+			width: 100%;
+			padding: 0 20px;
+		}
+
+		.section-card {
+			background: var(--glass);
+			border: 1px solid var(--border);
+			border-radius: 30px;
+			padding: 30px;
+			text-align: center;
+			transition: 0.4s;
+			backdrop-filter: blur(10px);
+		}
+
+		.section-card:hover {
+			transform: translateY(-10px);
+			border-color: rgba(255,255,255,0.3);
+			background: rgba(255,255,255,0.05);
+		}
+
+		.section-card img {
+			width: 100%;
+			border-radius: 20px;
+			margin-bottom: 20px;
+			filter: grayscale(0.3);
+			transition: 0.5s;
+		}
+
+		.section-card:hover img {
+			filter: grayscale(0);
+		}
+
+		.section-title {
+			font-size: 0.7rem;
+			color: var(--pink-primary);
+			letter-spacing: 4px;
+			text-transform: uppercase;
+			margin-bottom: 15px;
+			display: block;
+			font-weight: 600;
+		}
+
+		.section-text {
+			font-style: italic;
+			font-size: 1rem;
+			line-height: 1.8;
+			opacity: 0.8;
+		}
+
+		/* 🌸 FLOR INTERACTIVA */
+		.flower-container {
+			text-align: center;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 60px 0 40px 0;
+		}
+
+		.flower-svg {
+			width: 300px;
+			height: 300px;
+			max-width: 100%;
+			filter: drop-shadow(0 0 20px rgba(255, 128, 171, 0.2));
+		}
+
+		.flower-petal {
+			cursor: pointer;
+			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+			filter: drop-shadow(0 0 5px rgba(255, 128, 171, 0.1));
+		}
+
+		.flower-petal:hover {
+			filter: drop-shadow(0 0 15px rgba(255, 128, 171, 0.6));
+			transform: scale(1.1);
+		}
+
+		.flower-petal.revealed {
+			filter: drop-shadow(0 0 20px rgba(255, 128, 171, 0.8));
+		}
+
+		.secret-tooltip {
+			position: absolute;
+			background: rgba(255, 128, 171, 0.95);
+			color: #fff;
+			padding: 12px 16px;
+			border-radius: 12px;
+			font-size: 0.85rem;
+			pointer-events: none;
+			z-index: 3000;
+			animation: tooltipFade 0.4s ease-out;
+			max-width: 200px;
+			text-align: center;
+			box-shadow: 0 8px 24px rgba(255, 128, 171, 0.3);
+		}
+
+		@keyframes tooltipFade {
+			from {
+				opacity: 0;
+				transform: translateY(-10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* 🔐 BOTÓN Y MODAL DE ACCESO DESARROLLADOR */
+		.dev-access-btn {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			background: rgba(255, 128, 171, 0.15);
+			border: 2px solid rgba(255, 128, 171, 0.9);
+			color: rgba(255, 128, 171, 1);
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			cursor: pointer;
+			font-size: 1.3rem;
+			display: flex !important;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+			z-index: 9999999;
+			box-shadow: 0 0 20px rgba(255, 128, 171, 0.5), inset 0 0 10px rgba(255, 128, 171, 0.2);
+			font-weight: bold;
+			pointer-events: auto !important;
+		}
+
+		.dev-access-btn:hover {
+			color: rgba(255, 128, 171, 0.8);
+			border-color: rgba(255, 128, 171, 0.6);
+			background: rgba(255, 128, 171, 0.05);
+			transform: scale(1.1);
+		}
+
+		.dev-modal {
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.95);
+			z-index: 999999999 !important;
+			display: none;
+			align-items: center;
+			justify-content: center;
+			backdrop-filter: blur(10px);
+			animation: fadeIn 0.4s ease-out;
+			pointer-events: auto !important;
+		}
+
+		.dev-modal.active {
+			display: flex;
+		}
+
+		.dev-modal-box {
+			background: rgba(20, 20, 25, 0.95);
+			border: 1.5px solid var(--pink-primary);
+			border-radius: 20px;
+			padding: 40px;
+			width: 90%;
+			max-width: 420px;
+			box-shadow: 0 0 40px rgba(255, 128, 171, 0.3);
+			animation: slideUp 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+		}
+
+		@keyframes slideUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.dev-modal-box h3 {
+			color: var(--pink-primary);
+			font-size: 1.2rem;
+			margin-bottom: 8px;
+			text-align: center;
+			letter-spacing: 2px;
+		}
+
+		.dev-modal-box p {
+			color: var(--muted);
+			font-size: 0.8rem;
+			text-align: center;
+			margin-bottom: 24px;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+		}
+
+		.dev-modal-box input {
+			background: rgba(255, 255, 255, 0.05);
+			border: 1.5px solid var(--pink-secondary);
+			color: #fff;
+			padding: 12px 14px;
+			border-radius: 10px;
+			outline: none;
+			font-size: 0.95rem;
+			margin-bottom: 12px;
+			width: 100%;
+			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+			font-family: inherit;
+		}
+
+		.dev-modal-box input::placeholder {
+			color: rgba(255, 255, 255, 0.3);
+		}
+
+		.dev-modal-box input:focus {
+			border-color: var(--pink-primary);
+			background: rgba(255, 255, 255, 0.08);
+			box-shadow: 0 0 15px rgba(255, 128, 171, 0.2);
+		}
+
+		.dev-modal-buttons {
+			display: flex;
+			gap: 10px;
+			margin-top: 20px;
+		}
+
+		.dev-modal-buttons button {
+			flex: 1;
+			padding: 12px 16px;
+			border-radius: 10px;
+			border: 1.5px solid var(--pink-secondary);
+			background: rgba(255, 128, 171, 0.1);
+			color: #fff;
+			cursor: pointer;
+			font-weight: 600;
+			font-size: 0.85rem;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+		}
+
+		.dev-modal-buttons button:hover {
+			background: rgba(255, 128, 171, 0.2);
+			border-color: var(--pink-primary);
+			transform: translateY(-2px);
+		}
+
+		.dev-modal-buttons button.submit {
+			background: linear-gradient(135deg, rgba(255, 128, 171, 0.3), rgba(255, 183, 213, 0.15));
+			border-color: var(--pink-primary);
+		}
+
+		.dev-modal-buttons button.submit:hover {
+			background: linear-gradient(135deg, rgba(255, 128, 171, 0.4), rgba(255, 183, 213, 0.25));
+			box-shadow: var(--glow-pink);
+		}
+
+		.dev-error {
+			color: #ff6b6b;
+			font-size: 0.75rem;
+			text-align: center;
+			margin-top: 12px;
+			display: none;
+			letter-spacing: 0.5px;
+			animation: shake 0.4s ease;
+		}
+
+		.dev-error.show {
+			display: block;
+		}
+
+		@keyframes shake {
+			0%, 100% { transform: translateX(0); }
+			25% { transform: translateX(-5px); }
+			75% { transform: translateX(5px); }
+		}
+
+		footer{padding:28px;text-align:center;color:var(--muted);font-size:0.8rem}
+
+		/* 🌸 HOJAS DE SAKURA */
+		.sakura {
+			position: fixed;
+			inset: 0;
+			z-index: 1;
+			pointer-events: none;
+			overflow: hidden;
+		}
+
+		.sakura-leaf {
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			opacity: 0.7;
+			animation: sakuraFall linear forwards;
+			filter: drop-shadow(0 0 3px rgba(255, 128, 171, 0.5));
+		}
+
+		.sakura-leaf::before {
+			content: '';
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23ff80ab"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%23ffb7d5"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23ff80ab"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%23ffb7d5"/><circle cx="50" cy="50" r="8" fill="%23ffd54f"/></svg>') center / contain no-repeat;
+		}
+
+		@keyframes sakuraFall {
+			0% {
+				top: -20px;
+				opacity: 0.8;
+				transform: translateX(0) rotateZ(0deg);
+			}
+			50% {
+				opacity: 0.8;
+			}
+			100% {
+				top: 100vh;
+				opacity: 0;
+				transform: translateX(var(--tx, 100px)) rotateZ(360deg);
+			}
+		}
+
+		/* Estilos para minijuegos */
+		.game-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+			margin: 12px 0;
+		}
+
+		.game-btn {
+			padding: 12px;
+			border-radius: 10px;
+			border: 1.5px solid var(--pink-secondary);
+			background: rgba(255,128,171,0.1);
+			color: #fff;
+			cursor: pointer;
+			transition: all 0.2s;
+			font-weight: 600;
+			font-size: 0.9rem;
+		}
+
+		.game-btn:hover {
+			background: rgba(255,128,171,0.2);
+			transform: scale(1.05);
+		}
+
+		.game-btn.active {
+			background: var(--pink-primary);
+			box-shadow: var(--glow-pink);
+		}
+
+		.memory-card {
+			width: 60px;
+			height: 60px;
+			background: linear-gradient(135deg, rgba(255,128,171,0.2), rgba(255,183,213,0.1));
+			border: 1.5px solid var(--pink-secondary);
+			border-radius: 10px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.5rem;
+			transition: all 0.3s;
+			margin: 4px;
+		}
+
+		.memory-card.flipped {
+			background: var(--pink-primary);
+			transform: scale(1.05);
+		}
+
+		.memory-card.matched {
+			opacity: 0.5;
+			cursor: default;
+		}
+
+		.progress-bar {
+			width: 100%;
+			height: 6px;
+			background: rgba(255,255,255,0.1);
+			border-radius: 3px;
+			margin: 8px 0;
+			overflow: hidden;
+		}
+
+		.progress-fill {
+			height: 100%;
+			background: linear-gradient(90deg, var(--pink-primary), var(--pink-secondary));
+			transition: width 0.3s;
+		}
+
+		@media (max-width: 768px) {
+			.lock-box {
+				width: 95%;
+				padding: 30px;
+			}
+			.game-grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 8px;
+			}
+			.memory-card {
+				width: 50px;
+				height: 50px;
+				font-size: 1.2rem;
+			}
+		}
+
+		/* Estilos para el canvas de la flor en carta5 */
+		#flowerCanvas {
+			width: 100%;
+			height: auto;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+		}
+
+		#flowerCanvas .flower-svg {
+			width: 220px;
+			height: 220px;
+			max-width: 100%;
+		}
+	</style>
+</head>
+<body style="background:#050505;color:#fff">
+	<div class="stars"></div>
+	<div class="sakura" id="sakura"></div>
+
+	<!-- 🔐 BOTÓN DE ACCESO DESARROLLADOR (DENTRO DEL PAGE-LOCK) -->
+	<div id="pageLock" class="page-lock" style="display:flex">
+		<button class="dev-access-btn" title="Acceso de Desarrollador">⚙️</button>
+		<div class="lock-box">
+			<h2>✨ SORPRESA ESPECIAL ✨</h2>
+			<p class="lock-subtitle">Para la chica más hermosa</p>
+
+			<!-- MINIJUEGO 1: Pregunta romántica -->
+			<div id="game1" class="minigame-container active">
+				<p style="color: rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:8px">¿En cuántos meses nos conocemos? 💕</p>
+				<input type="number" id="game1Input" placeholder="Número de meses" min="0" max="24">
+				<button onclick="checkGame1()">Siguiente</button>
+				<div id="game1Error" class="lock-error"></div>
+				<div id="game1Success" class="game-success"></div>
+			</div>
+
+
+
+			<!-- MINIJUEGO 3: Puzzle de palabras -->
+			<div id="game3" class="minigame-container">
+				<p style="color: rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:8px">Ordena las palabras para formar una frase 📝</p>
+				<div id="wordPuzzle" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0"></div>
+				<input type="text" id="game3Answer" placeholder="Escribe la respuesta" style="margin-top:12px">
+				<button onclick="checkGame3()">Revelar</button>
+				<div id="game3Error" class="lock-error"></div>
+				<div id="game3Success" class="game-success"></div>
+			</div>
+
+			<!-- MINIJUEGO 4: Quiz de preguntas personales -->
+			<div id="game4" class="minigame-container">
+				<p style="color: rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:8px">Responde: ¿Cómo me dices de cariño? 💗</p>
+				<input type="text" id="game4Input" placeholder="Mi apodo favorito">
+				<button onclick="checkGame4()">Responder</button>
+				<div id="game4Error" class="lock-error"></div>
+				<div id="game4Success" class="game-success"></div>
+			</div>
+
+			<!-- MINIJUEGO 5: Memory Game -->
+			<div id="game5" class="minigame-container">
+				<p style="color: rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:8px">Encontra las parejas 💝</p>
+				<div id="memoryGrid" style="display:flex;flex-wrap:wrap;justify-content:center;margin:12px 0"></div>
+				<div id="game5Status" style="color: rgba(255,255,255,0.6);font-size:0.8rem;text-align:center;margin-top:8px"></div>
+				<div id="game5Success" class="game-success"></div>
+			</div>
+
+
+
+			<!-- MINIJUEGO 7: Secuencia de emojis -->
+			<div id="game7" class="minigame-container">
+				<p style="color: rgba(255,255,255,0.7);font-size:0.85rem;margin-bottom:8px">Elige los emojis en orden (3 intentos) 🎯</p>
+				<div id="emojiSequence" style="font-size:2rem;margin:12px 0">Esperando...</div>
+				<div id="emojiButtons" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0"></div>
+				<div id="game7Counter" style="color: rgba(255,255,255,0.6);font-size:0.8rem;text-align:center">Intentos: 3</div>
+				<div id="game7Error" class="lock-error"></div>
+				<div id="game7Success" class="game-success"></div>
+			</div>
+
+			<!-- PIN final -->
+			<div id="pinSection" style="display:none;flex-direction:column;gap:12px;border-top:1px solid var(--pink-secondary);padding-top:16px;margin-top:12px">
+				<p style="color:var(--muted);font-size:0.8rem;letter-spacing:2px">INGRESA EL PIN FINAL</p>
+				<input id="finalPin" type="password" placeholder="PIN" inputmode="numeric" maxlength="6">
+				<button onclick="finalUnlockPage()">ABRIR SORPRESA</button>
+				<div id="pinError" class="lock-error"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 🔐 MODAL DE ACCESO DESARROLLADOR -->
+	<div id="devModal" class="dev-modal">
+		<div class="dev-modal-box">
+			<h3>🔐 ACCESO RESTRINGIDO</h3>
+			<p>Solo para desarrolladores verificados</p>
+			
+			<input type="text" id="devUsername" placeholder="Usuario" autocomplete="off">
+			<input type="password" id="devPassword" placeholder="Contraseña" autocomplete="off">
+			
+			<div class="dev-modal-buttons">
+				<button onclick="verifyDevAccess()">Ingresar</button>
+				<button onclick="closeDevModal()">Cancelar</button>
+			</div>
+			
+			<div id="devError" class="dev-error"></div>
+		</div>
+	</div>
+
+	<header style="display:none">
+		<img id="dynamicAvatar" src="https://i.imgur.com/iSyUemC.png" alt="avatar">
+		<div class="title">Ya casi un año juntos ❤️</div>
+		<div class="subtitle">Para ti, mi amor</div>
+	</header>
+
+	<nav style="display:none">
+		<a href="index.html">Inicio</a>
+	</nav>
+
+	<div class="envelope-wrapper" style="display:none">
+		<div class="envelope" onclick="openLetter()">
+			<div class="seal">💌</div>
+			<p style="font-size: 0.7rem; letter-spacing: 4px; color: var(--text-dim); margin-top: 10px;">CLICK PARA ABRIR</p>
+		</div>
+
+		<div class="sections-grid">
+			<div class="section-card">
+				<span class="section-title">Mi reina Hermosa</span>
+				<p class="section-text" style="margin-top:20px;font-size:1.1rem">Eres la persona que ilumina mis días. Tu sonrisa es mi razón de sonreír. Te amo más cada día que pasa.</p>
+			</div>
+
+			<!-- 🌸 FLOR INTERACTIVA CON SECRETOS -->
+			<div class="section-card">
+				<span class="section-title">Un Pequeño Detalle</span>
+				<p class="section-text" style="margin-top:20px;font-size:1rem">Presiona el botón y los petalos para ver algo bonito ❤️</p>
+				
+				<div id="flowerCanvas" style="display: none; text-align: center; margin: 30px 0;">
+					<svg class="flower-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+						<!-- Stem -->
+						<path id="flower-stem" d="M100 200 L100 100" stroke="#2d5a27" stroke-width="3" fill="none" stroke-dasharray="100" stroke-dashoffset="100">
+							<animate id="stemAnim" attributeName="stroke-dashoffset" from="100" to="0" dur="2s" fill="freeze" begin="indefinite" />
+						</path>
+
+						<!-- Leaves -->
+						<path id="flower-leaf1" d="M100 150 Q70 140 80 120 Q95 130 100 150" fill="#2d5a27" opacity="0">
+							<animate id="leaf1Anim" attributeName="opacity" from="0" to="1" dur="1s" fill="freeze" begin="indefinite" />
+						</path>
+						<path id="flower-leaf2" d="M100 170 Q130 160 120 140 Q105 150 100 170" fill="#2d5a27" opacity="0">
+							<animate id="leaf2Anim" attributeName="opacity" from="0" to="1" dur="1s" fill="freeze" begin="indefinite" />
+						</path>
+
+						<!-- Petals Group -->
+						<g transform="translate(100 100)">
+							<g id="petals" transform="scale(0)">
+								<animateTransform id="petalsAnim" attributeName="transform" type="scale" from="0" to="1" dur="2s" fill="freeze" begin="indefinite" />
+								
+								<!-- Petal 1 (Top) -->
+								<circle class="flower-petal" data-secret="Eres mi razón de sonreír cada mañana" cx="0" cy="-25" r="18" fill="#ffb7d5" />
+								
+								<!-- Petal 2 (Top Right) -->
+								<circle class="flower-petal" data-secret="Tu amor es mi fortaleza" cx="21" cy="-13" r="18" fill="#ff80ab" />
+								
+								<!-- Petal 3 (Bottom Right) -->
+								<circle class="flower-petal" data-secret="Contigo quiero envejecer" cx="21" cy="13" r="18" fill="#ffb7d5" />
+								
+								<!-- Petal 4 (Bottom) -->
+								<circle class="flower-petal" data-secret="Eres mi mejor decisión" cx="0" cy="25" r="18" fill="#ff80ab" />
+								
+								<!-- Petal 5 (Bottom Left) -->
+								<circle class="flower-petal" data-secret="Mi corazón es tuyo siempre" cx="-21" cy="13" r="18" fill="#ffb7d5" />
+								
+								<!-- Petal 6 (Top Left) -->
+								<circle class="flower-petal" data-secret="Te amo infinitamente" cx="-21" cy="-13" r="18" fill="#ff80ab" />
+
+								<!-- Center -->
+								<circle cx="0" cy="0" r="12" fill="#ffd54f" />
+							</g>
+						</g>
+					</svg>
+				</div>
+
+				<button id="runFlower" onclick="startFlowerCarta5()" style="display: inline-block; background: #ffffff; color: #050505; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; margin-top: 18px;">Iniciar</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="letterOverlay" class="letter">
+		<button class="close-letter" onclick="closeLetter()">✕</button>
+		<div class="letter-inner">
+			<div class="letter-header">
+				Para ti,
+			</div>
+			<div class="letter-body">
+				<p>Mi amor,</p>
+
+				<p>Cuando decidí hacer esto, lo primero que pensé fue en ti. En tu sonrisa. En cómo iluminas todo a tu alrededor con tu sola presencia. Y supe que esta sorpresa tenía que ser especial porque tú lo eres.</p>
+
+				<p>No es común encontrar a alguien como tú. Alguien que siente tan profundo, que ama sin medida, que da sin esperar nada a cambio. Eres de esas personas que hacen que el mundo sea más hermoso, más amable, más lleno de luz.</p>
+
+				<p>Cada momento contigo es un regalo que no me merezco, pero que agradezco infinitamente. Desde las conversaciones más profundas hasta los silencios más cómodos, todo contigo se siente especial. Todo contigo se siente correcto.</p>
+
+				<p>Admiro tu fuerza, tu sensibilidad, tu capacidad de amar con todo el corazón. Eres hermosa, no solo por fuera (aunque lo eres), sino por la bondad que llevas dentro. Por la forma en que cuidas a las personas que amas. Por tu esencia.</p>
+
+				<p>Me encanta ser la persona que puede hacerte reír cuando el mundo pesa demasiado. Me encanta poder abrazarte y sentir que todo está bien. Me encanta que confíes en mí, que me dejes ser tu refugio como tú eres el mío.</p>
+
+				<p>A veces pienso en lo afortunado que soy de tenerte. De poder mirar esos ojos que tanto amo, de poder escuchar esa voz que calma mi alma, de poder sentir tu mano en la mía y saber que todo va a estar bien.</p>
+
+				<p>Esta carta, estos minijuegos, esta sorpresa entera... es solo una pequeña muestra de todo lo que siento por ti. Es mi forma de decirte: "Eres importante. Eres valiosa. Eres todo para mí."</p>
+
+				<p>No importa lo que venga, quiero que sepas que voy a estar aquí. Cuidándote. Amándote. Dándote la seguridad que mereces. Porque eres la persona más especial que he conocido, y no pienso dejar irte.</p>
+
+				<p>Te amo más de lo que las palabras pueden expresar. Con toda mi alma, con todo mi corazón.</p>
+
+				<p>Gracias por ser tú. Gracias por quedarte. Gracias por amarme como lo haces.</p>
+			</div>
+			<div class="letter-footer">
+				<p>Por siempre tuyo,</p>
+				<p>A 💕</p>
+			</div>
+		</div>
+	</div>
+
+	<script src="lock.js"></script>
+	<script>
+		// ===== VARIABLES GLOBALES =====
+		let currentGame = 1;
+		const CORRECT_PIN = "0904"; // PIN final
+		let gameStates = {
+			game1: false,
+			game3: false,
+			game4: false,
+			game5: false,
+			game7: false
+		};
+
+		// ===== SAKURA EFECT =====
+		function createSakura() {
+			const sakuraContainer = document.getElementById('sakura');
+			for (let i = 0; i < 30; i++) {
+				const leaf = document.createElement('div');
+				leaf.className = 'sakura-leaf';
+				const randomDelay = Math.random() * 20;
+				const randomDuration = 15 + Math.random() * 10;
+				const randomOffset = Math.random() * 100;
+				leaf.style.left = Math.random() * 100 + '%';
+				leaf.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+				leaf.style.animation = `sakuraFall ${randomDuration}s linear ${randomDelay}s infinite`;
+				sakuraContainer.appendChild(leaf);
+			}
+		}
+		createSakura();
+
+		// ===== MINIJUEGO 1: Pregunta romántica =====
+		function checkGame1() {
+			const input = parseInt(document.getElementById('game1Input').value);
+			const errorDiv = document.getElementById('game1Error');
+			const successDiv = document.getElementById('game1Success');
+			
+			// Acepta valores cercanos (12 is the correct answer)
+			if (input >= 10 && input <= 14) {
+				successDiv.style.display = 'block';
+				successDiv.textContent = '✓ ¡Correcto! Aproximadamente 12 meses para un año... 💕';
+				gameStates.game1 = true;
+				setTimeout(() => nextGame(1), 1200);
+			} else {
+				errorDiv.style.display = 'block';
+				errorDiv.textContent = '✗ Piensa en nuestros meses juntos...';
+				setTimeout(() => { errorDiv.style.display = 'none'; }, 2000);
+			}
+		}
+
+
+
+		// ===== MINIJUEGO 3: Puzzle de palabras =====
+		function setupWordPuzzle() {
+			const words = ['te', 'amo', 'mas', 'cada', 'dia'];
+			const shuffled = [...words].sort(() => Math.random() - 0.5);
+			const puzzleDiv = document.getElementById('wordPuzzle');
+			puzzleDiv.innerHTML = '';
+			shuffled.forEach(word => {
+				const btn = document.createElement('button');
+				btn.textContent = word;
+				btn.className = 'game-btn';
+				btn.onclick = () => { document.getElementById('game3Answer').value += (document.getElementById('game3Answer').value ? ' ' : '') + word; };
+				puzzleDiv.appendChild(btn);
+			});
+		}
+
+		function checkGame3() {
+			setupWordPuzzle();
+			const input = document.getElementById('game3Answer').value.trim().toLowerCase();
+			const correct = input === 'te amo mas cada dia';
+			const errorDiv = document.getElementById('game3Error');
+			const successDiv = document.getElementById('game3Success');
+			
+			if (correct) {
+				successDiv.style.display = 'block';
+				successDiv.textContent = '✓ ¡Exacto! Eso es lo que siento 💕';
+				gameStates.game3 = true;
+				setTimeout(() => nextGame(3), 1200);
+			} else {
+				errorDiv.style.display = 'block';
+				errorDiv.textContent = '✗ Intenta de nuevo...';
+				setTimeout(() => { errorDiv.style.display = 'none'; }, 2000);
+			}
+		}
+
+		// ===== MINIJUEGO 4: Preguntas personales =====
+		function checkGame4() {
+			const input = document.getElementById('game4Input').value.trim().toLowerCase();
+			const valid = ['amor', 'mi amor', 'mi vida', 'andresito', 'mi niño bello', 'amor de mi vida', 'mi niño hermoso', 'cariño', 'corazón'];
+			const errorDiv = document.getElementById('game4Error');
+			const successDiv = document.getElementById('game4Success');
+			
+			if (valid.includes(input)) {
+				successDiv.style.display = 'block';
+				successDiv.textContent = '✓ ¡Correcto! Me encanta cuando lo dices 💋';
+				gameStates.game4 = true;
+				setTimeout(() => nextGame(4), 1200);
+			} else {
+				errorDiv.style.display = 'block';
+				errorDiv.textContent = '✗ Exacto no... piensa en un apodo tierno';
+				setTimeout(() => { errorDiv.style.display = 'none'; }, 2000);
+			}
+		}
+
+		// ===== MINIJUEGO 5: Memory Game =====
+		function setupMemoryGame() {
+			const emojis = ['💕', '💕', '💖', '💖', '😍', '😍', '🌹', '🌹'];
+			const shuffled = [...emojis].sort(() => Math.random() - 0.5);
+			const grid = document.getElementById('memoryGrid');
+			grid.innerHTML = '';
+			let matched = 0;
+
+			shuffled.forEach((emoji, idx) => {
+				const card = document.createElement('div');
+				card.className = 'memory-card';
+				card.textContent = '?';
+				card.dataset.emoji = emoji;
+				card.dataset.index = idx;
+				card.onclick = () => flipMemoryCard(card, shuffled, grid);
+				grid.appendChild(card);
+			});
+		}
+
+		function flipMemoryCard(card, shuffled, grid) {
+			if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+			card.classList.add('flipped');
+			card.textContent = card.dataset.emoji;
+
+			const flipped = document.querySelectorAll('.memory-card.flipped:not(.matched)');
+			if (flipped.length === 2) {
+				const [card1, card2] = flipped;
+				if (card1.dataset.emoji === card2.dataset.emoji) {
+					card1.classList.add('matched');
+					card2.classList.add('matched');
+					card1.classList.remove('flipped');
+					card2.classList.remove('flipped');
+					
+					if (document.querySelectorAll('.memory-card.matched').length === 8) {
+						document.getElementById('game5Success').style.display = 'block';
+						document.getElementById('game5Success').textContent = '✓ ¡Todas las parejas encontradas!';
+						gameStates.game5 = true;
+						setTimeout(() => nextGame(5), 1200);
+					}
+				} else {
+					setTimeout(() => {
+						card1.classList.remove('flipped');
+						card2.classList.remove('flipped');
+						card1.textContent = '?';
+						card2.textContent = '?';
+					}, 800);
+				}
+			}
+		}
+
+
+
+		// ===== MINIJUEGO 7: Secuencia de emojis =====
+		let emojiSequence = [];
+		let playerEmojiSequence = [];
+		let emojiAttempts = 3;
+
+		function setupEmojiGame() {
+			const emojis = ['💕', '✨', '🌹', '💖'];
+			emojiSequence = [];
+			playerEmojiSequence = [];
+			emojiAttempts = 3;
+
+			for (let i = 0; i < 5; i++) {
+				emojiSequence.push(emojis[Math.floor(Math.random() * emojis.length)]);
+			}
+
+			const buttonsDiv = document.getElementById('emojiButtons');
+			buttonsDiv.innerHTML = '';
+			emojis.forEach(emoji => {
+				const btn = document.createElement('button');
+				btn.style.background = 'linear-gradient(135deg, rgba(255,128,171,0.2), rgba(255,183,213,0.1))';
+				btn.style.border = '1.5px solid rgba(255,128,171,0.5)';
+				btn.style.color = '#fff';
+				btn.style.fontSize = '1.8rem';
+				btn.style.padding = '12px';
+				btn.style.borderRadius = '10px';
+				btn.style.cursor = 'pointer';
+				btn.style.transition = 'all 0.2s';
+				btn.textContent = emoji;
+				btn.onclick = () => selectEmoji(emoji, btn);
+				buttonsDiv.appendChild(btn);
+			});
+
+			document.getElementById('emojiSequence').textContent = emojiSequence.join(' ');
+		}
+
+		function selectEmoji(emoji, btn) {
+			playerEmojiSequence.push(emoji);
+			btn.style.background = 'var(--pink-primary)';
+			btn.style.boxShadow = 'var(--glow-pink)';
+			setTimeout(() => {
+				btn.style.background = 'linear-gradient(135deg, rgba(255,128,171,0.2), rgba(255,183,213,0.1))';
+				btn.style.boxShadow = 'none';
+			}, 200);
+
+			if (playerEmojiSequence.length === emojiSequence.length) {
+				let correct = playerEmojiSequence.every((emoji, idx) => emoji === emojiSequence[idx]);
+				if (correct) {
+					document.getElementById('game7Success').style.display = 'block';
+					document.getElementById('game7Success').textContent = '✓ ¡Secuencia perfecta!';
+					gameStates.game7 = true;
+					setTimeout(() => nextGame(7), 1200);
+				} else {
+					emojiAttempts--;
+					document.getElementById('game7Counter').textContent = 'Intentos: ' + emojiAttempts;
+					if (emojiAttempts <= 0) {
+						document.getElementById('game7Error').style.display = 'block';
+						document.getElementById('game7Error').textContent = '✗ Game Over - Intenta de nuevo';
+						document.getElementById('emojiButtons').innerHTML = '';
+						setTimeout(() => setupEmojiGame(), 2000);
+					} else {
+						document.getElementById('game7Error').style.display = 'block';
+						document.getElementById('game7Error').textContent = `✗ Incorrecto (${emojiAttempts} intentos)`;
+						playerEmojiSequence = [];
+						setTimeout(() => {
+							document.getElementById('game7Error').style.display = 'none';
+						}, 1500);
+					}
+				}
+			}
+		}
+
+		// ===== NAVEGACIÓN ENTRE MINIJUEGOS =====
+		function nextGame(currentGameNum) {
+			document.getElementById('game' + currentGameNum).classList.remove('active');
+			
+			if (currentGameNum === 1) {
+				setupWordPuzzle();
+				document.getElementById('game3').classList.add('active');
+			} else if (currentGameNum === 3) {
+				document.getElementById('game4').classList.add('active');
+			} else if (currentGameNum === 4) {
+				setupMemoryGame();
+				document.getElementById('game5').classList.add('active');
+			} else if (currentGameNum === 5) {
+				setupEmojiGame();
+				document.getElementById('game7').classList.add('active');
+			} else if (currentGameNum === 7) {
+				showPinSection();
+			}
+		}
+
+		function showPinSection() {
+			document.getElementById('game7').classList.remove('active');
+			document.getElementById('pinSection').style.display = 'flex';
+			document.getElementById('lock-subtitle').textContent = '¡Casi listo!';
+		}
+
+		// ===== DESBLOQUEO FINAL =====
+		function finalUnlockPage() {
+			const pin = document.getElementById('finalPin').value;
+			if (pin === CORRECT_PIN) {
+				// Remover clases de bloqueo de lock.js
+				document.body.classList.remove('locked');
+				document.body.classList.remove('initializing');
+				
+				// Remover el CSS de initializing si existe
+				const initializingStyle = document.getElementById('initializing-style');
+				if (initializingStyle && initializingStyle.parentNode) {
+					initializingStyle.parentNode.removeChild(initializingStyle);
+				}
+				
+				// Also remove if __removeInitializing function exists
+				if (typeof window.__removeInitializing === 'function') {
+					window.__removeInitializing();
+				}
+				
+				const pageLock = document.getElementById('pageLock');
+				if (pageLock) {
+					// Remover clases que lock.js agrega
+					pageLock.classList.remove('active');
+					pageLock.classList.remove('unlocking');
+					// Forzar display none con todos los estilos
+					pageLock.style.cssText = 'display: none !important; visibility: hidden !important; z-index: -9999 !important; pointer-events: none !important;';
+				}
+				
+				// Restaurar visibilidad de todos los elementos del body
+				const allElements = document.body.querySelectorAll('*');
+				allElements.forEach(el => {
+					if (el.id !== 'pageLock' && el.id !== 'devModal' && !el.id.startsWith('initialSplash')) {
+						el.style.visibility = 'visible';
+					}
+				});
+				
+				// Mostrar header
+				const header = document.querySelector('header');
+				if (header) {
+					header.style.cssText = 'display: block !important; visibility: visible !important; z-index: 100 !important;';
+				}
+				
+				// Mostrar nav
+				const nav = document.querySelector('nav');
+				if (nav) {
+					nav.style.cssText = 'display: flex !important; visibility: visible !important; z-index: 100 !important;';
+				}
+				
+				// Mostrar envelope
+				const envelope = document.querySelector('.envelope-wrapper');
+				if (envelope) {
+					envelope.style.cssText = 'display: block !important; visibility: visible !important; z-index: 10 !important;';
+				}
+				
+				// Mostrar sakura (hojas decorativas)
+				const sakura = document.querySelector('.sakura');
+				if (sakura) {
+					sakura.style.cssText = 'visibility: visible !important; z-index: 1 !important; pointer-events: none !important;';
+				}
+				
+				// Configurar body para mostrar contenido
+				document.body.style.overflow = 'auto';
+				document.body.style.background = '#050505';
+				document.body.style.visibility = 'visible';
+				
+				// Crear estilo global para override final
+				const style = document.createElement('style');
+				style.id = 'unlock-override';
+				style.innerHTML = `
+					* { visibility: visible !important; }
+					body { background: #050505 !important; overflow: auto !important; visibility: visible !important; }
+					body.locked { background: #050505 !important; }
+					body.initializing { visibility: visible !important; }
+					header { display: block !important; visibility: visible !important; z-index: 100 !important; }
+					nav { display: flex !important; visibility: visible !important; z-index: 100 !important; }
+					.envelope-wrapper { display: block !important; visibility: visible !important; z-index: 10 !important; }
+					.sakura { visibility: visible !important; z-index: 1 !important; pointer-events: none !important; }
+					#pageLock { display: none !important; visibility: hidden !important; pointer-events: none !important; z-index: -9999 !important; }
+					#pageLock.active { display: none !important; visibility: hidden !important; }
+					#devModal { pointer-events: auto !important; }
+					.stars { visibility: visible !important; z-index: 0 !important; }
+				`;
+				document.head.appendChild(style);
+				
+				// Scroll al top
+				window.scrollTo(0, 0);
+			} else {
+				document.getElementById('pinError').style.display = 'block';
+				document.getElementById('pinError').textContent = '✗ PIN incorrecto';
+				setTimeout(() => {
+					document.getElementById('pinError').style.display = 'none';
+				}, 2000);
+			}
+		}
+
+		// ===== LETTER FUNCTIONS =====
+		function openLetter() {
+			document.getElementById('letterOverlay').classList.add('active');
+			document.getElementById('letterOverlay').style.display = 'block';
+		}
+
+		function closeLetter() {
+			document.getElementById('letterOverlay').classList.remove('active');
+			setTimeout(() => {
+				document.getElementById('letterOverlay').style.display = 'none';
+			}, 400);
+		}
+
+		// Inicializar primer minijuego
+		setupWordPuzzle();
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('game1').classList.add('active');
+			
+			// Asegurar que el botón del desarrollador funciona
+			const devBtn = document.querySelector('.dev-access-btn');
+			if (devBtn) {
+				devBtn.addEventListener('click', (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					console.log('Dev button clicked');
+					openDevModal();
+				});
+			}
+		});
+
+		// ===== FLOR INTERACTIVA - FUNCIÓN PARA MOSTRAR =====
+		function startFlowerCarta5() {
+			const canvas = document.getElementById('flowerCanvas');
+			const btn = document.getElementById('runFlower');
+			canvas.style.display = 'flex';
+			btn.style.display = 'none';
+
+			setTimeout(() => {
+				document.getElementById('stemAnim').beginElement();
+				setTimeout(() => document.getElementById('leaf1Anim').beginElement(), 1000);
+				setTimeout(() => document.getElementById('leaf2Anim').beginElement(), 1500);
+				setTimeout(() => {
+					document.getElementById('petalsAnim').beginElement();
+					// Inicializar interactividad de los pétalos después de que aparezcan
+					setTimeout(() => initializeFlowerSecrets(), 2200);
+				}, 2000);
+			}, 100);
+		}
+
+		// ===== ACCESO DESARROLLADOR =====
+		function openDevModal() {
+			document.getElementById('devModal').classList.add('active');
+			document.getElementById('devUsername').focus();
+		}
+
+		function closeDevModal() {
+			document.getElementById('devModal').classList.remove('active');
+			document.getElementById('devUsername').value = '';
+			document.getElementById('devPassword').value = '';
+			document.getElementById('devError').classList.remove('show');
+		}
+
+		function verifyDevAccess() {
+			const username = document.getElementById('devUsername').value.trim();
+			const password = document.getElementById('devPassword').value;
+			const errorDiv = document.getElementById('devError');
+
+			// Credenciales correctas
+			const VALID_USERS = {
+				'admin': 'Noah',
+				'AndrésDev': 'iReny',
+				'Andre_Nohe': 'Reny'
+			};
+
+			if (VALID_USERS[username] && VALID_USERS[username] === password) {
+				// Acceso correcto - desbloquear página
+				unlockPageDirectly();
+				closeDevModal();
+			} else {
+				// Acceso incorrecto
+				errorDiv.textContent = '✗ Credenciales inválidas';
+				errorDiv.classList.add('show');
+				document.getElementById('devPassword').value = '';
+				setTimeout(() => {
+					errorDiv.classList.remove('show');
+				}, 3000);
+			}
+		}
+
+		function unlockPageDirectly() {
+			// Remover clases de bloqueo de lock.js
+			document.body.classList.remove('locked');
+			document.body.classList.remove('initializing');
+			
+			// Remover el CSS de initializing si existe
+			const initializingStyle = document.getElementById('initializing-style');
+			if (initializingStyle && initializingStyle.parentNode) {
+				initializingStyle.parentNode.removeChild(initializingStyle);
+			}
+			
+			// Also remove if __removeInitializing function exists
+			if (typeof window.__removeInitializing === 'function') {
+				window.__removeInitializing();
+			}
+			
+			const pageLock = document.getElementById('pageLock');
+			if (pageLock) {
+				// Remover clases que lock.js agrega
+				pageLock.classList.remove('active');
+				pageLock.classList.remove('unlocking');
+				// Forzar display none con todos los estilos
+				pageLock.style.cssText = 'display: none !important; visibility: hidden !important; z-index: -9999 !important; pointer-events: none !important;';
+			}
+			
+			// Restaurar visibilidad de todos los elementos del body
+			const allElements = document.body.querySelectorAll('*');
+			allElements.forEach(el => {
+				if (el.id !== 'pageLock' && el.id !== 'devModal' && !el.id.startsWith('initialSplash')) {
+					el.style.visibility = 'visible';
+				}
+			});
+			
+			// Mostrar header
+			const header = document.querySelector('header');
+			if (header) {
+				header.style.cssText = 'display: block !important; visibility: visible !important; z-index: 100 !important;';
+			}
+			
+			// Mostrar nav
+			const nav = document.querySelector('nav');
+			if (nav) {
+				nav.style.cssText = 'display: flex !important; visibility: visible !important; z-index: 100 !important;';
+			}
+			
+			// Mostrar envelope
+			const envelope = document.querySelector('.envelope-wrapper');
+			if (envelope) {
+				envelope.style.cssText = 'display: block !important; visibility: visible !important; z-index: 10 !important;';
+			}
+			
+			// Mostrar sakura (hojas decorativas)
+			const sakura = document.querySelector('.sakura');
+			if (sakura) {
+				sakura.style.cssText = 'visibility: visible !important; z-index: 1 !important; pointer-events: none !important;';
+			}
+			
+			// Configurar body para mostrar contenido
+			document.body.style.overflow = 'auto';
+			document.body.style.background = '#050505';
+			document.body.style.visibility = 'visible';
+			
+			// Crear estilo global para override final
+			const style = document.createElement('style');
+			style.id = 'unlock-override';
+			style.innerHTML = `
+				* { visibility: visible !important; }
+				body { background: #050505 !important; overflow: auto !important; visibility: visible !important; }
+				body.locked { background: #050505 !important; }
+				body.initializing { visibility: visible !important; }
+				header { display: block !important; visibility: visible !important; z-index: 100 !important; }
+				nav { display: flex !important; visibility: visible !important; z-index: 100 !important; }
+				.envelope-wrapper { display: block !important; visibility: visible !important; z-index: 10 !important; }
+				.sakura { visibility: visible !important; z-index: 1 !important; pointer-events: none !important; }
+				#pageLock { display: none !important; visibility: hidden !important; pointer-events: none !important; z-index: -9999 !important; }
+				#pageLock.active { display: none !important; visibility: hidden !important; }
+				#devModal { pointer-events: auto !important; }
+				.stars { visibility: visible !important; z-index: 0 !important; }
+			`;
+			document.head.appendChild(style);
+			
+			// Scroll al top
+			window.scrollTo(0, 0);
+		}
+
+		// Cerrar modal con ESC
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') {
+				const devModal = document.getElementById('devModal');
+				if (devModal.classList.contains('active')) {
+					closeDevModal();
+				}
+			}
+		});
+
+		// Enviar con Enter en el modal
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				const devModal = document.getElementById('devModal');
+				if (devModal.classList.contains('active')) {
+					verifyDevAccess();
+				}
+			}
+		});
+
+		// ===== FLOR INTERACTIVA CON SECRETOS =====
+		function initializeFlowerSecrets() {
+			const petals = document.querySelectorAll('.flower-petal');
+			const revealedSecrets = new Set();
+			const flowerCanvas = document.getElementById('flowerCanvas');
+
+			petals.forEach((petal, index) => {
+				petal.addEventListener('click', (e) => {
+					e.stopPropagation();
+					
+					// Si ya fue revelado, no hacer nada
+					if (revealedSecrets.has(index)) {
+						return;
+					}
+
+					// Marcar como revelado
+					revealedSecrets.add(index);
+					petal.classList.add('revealed');
+
+					// Obtener el secreto del atributo data
+					const secret = petal.getAttribute('data-secret');
+					
+					// Crear y mostrar el tooltip
+					const tooltip = document.createElement('div');
+					tooltip.className = 'secret-tooltip';
+					tooltip.textContent = secret;
+
+					// Calcular posición relativa al pétalo
+					const rect = petal.getBoundingClientRect();
+					const containerRect = flowerCanvas.getBoundingClientRect();
+
+					tooltip.style.left = (rect.left - containerRect.left + rect.width / 2) + 'px';
+					tooltip.style.top = (rect.top - containerRect.top - 60) + 'px';
+					tooltip.style.transform = 'translateX(-50%)';
+
+					flowerCanvas.appendChild(tooltip);
+
+					// Animar el pétalo con un pulso
+					petal.style.animation = 'none';
+					setTimeout(() => {
+						petal.style.animation = 'petalPulse 0.6s ease-out';
+					}, 10);
+
+					// Remover el tooltip después de 3 segundos
+					setTimeout(() => {
+						tooltip.style.animation = 'tooltipFade 0.4s ease-out reverse';
+						setTimeout(() => {
+							tooltip.remove();
+						}, 400);
+					}, 3000);
+				});
+
+				petal.addEventListener('mouseenter', (e) => {
+					if (revealedSecrets.has(index)) return;
+					
+					const tooltip = document.createElement('div');
+					tooltip.className = 'secret-tooltip';
+					tooltip.textContent = '✨ Tocame ✨';
+					tooltip.style.opacity = '0.7';
+
+					const rect = petal.getBoundingClientRect();
+					const containerRect = flowerCanvas.getBoundingClientRect();
+
+					tooltip.style.left = (rect.left - containerRect.left + rect.width / 2) + 'px';
+					tooltip.style.top = (rect.top - containerRect.top - 50) + 'px';
+					tooltip.style.transform = 'translateX(-50%)';
+
+					flowerCanvas.appendChild(tooltip);
+					petal.dataset.hoverTooltip = true;
+
+					petal.addEventListener('mouseleave', () => {
+						if (petal.dataset.hoverTooltip) {
+							tooltip.remove();
+							delete petal.dataset.hoverTooltip;
+						}
+					}, { once: true });
+				});
+			});
+
+			// Agregar la animación de pulso
+			const style = document.createElement('style');
+			style.textContent = `
+				@keyframes petalPulse {
+					0% { transform: scale(1); }
+					50% { transform: scale(1.2); filter: drop-shadow(0 0 25px rgba(255, 128, 171, 0.8)); }
+					100% { transform: scale(1); }
+				}
+			`;
+			document.head.appendChild(style);
+		}
+	</script>
+</body>
+</html>
 
