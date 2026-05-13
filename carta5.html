@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="es" style="background:#050505">
+<html lang="es">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0">
 	<meta name="theme-color" content="#050505">
 	<title>Footage Archive</title>
 	<link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
@@ -51,7 +51,7 @@
 			position: fixed;
 			inset: 0;
 			background: #000;
-			z-index: 99999;
+			z-index: 9001;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -325,6 +325,7 @@
 			display: none;
 			padding: 40px 20px;
 			overflow-y: auto;
+			overflow-x: hidden;
 			backdrop-filter: blur(30px);
 		}
 
@@ -502,11 +503,12 @@
 			border-radius: 12px;
 			font-size: 0.85rem;
 			pointer-events: none;
-			z-index: 3000;
+			z-index: 1001;
 			animation: tooltipFade 0.4s ease-out;
 			max-width: 200px;
 			text-align: center;
 			box-shadow: 0 8px 24px rgba(255, 128, 171, 0.3);
+			word-wrap: break-word;
 		}
 
 		@keyframes tooltipFade {
@@ -522,7 +524,7 @@
 
 		/* 🔐 BOTÓN Y MODAL DE ACCESO DESARROLLADOR */
 		.dev-access-btn {
-			position: absolute;
+			position: fixed;
 			top: 20px;
 			right: 20px;
 			background: rgba(255, 128, 171, 0.15);
@@ -533,14 +535,14 @@
 			border-radius: 50%;
 			cursor: pointer;
 			font-size: 1.3rem;
-			display: flex !important;
+			display: flex;
 			align-items: center;
 			justify-content: center;
 			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-			z-index: 9999999;
+			z-index: 9998;
 			box-shadow: 0 0 20px rgba(255, 128, 171, 0.5), inset 0 0 10px rgba(255, 128, 171, 0.2);
 			font-weight: bold;
-			pointer-events: auto !important;
+			pointer-events: auto;
 		}
 
 		.dev-access-btn:hover {
@@ -554,13 +556,13 @@
 			position: fixed;
 			inset: 0;
 			background: rgba(0, 0, 0, 0.95);
-			z-index: 999999999 !important;
+			z-index: 9999;
 			display: none;
 			align-items: center;
 			justify-content: center;
 			backdrop-filter: blur(10px);
 			animation: fadeIn 0.4s ease-out;
-			pointer-events: auto !important;
+			pointer-events: auto;
 		}
 
 		.dev-modal.active {
@@ -693,7 +695,7 @@
 		.sakura {
 			position: fixed;
 			inset: 0;
-			z-index: 1;
+			z-index: 0;
 			pointer-events: none;
 			overflow: hidden;
 		}
@@ -801,10 +803,20 @@
 			transition: width 0.3s;
 		}
 
+		@media (max-width: 1024px) {
+			.envelope-wrapper {
+				margin: 30px auto;
+			}
+			.flower-svg {
+				width: 250px;
+				height: 250px;
+			}
+		}
+
 		@media (max-width: 768px) {
 			.lock-box {
 				width: 95%;
-				padding: 30px;
+				padding: 30px 20px;
 			}
 			.game-grid {
 				grid-template-columns: repeat(2, 1fr);
@@ -814,6 +826,59 @@
 				width: 50px;
 				height: 50px;
 				font-size: 1.2rem;
+			}
+			.lock-box h2 {
+				font-size: 1.2rem;
+			}
+			.dev-access-btn {
+				width: 45px;
+				height: 45px;
+				font-size: 1.1rem;
+				top: 15px;
+				right: 15px;
+			}
+			.letter-inner {
+				padding: 50px 30px;
+				margin: 40px auto;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.lock-box {
+				padding: 20px 16px;
+			}
+			.lock-box h2 {
+				font-size: 1rem;
+				margin-bottom: 8px;
+			}
+			.lock-subtitle {
+				font-size: 0.65rem;
+			}
+			.lock-box input, .lock-box textarea, .lock-box button {
+				font-size: 0.9rem;
+				padding: 12px 14px;
+			}
+			.game-btn {
+				font-size: 0.8rem;
+				padding: 10px;
+			}
+			.memory-card {
+				width: 45px;
+				height: 45px;
+				font-size: 1rem;
+				margin: 2px;
+			}
+			.flower-svg {
+				width: 200px;
+				height: 200px;
+			}
+			.letter-inner {
+				padding: 40px 20px;
+				margin: 30px auto;
+			}
+			.letter-body {
+				font-size: 1rem;
+				line-height: 1.6;
 			}
 		}
 
@@ -840,7 +905,7 @@
 
 	<!-- 🔐 BOTÓN DE ACCESO DESARROLLADOR (DENTRO DEL PAGE-LOCK) -->
 	<div id="pageLock" class="page-lock" style="display:flex">
-		<button class="dev-access-btn" title="Acceso de Desarrollador">⚙️</button>
+		<button class="dev-access-btn" title="Acceso de Desarrollador" aria-label="Botón de acceso para desarrolladores">⚙️</button>
 		<div class="lock-box">
 			<h2>✨ SORPRESA ESPECIAL ✨</h2>
 			<p class="lock-subtitle">Para la chica más hermosa</p>
@@ -1052,7 +1117,11 @@
 		// ===== SAKURA EFECT =====
 		function createSakura() {
 			const sakuraContainer = document.getElementById('sakura');
-			for (let i = 0; i < 30; i++) {
+			// Reducir cantidad de sakura en móviles para mejor performance
+			const isMobile = window.matchMedia('(max-width: 768px)').matches;
+			const sakuraCount = isMobile ? 12 : 30;
+			
+			for (let i = 0; i < sakuraCount; i++) {
 				const leaf = document.createElement('div');
 				leaf.className = 'sakura-leaf';
 				const randomDelay = Math.random() * 20;
@@ -1161,10 +1230,11 @@
 
 		function flipMemoryCard(card, shuffled, grid) {
 			if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+			
 			card.classList.add('flipped');
 			card.textContent = card.dataset.emoji;
 
-			const flipped = document.querySelectorAll('.memory-card.flipped:not(.matched)');
+			const flipped = Array.from(document.querySelectorAll('.memory-card.flipped:not(.matched)'));
 			if (flipped.length === 2) {
 				const [card1, card2] = flipped;
 				if (card1.dataset.emoji === card2.dataset.emoji) {
@@ -1173,9 +1243,13 @@
 					card1.classList.remove('flipped');
 					card2.classList.remove('flipped');
 					
-					if (document.querySelectorAll('.memory-card.matched').length === 8) {
-						document.getElementById('game5Success').style.display = 'block';
-						document.getElementById('game5Success').textContent = '✓ ¡Todas las parejas encontradas!';
+					const matched = document.querySelectorAll('.memory-card.matched');
+					if (matched.length === 8) {
+						const successDiv = document.getElementById('game5Success');
+						if (successDiv) {
+							successDiv.style.display = 'block';
+							successDiv.textContent = '✓ ¡Todas las parejas encontradas!';
+						}
 						gameStates.game5 = true;
 						setTimeout(() => nextGame(5), 1200);
 					}
@@ -1286,12 +1360,16 @@
 		function showPinSection() {
 			document.getElementById('game7').classList.remove('active');
 			document.getElementById('pinSection').style.display = 'flex';
-			document.getElementById('lock-subtitle').textContent = '¡Casi listo!';
+			const subtitle = document.querySelector('.lock-subtitle');
+			if (subtitle) subtitle.textContent = '¡Casi listo!';
 		}
 
 		// ===== DESBLOQUEO FINAL =====
 		function finalUnlockPage() {
-			const pin = document.getElementById('finalPin').value;
+			const pinInput = document.getElementById('finalPin');
+			const pin = pinInput ? pinInput.value : '';
+			const pinErrorDiv = document.getElementById('pinError');
+			
 			if (pin === CORRECT_PIN) {
 				// Remover clases de bloqueo de lock.js
 				document.body.classList.remove('locked');
@@ -1325,28 +1403,25 @@
 					}
 				});
 				
-				// Mostrar header
-				const header = document.querySelector('header');
-				if (header) {
-					header.style.cssText = 'display: block !important; visibility: visible !important; z-index: 100 !important;';
-				}
+				// Mostrar elementos principales
+				const elements = {
+					'header': document.querySelector('header'),
+					'nav': document.querySelector('nav'),
+					'envelope': document.querySelector('.envelope-wrapper'),
+					'sakura': document.querySelector('.sakura')
+				};
 				
-				// Mostrar nav
-				const nav = document.querySelector('nav');
-				if (nav) {
-					nav.style.cssText = 'display: flex !important; visibility: visible !important; z-index: 100 !important;';
+				if (elements.header) {
+					elements.header.style.cssText = 'display: block !important; visibility: visible !important; z-index: 100 !important;';
 				}
-				
-				// Mostrar envelope
-				const envelope = document.querySelector('.envelope-wrapper');
-				if (envelope) {
-					envelope.style.cssText = 'display: block !important; visibility: visible !important; z-index: 10 !important;';
+				if (elements.nav) {
+					elements.nav.style.cssText = 'display: flex !important; visibility: visible !important; z-index: 100 !important;';
 				}
-				
-				// Mostrar sakura (hojas decorativas)
-				const sakura = document.querySelector('.sakura');
-				if (sakura) {
-					sakura.style.cssText = 'visibility: visible !important; z-index: 1 !important; pointer-events: none !important;';
+				if (elements.envelope) {
+					elements.envelope.style.cssText = 'display: block !important; visibility: visible !important; z-index: 10 !important;';
+				}
+				if (elements.sakura) {
+					elements.sakura.style.cssText = 'visibility: visible !important; z-index: 0 !important; pointer-events: none !important;';
 				}
 				
 				// Configurar body para mostrar contenido
@@ -1365,22 +1440,26 @@
 					header { display: block !important; visibility: visible !important; z-index: 100 !important; }
 					nav { display: flex !important; visibility: visible !important; z-index: 100 !important; }
 					.envelope-wrapper { display: block !important; visibility: visible !important; z-index: 10 !important; }
-					.sakura { visibility: visible !important; z-index: 1 !important; pointer-events: none !important; }
+					.sakura { visibility: visible !important; z-index: 0 !important; pointer-events: none !important; }
 					#pageLock { display: none !important; visibility: hidden !important; pointer-events: none !important; z-index: -9999 !important; }
 					#pageLock.active { display: none !important; visibility: hidden !important; }
 					#devModal { pointer-events: auto !important; }
 					.stars { visibility: visible !important; z-index: 0 !important; }
 				`;
-				document.head.appendChild(style);
+				if (!document.getElementById('unlock-override')) {
+					document.head.appendChild(style);
+				}
 				
 				// Scroll al top
 				window.scrollTo(0, 0);
 			} else {
-				document.getElementById('pinError').style.display = 'block';
-				document.getElementById('pinError').textContent = '✗ PIN incorrecto';
-				setTimeout(() => {
-					document.getElementById('pinError').style.display = 'none';
-				}, 2000);
+				if (pinErrorDiv) {
+					pinErrorDiv.style.display = 'block';
+					pinErrorDiv.textContent = '✗ PIN incorrecto';
+					setTimeout(() => {
+						pinErrorDiv.style.display = 'none';
+					}, 2000);
+				}
 			}
 		}
 
@@ -1408,7 +1487,6 @@
 				devBtn.addEventListener('click', (e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					console.log('Dev button clicked');
 					openDevModal();
 				});
 			}
@@ -1440,10 +1518,12 @@
 		}
 
 		function closeDevModal() {
-			document.getElementById('devModal').classList.remove('active');
+			const devModal = document.getElementById('devModal');
+			devModal.classList.remove('active');
 			document.getElementById('devUsername').value = '';
 			document.getElementById('devPassword').value = '';
-			document.getElementById('devError').classList.remove('show');
+			const errorDiv = document.getElementById('devError');
+			if (errorDiv) errorDiv.classList.remove('show');
 		}
 
 		function verifyDevAccess() {
@@ -1506,28 +1586,25 @@
 				}
 			});
 			
-			// Mostrar header
-			const header = document.querySelector('header');
-			if (header) {
-				header.style.cssText = 'display: block !important; visibility: visible !important; z-index: 100 !important;';
-			}
+			// Mostrar elementos principales
+			const elements = {
+				'header': document.querySelector('header'),
+				'nav': document.querySelector('nav'),
+				'envelope': document.querySelector('.envelope-wrapper'),
+				'sakura': document.querySelector('.sakura')
+			};
 			
-			// Mostrar nav
-			const nav = document.querySelector('nav');
-			if (nav) {
-				nav.style.cssText = 'display: flex !important; visibility: visible !important; z-index: 100 !important;';
+			if (elements.header) {
+				elements.header.style.cssText = 'display: block !important; visibility: visible !important; z-index: 100 !important;';
 			}
-			
-			// Mostrar envelope
-			const envelope = document.querySelector('.envelope-wrapper');
-			if (envelope) {
-				envelope.style.cssText = 'display: block !important; visibility: visible !important; z-index: 10 !important;';
+			if (elements.nav) {
+				elements.nav.style.cssText = 'display: flex !important; visibility: visible !important; z-index: 100 !important;';
 			}
-			
-			// Mostrar sakura (hojas decorativas)
-			const sakura = document.querySelector('.sakura');
-			if (sakura) {
-				sakura.style.cssText = 'visibility: visible !important; z-index: 1 !important; pointer-events: none !important;';
+			if (elements.envelope) {
+				elements.envelope.style.cssText = 'display: block !important; visibility: visible !important; z-index: 10 !important;';
+			}
+			if (elements.sakura) {
+				elements.sakura.style.cssText = 'visibility: visible !important; z-index: 0 !important; pointer-events: none !important;';
 			}
 			
 			// Configurar body para mostrar contenido
@@ -1546,37 +1623,19 @@
 				header { display: block !important; visibility: visible !important; z-index: 100 !important; }
 				nav { display: flex !important; visibility: visible !important; z-index: 100 !important; }
 				.envelope-wrapper { display: block !important; visibility: visible !important; z-index: 10 !important; }
-				.sakura { visibility: visible !important; z-index: 1 !important; pointer-events: none !important; }
+				.sakura { visibility: visible !important; z-index: 0 !important; pointer-events: none !important; }
 				#pageLock { display: none !important; visibility: hidden !important; pointer-events: none !important; z-index: -9999 !important; }
 				#pageLock.active { display: none !important; visibility: hidden !important; }
 				#devModal { pointer-events: auto !important; }
 				.stars { visibility: visible !important; z-index: 0 !important; }
 			`;
-			document.head.appendChild(style);
+			if (!document.getElementById('unlock-override')) {
+				document.head.appendChild(style);
+			}
 			
 			// Scroll al top
 			window.scrollTo(0, 0);
 		}
-
-		// Cerrar modal con ESC
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Escape') {
-				const devModal = document.getElementById('devModal');
-				if (devModal.classList.contains('active')) {
-					closeDevModal();
-				}
-			}
-		});
-
-		// Enviar con Enter en el modal
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter') {
-				const devModal = document.getElementById('devModal');
-				if (devModal.classList.contains('active')) {
-					verifyDevAccess();
-				}
-			}
-		});
 
 		// ===== FLOR INTERACTIVA CON SECRETOS =====
 		function initializeFlowerSecrets() {
@@ -1588,7 +1647,6 @@
 				petal.addEventListener('click', (e) => {
 					e.stopPropagation();
 					
-					// Si ya fue revelado, no hacer nada
 					if (revealedSecrets.has(index)) {
 						return;
 					}
@@ -1671,4 +1729,3 @@
 	</script>
 </body>
 </html>
-
