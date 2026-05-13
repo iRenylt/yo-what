@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es" style="background:#050505;">
+<html lang="es">
 
 <head>
     <meta name="theme-color" content="#050505">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
     <title>Footage Archive</title>
     <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
@@ -359,7 +359,7 @@
     <div class="lock-box">
         <h2 id="lockPhrase"></h2>
         <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
-        <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
+        <input type="password" id="pinInput" placeholder="PIN SEGURIDAD" maxlength="4" inputmode="numeric">
         <button onclick="unlockPage()">Abrir Corazón</button>
         <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
     </div>
