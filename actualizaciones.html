@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="es" style="background:#050505;">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
     <meta name="theme-color" content="#050505">
     <title>Footage Archive</title>
     <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
@@ -450,7 +450,7 @@
         <div class="lock-box">
             <h2 id="lockPhrase"></h2>
             <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">CAMBIOS DEL SISTEMA</p>
-            <input type="password" id="pinInput" placeholder="PIN SEGURIDAD">
+            <input type="password" id="pinInput" placeholder="PIN SEGURIDAD" maxlength="4" inputmode="numeric">
             <button onclick="unlockPage()">Abrir Archivo</button>
             <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
         </div>
@@ -738,13 +738,26 @@
                 setTimeout(() => leaf.remove(), duration * 1000);
             }
 
-            setInterval(() => {
-                createSakuraLeaf();
-            }, Math.random() * 300 + 500);
-
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => createSakuraLeaf(), i * 200);
+let sakuraInterval = null;
+        function startSakura() {
+            if (!sakuraInterval && !document.hidden) {
+                sakuraInterval = setInterval(() => createSakuraLeaf(), Math.random() * 300 + 500);
             }
+        }
+        function stopSakura() {
+            if (sakuraInterval) {
+                clearInterval(sakuraInterval);
+                sakuraInterval = null;
+            }
+        }
+        startSakura();
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => createSakuraLeaf(), i * 200);
+        }
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stopSakura();
+            else startSakura();
+        });
         })();
 
         // Avatar dinámico (si existe)
