@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ca-ES" style="background:#050505;">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
     <meta name="theme-color" content="#050505">
     <title>Footage Archive</title>
     <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png" type="image/png">
@@ -1125,13 +1125,26 @@
             setTimeout(() => leaf.remove(), duration * 1000);
         }
 
-        setInterval(() => {
-            createSakuraLeaf();
-        }, Math.random() * 300 + 500);
-
+        let sakuraInterval = null;
+        function startSakura() {
+            if (!sakuraInterval && !document.hidden) {
+                sakuraInterval = setInterval(() => createSakuraLeaf(), Math.random() * 300 + 500);
+            }
+        }
+        function stopSakura() {
+            if (sakuraInterval) {
+                clearInterval(sakuraInterval);
+                sakuraInterval = null;
+            }
+        }
+        startSakura();
         for (let i = 0; i < 5; i++) {
             setTimeout(() => createSakuraLeaf(), i * 200);
         }
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stopSakura();
+            else startSakura();
+        });
     })();
 </script>
 </body>
