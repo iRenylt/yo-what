@@ -98,7 +98,7 @@ function showInitialLogoSplash() {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: 'rgba(0,0,0,1)',
-            zIndex: '999999',
+            zIndex: '99998',
             transition: 'opacity 600ms ease, transform 700ms ease',
             padding: '20px'
         });
@@ -115,7 +115,7 @@ function showInitialLogoSplash() {
         });
 
         // Intentamos obtener el favicon de la página; si no existe, usamos la URL por defecto
-        const iconHref = (document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]'))?.href || 'https://i.imgur.com/PaRZRTN.png';
+        const iconHref = (document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]'))?.href || 'https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png';
 
         const img = document.createElement('img');
         img.src = iconHref;
@@ -191,6 +191,10 @@ function showInitialLogoSplash() {
 function verificarBloqueo() {
     document.body.classList.add("locked");
     const pageLock = document.getElementById("pageLock");
+    if (!pageLock) {
+        console.error('[lock.js] CRÍTICO: Elemento #pageLock no encontrado. El bloqueo no funcionará.');
+        return;
+    }
     if (pageLock) {
         // Asegurar que el overlay cubre todo y evita que se vea contenido detrás
         pageLock.style.display = '';
@@ -251,74 +255,83 @@ function showWelcomeAnimation() {
     pageLock.classList.add('force-solid');
 
     const lockBox = pageLock.querySelector('.lock-box');
-    lockBox.style.transition = "all 1s cubic-bezier(0.19, 1, 0.22, 1)";
-    lockBox.style.opacity = "0";
-    lockBox.style.transform = "scale(0.8) translateY(-50px)";
-    lockBox.style.filter = "blur(10px)";
+    if (lockBox) {
+        lockBox.style.transition = "all 1s cubic-bezier(0.19, 1, 0.22, 1)";
+        lockBox.style.opacity = "0";
+        lockBox.style.transform = "scale(0.8) translateY(-50px)";
+        lockBox.style.filter = "blur(10px)";
+    }
 
     setTimeout(() => {
-        pageLock.innerHTML = `
-            <div style="text-align: center; color: white; width: 100%; max-width: 90vw; padding: clamp(16px, 4vw, 30px);">
-                <div id="welcomeIcon" style="
-                    font-size: clamp(2.5rem, 10vw, 4rem); 
-                    margin-bottom: clamp(12px, 3vw, 20px); 
-                    opacity: 0; 
-                    transform: scale(0.5);
-                    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    line-height: 1;
-                ">${selectedHeart}</div>
-                <h1 id="welcomeText" style="
-                    font-size: clamp(1.8rem, 6vw, 3.5rem);
-                    font-weight: 400;
-                    background: linear-gradient(to bottom, #fff, #aaa);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    opacity: 0;
-                    transform: translateY(30px);
-                    transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-                    letter-spacing: clamp(2px, 1.5vw, 8px);
-                    margin-bottom: clamp(12px, 3vw, 15px);
-                    margin-top: 0;
-                    text-transform: uppercase;
-                    word-wrap: break-word;
-                    word-break: break-word;
-                    line-height: 1.2;
-                ">
-                    ${selectedPhrase}
-                </h1>
-                <p id="welcomeSub" style="
-                    font-size: clamp(0.75rem, 2vw, 0.9rem);
-                    letter-spacing: clamp(1px, 1vw, 12px);
-                    color: rgba(255,255,255,0.4);
-                    opacity: 0;
-                    transform: translateY(10px);
-                    transition: all 1s ease 0.4s;
-                    text-transform: uppercase;
-                    margin: clamp(8px, 2vw, 15px) 0;
-                    word-wrap: break-word;
-                    word-break: break-word;
-                    line-height: 1.3;
-                ">
-                    ${selectedSub}
-                </p>
-                <div id="welcomeLine" style="
-                    width: 0;
-                    height: 1px;
-                    background: linear-gradient(90deg, transparent, #fff, transparent);
-                    margin: clamp(16px, 4vw, 30px) auto;
-                    transition: width 2s cubic-bezier(0.19, 1, 0.22, 1) 0.6s;
-                "></div>
-                <p id="welcomeFinal" style="
-                    font-size: clamp(0.6rem, 1.5vw, 0.7rem);
-                    color: rgba(255,255,255,0.2);
-                    opacity: 0;
-                    transition: all 1s ease 1s;
-                    letter-spacing: clamp(2px, 1vw, 4px);
-                    margin: 0;
-                    line-height: 1.2;
-                ">DESBLOQUEANDO RECUERDOS...</p>
-            </div>
-        `; 
+        // Crear fragmento DOM antes de insertar (evita reflow)
+        const container = document.createElement('div');
+        container.style.textAlign = 'center';
+        container.style.color = 'white';
+        container.style.width = '100%';
+        container.style.maxWidth = '90vw';
+        container.style.padding = 'clamp(16px, 4vw, 30px)';
+        container.innerHTML = `
+            <div id="welcomeIcon" style="
+                font-size: clamp(2.5rem, 10vw, 4rem); 
+                margin-bottom: clamp(12px, 3vw, 20px); 
+                opacity: 0; 
+                transform: scale(0.5);
+                transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                line-height: 1;
+            ">${selectedHeart}</div>
+            <h1 id="welcomeText" style="
+                font-size: clamp(1.8rem, 6vw, 3.5rem);
+                font-weight: 400;
+                background: linear-gradient(to bottom, #fff, #aaa);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                opacity: 0;
+                transform: translateY(30px);
+                transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+                letter-spacing: clamp(2px, 1.5vw, 8px);
+                margin-bottom: clamp(12px, 3vw, 15px);
+                margin-top: 0;
+                text-transform: uppercase;
+                word-wrap: break-word;
+                word-break: break-word;
+                line-height: 1.2;
+            ">
+                ${selectedPhrase}
+            </h1>
+            <p id="welcomeSub" style="
+                font-size: clamp(0.75rem, 2vw, 0.9rem);
+                letter-spacing: clamp(1px, 1vw, 12px);
+                color: rgba(255,255,255,0.4);
+                opacity: 0;
+                transform: translateY(10px);
+                transition: all 1s ease 0.4s;
+                text-transform: uppercase;
+                margin: clamp(8px, 2vw, 15px) 0;
+                word-wrap: break-word;
+                word-break: break-word;
+                line-height: 1.3;
+            ">
+                ${selectedSub}
+            </p>
+            <div id="welcomeLine" style="
+                width: 0;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, #fff, transparent);
+                margin: clamp(16px, 4vw, 30px) auto;
+                transition: width 2s cubic-bezier(0.19, 1, 0.22, 1) 0.6s;
+            "></div>
+            <p id="welcomeFinal" style="
+                font-size: clamp(0.6rem, 1.5vw, 0.7rem);
+                color: rgba(255,255,255,0.2);
+                opacity: 0;
+                transition: all 1s ease 1s;
+                letter-spacing: clamp(2px, 1vw, 4px);
+                margin: 0;
+                line-height: 1.2;
+            ">DESBLOQUEANDO RECUERDOS...</p>
+        `;
+        pageLock.innerHTML = '';
+        pageLock.appendChild(container); 
 
         setTimeout(() => {
             document.getElementById('welcomeIcon').style.opacity = '1';
@@ -363,7 +376,12 @@ function showWelcomeAnimation() {
 }
 
 function unlockPage() {
-    const input = document.getElementById("pinInput").value;
+    const inputElement = document.getElementById("pinInput");
+    if (!inputElement) {
+        console.error('[lock.js] CRÍTICO: Elemento #pinInput no encontrado');
+        return;
+    }
+    const input = inputElement.value;
     const error = document.getElementById("errorMsg");
 
     if (error) error.style.display = "none";
@@ -441,7 +459,10 @@ function unlockPage() {
     // Evitar zoom automático en iOS al enfocar/ocultar el teclado en el input del PIN
     document.addEventListener('DOMContentLoaded', () => {
         const pinInput = document.getElementById('pinInput');
-        if (!pinInput) return;
+        if (!pinInput) {
+            console.warn('[lock.js] #pinInput no encontrado - iOS zoom prevention desactivado');
+            return;
+        }
 
         function isIOS() {
             return /iP(ad|hone|od)/.test(navigator.userAgent) && !window.MSStream;
@@ -453,7 +474,7 @@ function unlockPage() {
         // Aseguramos tamaño de fuente mínimo 16px para evitar zoom en iOS como primera defensa
         pinInput.style.fontSize = '16px';
 
-        if (isIOS()) {
+        if (isIOS() && metaViewport) {
             pinInput.addEventListener('focus', () => {
                 if (metaViewport) metaViewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
                 document.documentElement.style['-webkit-text-size-adjust'] = '100%';
@@ -473,7 +494,10 @@ function unlockPage() {
 document.addEventListener('DOMContentLoaded', () => {
     const pin = document.getElementById('pinInput');
     const pageLock = document.getElementById('pageLock');
-    if (!pin || !pageLock) return;
+    if (!pin || !pageLock) {
+        console.warn('[lock.js] No se puede activar force-solid (falta #pinInput o #pageLock)');
+        return;
+    }
 
     pin.addEventListener('focus', () => {
         pageLock.classList.add('force-solid');
@@ -499,7 +523,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const boton = document.getElementById("enviar");
     const textarea = document.getElementById("mensaje");
 
-    if (!boton || !textarea) return;
+    if (!boton || !textarea) {
+        console.warn('[lock.js] Elementos comentarios (#enviar, #mensaje) no encontrados');
+        return;
+    }
 
     function enviarComentario() {
         const mensaje = textarea.value.trim();
@@ -540,7 +567,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const avatar = document.getElementById("dynamicAvatar");
         const avatarInput = document.getElementById("avatarInput");
 
-        if (!avatar || !avatarInput) return;
+        if (!avatar || !avatarInput) {
+            console.warn('[lock.js] Elementos avatar (#dynamicAvatar, #avatarInput) no encontrados');
+            return;
+        }
 
         function isTouchDevice() {
             return (('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches);
@@ -620,7 +650,7 @@ async function uploadAvatar(file) {
 async function saveAvatarUrl(url) {
     // Intento PATCH (actualizar fila existente)
     let res = await fetch(
-        `${SUPABASE_URL}/rest/v1/avatar_state?id=eq.1`,
+        `${SUPABASE_URL}rest/v1/avatar_state?id=eq.1`,
         {
             method: "PATCH",
             headers: {
@@ -639,7 +669,7 @@ async function saveAvatarUrl(url) {
     // Si no existía la fila (PATCH falló), intentamos INSERTar (crear)
     if (!res.ok) {
         try {
-            res = await fetch(`${SUPABASE_URL}/rest/v1/avatar_state`, {
+            res = await fetch(`${SUPABASE_URL}rest/v1/avatar_state`, {
                 method: 'POST',
                 headers: {
                     "apikey": SUPABASE_KEY,
@@ -669,7 +699,7 @@ async function saveAvatarUrl(url) {
 
 async function loadAvatarFromDB() {
     const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/avatar_state?id=eq.1&select=image_url`,
+        `${SUPABASE_URL}rest/v1/avatar_state?id=eq.1&select=image_url`,
         {
             headers: {
                 "apikey": SUPABASE_KEY,
@@ -687,11 +717,33 @@ async function loadAvatarFromDB() {
 }
 
 // Poll periódico para mantener sincronizado el avatar entre dispositivos (cada 30s)
-setInterval(() => {
-    if (typeof loadAvatarFromDB === 'function') {
-        loadAvatarFromDB().catch(err => console.error('Error sincronizando avatar:', err));
-    }
-}, 30000);
+// Solo mientras la página esté activa (no bloqueada)
+let avatarPollInterval = null;
+document.addEventListener('DOMContentLoaded', () => {
+    // Iniciar poll después de desbloquear
+    const startAvatarPolling = () => {
+        if (!avatarPollInterval && !document.body.classList.contains('locked')) {
+            avatarPollInterval = setInterval(() => {
+                if (typeof loadAvatarFromDB === 'function') {
+                    loadAvatarFromDB().catch(err => console.error('Error sincronizando avatar:', err));
+                }
+            }, 30000);
+        }
+    };
+    // Limpiar poll al bloquear
+    const stopAvatarPolling = () => {
+        if (avatarPollInterval) {
+            clearInterval(avatarPollInterval);
+            avatarPollInterval = null;
+        }
+    };
+    // Observer para cambios en la clase 'locked'
+    const observer = new MutationObserver(() => {
+        if (document.body.classList.contains('locked')) stopAvatarPolling();
+        else startAvatarPolling();
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+});
 
 // Evitar flash blanco al navegar o recargar: forzamos fondo oscuro justo antes de navegar
 document.addEventListener('DOMContentLoaded', () => {
@@ -705,13 +757,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // antes de recargar o salir
     window.addEventListener('beforeunload', protectBackground, {capture: true});
 
-    // al hacer click en enlaces internos, forzar fondo oscuro inmediatamente
-    document.querySelectorAll('a[href]').forEach(a => {
-        a.addEventListener('click', (e) => {
-            const href = a.getAttribute('href');
-            if (!href) return;
-            if (href.startsWith('#') || a.target === '_blank' || href.startsWith('mailto:') || href.startsWith('javascript:')) return;
-            protectBackground();
-        }, {passive: true});
-    });
+    // Event delegation: un solo listener en body para todos los links
+    document.body.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href]');
+        if (!a) return;
+        const href = a.getAttribute('href');
+        if (!href) return;
+        if (href.startsWith('#') || a.target === '_blank' || href.startsWith('mailto:') || href.startsWith('javascript:')) return;
+        protectBackground();
+    }, {passive: true, capture: false});
 });
