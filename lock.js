@@ -45,22 +45,31 @@ function injectPinStyles() {
     if (document.getElementById('pin-styles')) return;
     const css = `
     /* Pin styles injected by lock.js - responsive + accessible */
+    @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+    @keyframes glow { 0%, 100% { box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(200,200,220,0.05); } 50% { box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 60px rgba(200,200,220,0.15); } }
+    @keyframes floatUp { 0% { transform: translateY(30px) scale(0.95); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
+    @keyframes slideInFade { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+    @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-4px); } 100% { transform: translateX(0); } }
+    @keyframes pulseGlow { 0%, 100% { text-shadow: 0 0 30px rgba(200,200,220,0.15); } 50% { text-shadow: 0 0 50px rgba(200,200,220,0.3); } }
+    @keyframes floatParticles { 0% { opacity: 0; transform: translateY(100vh) rotate(0deg); } 25% { opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; transform: translateY(-100vh) rotate(360deg); } }
+    @keyframes borderGlow { 0%, 100% { border-color: rgba(200,200,220,0.15); } 50% { border-color: rgba(200,200,220,0.3); } }
     .page-lock { display: none; align-items: center; justify-content: center; }
     .page-lock.active { display: flex; }
-    .page-lock { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 99999; padding: 20px; }
+    .page-lock { position: fixed; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,0.99), rgba(0,0,0,0.99)); z-index: 99999; padding: 20px; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
     .page-lock.force-solid { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 18px; padding: clamp(20px, 3.2vw, 40px); background: linear-gradient(180deg, rgba(200,200,220,0.03), rgba(170,170,190,0.01)); border: 1.5px solid rgba(200,200,220,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(200,200,220,0.05); text-align: center; transform-origin: center; }
-    .lock-box h2 { font-size: clamp(1.1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; color: #fff; text-shadow: 0 0 30px rgba(200,200,220,0.15); }
-    .lock-box p { margin: 0 0 20px; color: rgba(255,255,255,0.65); font-size: 0.85rem; letter-spacing: 2px; }
-    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1.5px solid rgba(200,200,220,0.15); background: rgba(255,255,255,0.03); color: #fff; outline: none; transition: box-shadow 220ms ease, transform 200ms ease, border-color 200ms ease; text-align: center; }
-    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 20px rgba(200,200,220,0.12); border-color: rgba(200,200,220,0.3); background: rgba(200,200,220,0.05); }
-    .lock-box button { margin-top: 14px; padding: 13px 36px; border-radius: 999px; border: 1.5px solid rgba(200,200,220,0.15); background: linear-gradient(135deg, rgba(200,200,220,0.08), rgba(170,170,190,0.04)); color: #fff; cursor: pointer; font-weight: 600; transition: transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms, all 220ms; }
-    .lock-box button:hover { background: linear-gradient(135deg, rgba(200,200,220,0.15), rgba(170,170,190,0.08)); border-color: rgba(200,200,220,0.3); box-shadow: 0 10px 30px rgba(200,200,220,0.1); transform: translateY(-2px); }
-    .lock-box button:active { transform: translateY(0) scale(0.998); }
+    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 18px; padding: clamp(20px, 3.2vw, 40px); background: linear-gradient(180deg, rgba(200,200,220,0.03), rgba(170,170,190,0.01)); border: 1.5px solid rgba(200,200,220,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(200,200,220,0.05); text-align: center; transform-origin: center; animation: glow 3s ease-in-out infinite, floatUp 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
+    .lock-box h2 { font-size: clamp(1.1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; color: #fff; text-shadow: 0 0 30px rgba(200,200,220,0.15); animation: pulseGlow 2.5s ease-in-out infinite; }
+    .lock-box p { margin: 0 0 20px; color: rgba(255,255,255,0.65); font-size: 0.85rem; letter-spacing: 2px; animation: slideInFade 0.8s ease-out 0.2s both; }
+    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1.5px solid rgba(200,200,220,0.15); background: rgba(255,255,255,0.03); color: #fff; outline: none; transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), transform 280ms cubic-bezier(0.4, 0, 0.2, 1), border-color 280ms cubic-bezier(0.4, 0, 0.2, 1), background 280ms cubic-bezier(0.4, 0, 0.2, 1); text-align: center; animation: slideInFade 0.8s ease-out 0.3s both; }
+    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 30px rgba(200,200,220,0.2), inset 0 0 15px rgba(200,200,220,0.08); border-color: rgba(200,200,220,0.4); background: rgba(200,200,220,0.08); transform: translateY(-2px); }
+    .lock-box button { margin-top: 14px; padding: 13px 36px; border-radius: 999px; border: 1.5px solid rgba(200,200,220,0.15); background: linear-gradient(135deg, rgba(200,200,220,0.08), rgba(170,170,190,0.04)); color: #fff; cursor: pointer; font-weight: 600; transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 260ms cubic-bezier(0.4, 0, 0.2, 1), all 260ms cubic-bezier(0.4, 0, 0.2, 1); animation: slideInFade 0.8s ease-out 0.4s both; position: relative; overflow: hidden; }
+    .lock-box button::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transform: translateX(-100%); transition: transform 400ms ease; }
+    .lock-box button:hover::before { transform: translateX(100%); }
+    .lock-box button:hover { background: linear-gradient(135deg, rgba(200,200,220,0.18), rgba(170,170,190,0.1)); border-color: rgba(200,200,220,0.35); box-shadow: 0 12px 35px rgba(200,200,220,0.15); transform: translateY(-3px); }
+    .lock-box button:active { transform: translateY(-1px) scale(0.98); box-shadow: 0 4px 12px rgba(200,200,220,0.1); }
     .lock-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 12px; display: none; animation: shake 420ms ease; }
     .lock-error.show { display: block; }
-    @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-4px); } 100% { transform: translateX(0); } }
-    .page-lock.unlocking { transition: opacity 420ms ease, transform 420ms ease; opacity: 0; transform: scale(1.03); }
+    .page-lock.unlocking { transition: opacity 480ms cubic-bezier(0.4, 0, 0.2, 1), transform 480ms cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; transform: scale(1.08); }
     @media (max-width: 480px) { .lock-box { padding: 16px; border-radius: 14px; } .lock-box h2 { letter-spacing: 2px; } }
     `;
 
@@ -99,9 +108,41 @@ function showInitialLogoSplash() {
             justifyContent: 'center',
             backgroundColor: 'rgba(0,0,0,1)',
             zIndex: '99998',
-            transition: 'opacity 600ms ease, transform 700ms ease',
-            padding: '20px'
+            transition: 'opacity 700ms cubic-bezier(0.4, 0, 0.2, 1), transform 700ms cubic-bezier(0.4, 0, 0.2, 1), filter 700ms ease',
+            padding: '20px',
+            overflow: 'hidden'
         });
+
+        // Contenedor para partículas de fondo
+        const particlesContainer = document.createElement('div');
+        Object.assign(particlesContainer.style, {
+            position: 'absolute',
+            inset: '0',
+            pointerEvents: 'none',
+            zIndex: '1'
+        });
+        
+        // Crear partículas sutiles
+        for (let i = 0; i < 8; i++) {
+            const particle = document.createElement('div');
+            const delay = (i * 0.1) + 's';
+            const duration = (2 + Math.random() * 1.5) + 's';
+            const size = (Math.random() * 60 + 20) + 'px';
+            Object.assign(particle.style, {
+                position: 'absolute',
+                width: size,
+                height: size,
+                borderRadius: '50%',
+                background: `radial-gradient(circle, rgba(200,200,220,0.15), rgba(200,200,220,0))`,
+                left: (Math.random() * 100) + '%',
+                top: (Math.random() * 100) + '%',
+                animation: `floatParticles ${duration} ease-in-out infinite`,
+                animationDelay: delay,
+                filter: 'blur(1px)'
+            });
+            particlesContainer.appendChild(particle);
+        }
+        splash.appendChild(particlesContainer);
 
         // Contenedor interno para centrar imagen + texto y controlar responsividad
         const inner = document.createElement('div');
@@ -111,11 +152,14 @@ function showInitialLogoSplash() {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '18px',
-            textAlign: 'center'
+            textAlign: 'center',
+            filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.8))',
+            position: 'relative',
+            zIndex: '2'
         });
 
         // Intentamos obtener el favicon de la página; si no existe, usamos la URL por defecto
-        const iconHref = (document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]'))?.href || 'https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar-1769744876215.png';
+        const iconHref = (document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]'))?.href || 'https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png';
 
         const img = document.createElement('img');
         img.src = iconHref;
@@ -124,11 +168,12 @@ function showInitialLogoSplash() {
             width: 'min(44vw, 220px)',
             maxWidth: '220px',
             height: 'auto',
-            borderRadius: '12px',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.6)',
+            borderRadius: '16px',
+            boxShadow: '0 0 0 0 rgba(200,200,220,0.4), 0 20px 50px rgba(0,0,0,0.8)',
             opacity: '0',
-            transform: 'translateY(8px) scale(0.97)',
-            transition: 'all 500ms cubic-bezier(0.22,1,0.36,1)'
+            transform: 'translateY(20px) scale(0.92) rotateX(-15deg)',
+            transition: 'all 700ms cubic-bezier(0.19, 1, 0.22, 1)',
+            filter: 'brightness(0.95)'
         });
 
         const logo = document.createElement('div');
@@ -138,15 +183,21 @@ function showInitialLogoSplash() {
             color: '#fff',
             fontSize: 'clamp(1.6rem, 4vw, 3.2rem)',
             fontWeight: '700',
-            letterSpacing: '6px',
+            letterSpacing: '8px',
             opacity: '0',
-            transform: 'translateY(6px)',
-            transition: 'opacity 600ms ease, transform 700ms cubic-bezier(0.22,1,0.36,1)',
+            transform: 'translateY(15px)',
+            transition: 'opacity 800ms ease, transform 800ms cubic-bezier(0.19, 1, 0.22, 1)',
             textTransform: 'uppercase',
             textAlign: 'center',
             padding: '0 8px',
             maxWidth: '90vw',
-            wordBreak: 'break-word'
+            wordBreak: 'break-word',
+            backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.8), rgba(200,200,220,0.4), rgba(255,255,255,0.8))',
+            backgroundSize: '200% 100%',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textShadow: 'none'
         });
 
         inner.appendChild(img);
@@ -158,29 +209,31 @@ function showInitialLogoSplash() {
         requestAnimationFrame(() => {
             setTimeout(() => {
                 img.style.opacity = '1';
-                img.style.transform = 'translateY(0) scale(1)';
-            }, 50);
+                img.style.transform = 'translateY(0) scale(1) rotateX(0deg)';
+                img.style.filter = 'brightness(1)';
+            }, 80);
 
             setTimeout(() => {
                 logo.style.opacity = '1';
                 logo.style.transform = 'translateY(0)';
-            }, 180);
+            }, 250);
         });
 
         // Mantener visible un instante y luego desvanecer splash
         setTimeout(() => {
             splash.style.opacity = '0';
-            splash.style.transform = 'scale(1.04)';
+            splash.style.transform = 'scale(1.06)';
+            splash.style.filter = 'blur(8px)';
             // impedir interacciones mientras se desvanece
             splash.style.pointerEvents = 'none';
-        }, 1800);
+        }, 2000);
 
         // Remover splash después de que se desvanezca completamente
         setTimeout(() => {
             if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
             // Después de remover el splash, mostrar el PIN
             try { verificarBloqueo(); } catch (e) { /* no bloquear si falla */ }
-        }, 2250);
+        }, 2350);
     } catch (err) {
         // En caso de fallo, caer al comportamiento anterior
         console.error('showInitialLogoSplash fallo:', err);
@@ -221,6 +274,26 @@ function showWelcomeAnimation() {
     const pageLock = document.getElementById("pageLock");
     if (!pageLock) return;
     
+    // Inyectar estilos para animaciones de bienvenida
+    if (!document.getElementById('welcome-styles')) {
+        const welcomeCss = `
+        @keyframes fadeInScale { 0% { opacity: 0; transform: scale(0.7); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        @keyframes shimmerText { 0% { background-position: 0 0; } 100% { background-position: 200% 0; } }
+        @keyframes lineGrow { 0% { width: 0; opacity: 0; } 50% { opacity: 1; } 100% { width: 100%; opacity: 0; } }
+        #welcomeIcon { animation: fadeInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), heartBeat 1.5s ease-in-out 0.5s infinite !important; }
+        #welcomeText { animation: slideUpFade 1s cubic-bezier(0.19, 1, 0.22, 1) 0.3s both !important; }
+        #welcomeSub { animation: slideUpFade 1s cubic-bezier(0.19, 1, 0.22, 1) 0.5s both !important; }
+        #welcomeLine { animation: lineGrow 2s cubic-bezier(0.19, 1, 0.22, 1) 0.8s both !important; }
+        #welcomeFinal { animation: slideUpFade 0.8s ease 1.2s both !important; }
+        `;
+        const style = document.createElement('style');
+        style.id = 'welcome-styles';
+        style.appendChild(document.createTextNode(welcomeCss));
+        document.head.appendChild(style);
+    }
+    
     // Arrays de frases y emojis para la bienvenida
     const welcomePhrases = [
         "HOLA NOHELIA",
@@ -251,15 +324,16 @@ function showWelcomeAnimation() {
     pageLock.style.opacity = '1';
     pageLock.style.pointerEvents = 'auto';
     pageLock.style.backdropFilter = 'blur(20px)';
+    pageLock.style.transition = 'all 1.2s cubic-bezier(0.19, 1, 0.22, 1)';
     // evitar fugas visuales en móviles: desactivar backdrop-filter vía clase
     pageLock.classList.add('force-solid');
 
     const lockBox = pageLock.querySelector('.lock-box');
     if (lockBox) {
-        lockBox.style.transition = "all 1s cubic-bezier(0.19, 1, 0.22, 1)";
+        lockBox.style.transition = "all 1.2s cubic-bezier(0.19, 1, 0.22, 1)";
         lockBox.style.opacity = "0";
-        lockBox.style.transform = "scale(0.8) translateY(-50px)";
-        lockBox.style.filter = "blur(10px)";
+        lockBox.style.transform = "scale(0.7) translateY(-80px)";
+        lockBox.style.filter = "blur(15px)";
     }
 
     setTimeout(() => {
@@ -276,18 +350,18 @@ function showWelcomeAnimation() {
                 margin-bottom: clamp(12px, 3vw, 20px); 
                 opacity: 0; 
                 transform: scale(0.5);
-                transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 line-height: 1;
+                filter: drop-shadow(0 10px 30px rgba(0,0,0,0.6));
             ">${selectedHeart}</div>
             <h1 id="welcomeText" style="
                 font-size: clamp(1.8rem, 6vw, 3.5rem);
                 font-weight: 400;
-                background: linear-gradient(to bottom, #fff, #aaa);
+                background: linear-gradient(135deg, #fff 0%, #e0e0ff 50%, #c0c0ff 100%);
+                backgroundSize: '200% 200%';
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 opacity: 0;
-                transform: translateY(30px);
-                transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+                transform: translateY(40px);
                 letter-spacing: clamp(2px, 1.5vw, 8px);
                 margin-bottom: clamp(12px, 3vw, 15px);
                 margin-top: 0;
@@ -295,16 +369,16 @@ function showWelcomeAnimation() {
                 word-wrap: break-word;
                 word-break: break-word;
                 line-height: 1.2;
+                filter: drop-shadow(0 0 20px rgba(200,200,220,0.3));
             ">
                 ${selectedPhrase}
             </h1>
             <p id="welcomeSub" style="
                 font-size: clamp(0.75rem, 2vw, 0.9rem);
                 letter-spacing: clamp(1px, 1vw, 12px);
-                color: rgba(255,255,255,0.4);
+                color: rgba(255,255,255,0.5);
                 opacity: 0;
-                transform: translateY(10px);
-                transition: all 1s ease 0.4s;
+                transform: translateY(15px);
                 text-transform: uppercase;
                 margin: clamp(8px, 2vw, 15px) 0;
                 word-wrap: break-word;
@@ -315,40 +389,29 @@ function showWelcomeAnimation() {
             </p>
             <div id="welcomeLine" style="
                 width: 0;
-                height: 1px;
-                background: linear-gradient(90deg, transparent, #fff, transparent);
+                height: 1.5px;
+                background: linear-gradient(90deg, transparent, rgba(200,200,220,0.6), transparent);
                 margin: clamp(16px, 4vw, 30px) auto;
-                transition: width 2s cubic-bezier(0.19, 1, 0.22, 1) 0.6s;
+                boxShadow: 0 0 20px rgba(200,200,220,0.3);
             "></div>
             <p id="welcomeFinal" style="
                 font-size: clamp(0.6rem, 1.5vw, 0.7rem);
-                color: rgba(255,255,255,0.2);
+                color: rgba(255,255,255,0.3);
                 opacity: 0;
-                transition: all 1s ease 1s;
                 letter-spacing: clamp(2px, 1vw, 4px);
                 margin: 0;
                 line-height: 1.2;
+                textTransform: 'uppercase';
             ">DESBLOQUEANDO RECUERDOS...</p>
         `;
         pageLock.innerHTML = '';
-        pageLock.appendChild(container); 
-
-        setTimeout(() => {
-            document.getElementById('welcomeIcon').style.opacity = '1';
-            document.getElementById('welcomeIcon').style.transform = 'scale(1)';
-            document.getElementById('welcomeText').style.opacity = '1';
-            document.getElementById('welcomeText').style.transform = 'translateY(0)';
-            document.getElementById('welcomeSub').style.opacity = '1';
-            document.getElementById('welcomeSub').style.transform = 'translateY(0)';
-            document.getElementById('welcomeLine').style.width = '100%';
-            document.getElementById('welcomeFinal').style.opacity = '1';
-        }, 100);
+        pageLock.appendChild(container);
 
         setTimeout(() => {
             // Hacemos fade-out (sin volver transparente el fondo antes de tiempo)
-            pageLock.style.transition = 'opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1), transform 1.2s ease';
+            pageLock.style.transition = 'opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1), filter 1.4s ease';
             pageLock.style.opacity = '0';
-            pageLock.style.transform = 'scale(1.04)';
+            pageLock.style.filter = 'blur(12px)';
 
             setTimeout(() => {
                 pageLock.style.display = 'none';
@@ -369,9 +432,9 @@ function showWelcomeAnimation() {
                 if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
                 actualizarUltimaActividad();
                 loadAvatarFromDB(); // 👈 AQUI TAMBIÉN
-            }, 1200);
+            }, 1400);
 
-        }, 4000);
+        }, 4400);
     }, 800);
 }
 
@@ -395,6 +458,10 @@ function unlockPage() {
         if (isIndex) {
             showWelcomeAnimation();
         } else {
+            // Añadir efecto de éxito antes de desbloquear
+            inputElement.style.borderColor = 'rgba(100, 200, 100, 0.6)';
+            inputElement.style.boxShadow = '0 0 30px rgba(100, 200, 100, 0.3), inset 0 0 15px rgba(100, 200, 100, 0.1)';
+            
             // Remover clases de bloqueo
             document.body.classList.remove('locked');
             document.body.classList.remove('initializing');
@@ -415,15 +482,18 @@ function unlockPage() {
             
             const pageLock = document.getElementById("pageLock");
             if (pageLock) {
-                // animación de salida suave
+                // animación de salida suave mejorada
                 pageLock.classList.add('unlocking');
+                pageLock.style.transition = 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 500ms cubic-bezier(0.4, 0, 0.2, 1), filter 500ms ease';
+                pageLock.style.opacity = '0';
+                pageLock.style.filter = 'blur(10px)';
                 setTimeout(() => {
                     pageLock.classList.remove('active');
                     pageLock.classList.remove('unlocking');
                     pageLock.style.display = 'none';
                     pageLock.style.visibility = 'hidden';
                     pageLock.style.pointerEvents = 'none';
-                }, 420);
+                }, 500);
             }
             document.body.classList.remove("locked");
             if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
@@ -431,7 +501,23 @@ function unlockPage() {
             if (typeof loadAvatarFromDB === 'function') loadAvatarFromDB(); // 👈 AQUI
         }
     } else {
-        if (error) error.style.display = "block";
+        // Animación de error mejorada
+        if (error) {
+            error.style.display = "block";
+            error.style.animation = 'none';
+            // Forzar reflow para reiniciar animación
+            void error.offsetWidth;
+            error.style.animation = 'shake 420ms cubic-bezier(0.36, 0, 0.66, -0.56)';
+        }
+        
+        // Efecto visual en el input
+        inputElement.style.borderColor = 'rgba(255, 107, 107, 0.6)';
+        inputElement.style.boxShadow = '0 0 25px rgba(255, 107, 107, 0.3), inset 0 0 10px rgba(255, 107, 107, 0.05)';
+        
+        setTimeout(() => {
+            inputElement.style.borderColor = 'rgba(200,200,220,0.15)';
+            inputElement.style.boxShadow = '';
+        }, 500);
     }
 }
 
