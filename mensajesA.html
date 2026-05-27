@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
+    <meta name="theme-color" content="#050505">
+    <title>Footage Archive</title>
+    <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffffff;
+            --accent: #9a9aaa;
+            --accent-light: #d8d8e8;
+            --accent-dark: #6a6a7a;
+            --bg: #050505;
+            --card-bg: rgba(20, 20, 25, 0.7);
+            --card-bg-hover: rgba(25, 25, 35, 0.85);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(150, 150, 170, 0.15);
+            --border-hover: rgba(150, 150, 170, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Playfair Display', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        /* 🌌 Fondo Estelar */
+        .stars {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #111111 0%, #050505 100%);
+            z-index: 0;
+        }
+
+        .stars::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.15;
+            animation: starsMove 150s linear infinite;
+        }
+
+        @keyframes starsMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        /* 🔒 BLOQUEO */
+        body.locked { overflow: hidden !important; height: 100vh !important; }
+        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
+
+        .page-lock {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .lock-box {
+            text-align: center;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            animation: lockFadeIn 1s ease-out;
+        }
+
+        @keyframes lockFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .lock-box h2 { 
+            font-weight: 400; 
+            margin-bottom: 30px; 
+            letter-spacing: 4px; 
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .lock-box input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            outline: none;
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .lock-box button {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 12px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .lock-box button:hover { 
+            background: #fff;
+            color: #000;
+        }
+
+        .lock-error {
+            margin-top: 15px;
+            color: #ff4444;
+            font-size: 0.8rem;
+            display: none;
+            letter-spacing: 1px;
+        }
+
+        /* ✨ HEADER */
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 80px 20px 45px;
+            text-align: center;
+        }
+
+        .nohelia-name {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 700;
+            letter-spacing: 15px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #fff 30%, rgba(255,255,255,0.2) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
+            display: block;
+        }
+
+        .header-sub {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        /* 📱 Navegación */
+        nav {
+            position: relative;
+            z-index: 1000;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-width: 100%;
+            margin: 0 auto 50px;
+            padding: 0 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav a, .nav-item {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border: 1.5px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 22px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        nav a:hover, .nav-item:hover { 
+            color: #fff; 
+            border-color: var(--border-hover);
+            background: var(--glass-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
+        }
+
+        .dropdown { position: relative; width: auto; display: inline-block; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: max-content;
+            min-width: 120px;
+            background: rgba(5, 5, 5, 0.98);
+            border: 1.5px solid var(--border);
+            border-radius: 18px;
+            padding: 8px 4px;
+            z-index: 2001;
+            flex-direction: column;
+            gap: 2px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+        }
+        .dropdown:hover .dropdown-content { display: flex; }
+        .dropdown-content a { 
+            display: block; 
+            padding: 10px 14px; 
+            border: none; 
+            background: transparent; 
+            white-space: nowrap; 
+            color: var(--text-dim); 
+            text-decoration: none; 
+            font-size: 0.65rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.3px; 
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); 
+            border-radius: 10px; 
+            cursor: pointer; 
+        }
+        .dropdown-content a:hover { 
+            background: rgba(200,200,220,0.1); 
+            color: #fff;
+        }
+
+        /* 🆕 Badge de Notificación */
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            display: none;
+        }
+
+        .has-update .badge { display: block; }
+
+        /* ⏳ LINEA DE TIEMPO */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 16px 70px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 70px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 30% 30%, #fff, #d8d8e8);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px var(--card-bg);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .timeline-item:hover::before {
+            box-shadow: 0 0 0 3px var(--card-bg);
+        }
+
+        .timeline-date {
+            font-size: 0.7rem;
+            color: #d8d8e8;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: block;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(200, 200, 220, 0.2);
+        }
+
+        .timeline-content {
+            background: linear-gradient(135deg, rgba(20, 20, 25, 0.8), rgba(25, 25, 35, 0.6));
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(20px);
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .timeline-content:hover {
+            border-color: var(--border-hover);
+            background: linear-gradient(135deg, rgba(25, 25, 35, 0.9), rgba(30, 30, 40, 0.8));
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .timeline-content h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: #d8d8e8;
+            letter-spacing: 0.8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .timeline-content p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.85;
+            font-style: italic;
+            animation: typewriter 3s steps(60, end) forwards;
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        @keyframes typewriter {
+            from { max-height: 0; opacity: 0; }
+            to { max-height: 400px; opacity: 1; }
+        }
+
+        /* � Books collapsible (accordion) */
+        .book { 
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+
+        .book.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .book-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin: 0 0 0 0;
+            padding-bottom: 10px;
+        }
+
+        .book-toggle {
+            background: linear-gradient(135deg, rgba(200,200,220,0.12), rgba(170,170,190,0.05));
+            border: 1.5px solid var(--border);
+            padding: 14px 24px;
+            border-radius: 28px;
+            color: #d8d8e8;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            font-weight: 700;
+            width: 100%;
+            justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .book-toggle:hover {
+            background: linear-gradient(135deg, rgba(200,200,220,0.2), rgba(170,170,190,0.1));
+            border-color: var(--border-hover);
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .book-title { flex: 1; text-align: left; }
+        .book-toggle .chev { 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .book.open .chev { transform: rotate(90deg); }
+
+        .book-body { 
+            overflow: hidden; 
+            max-height: 0; 
+            transition: max-height 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease; 
+            opacity: 0;
+        }
+
+        .book.open .book-body { 
+            opacity: 1;
+        }
+
+        .book .book-body .timeline-item { pointer-events: auto; }
+
+        /* �💬 AREA DE MENSAJES */
+        .message-box {
+            margin-bottom: 50px;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 25px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .message-box:hover {
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        #mensaje {
+            width: 100%;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+            margin-bottom: 20px;
+            resize: none;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        #mensaje:focus { border-color: #fff; background: rgba(255,255,255,0.05); }
+
+        #enviar {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 12px 50px;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        #enviar:hover { background: #fff; color: #000; }
+
+        /* 🖱️ INDICADOR DE SCROLL */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 5;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator p { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
+        .scroll-indicator .dot { width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+            40% {transform: translateX(-50%) translateY(-10px);}
+            60% {transform: translateX(-50%) translateY(-5px);}
+        }
+
+        /* 🎁 SECRETOS ESTILOS */
+        .secret-word { cursor: pointer; position: relative; transition: all 0.3s; }
+        .secret-word:hover { color: #d8d8e8; text-shadow: 0 0 10px rgba(200, 200, 220, 0.5); }
+
+        .secret-modal { 
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
+            z-index: 10001; align-items: center; justify-content: center; 
+            backdrop-filter: blur(20px); padding: 20px; animation: fadeIn 0.4s ease;
+        }
+
+        .secret-modal.active { display: flex; }
+
+        .secret-content { 
+            background: var(--card-bg); border: 1px solid var(--border); padding: 40px; 
+            border-radius: 30px; text-align: center; max-width: 500px; animation: popIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .secret-image { max-width: 100%; border-radius: 20px; margin: 20px 0; max-height: 400px; }
+        .secret-text { color: var(--text-dim); font-style: italic; margin: 15px 0; line-height: 1.6; }
+        .secret-button { background: transparent; border: 1px solid #fff; color: #fff; padding: 10px 30px; border-radius: 30px; cursor: pointer; margin-top: 20px; transition: all 0.3s; }
+        .secret-button:hover { background: #fff; color: #000; }
+
+        footer {
+            position: relative;
+            z-index: 10;
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            background: linear-gradient(to bottom, transparent, rgba(5, 5, 5, 0.8));
+            margin-top: auto;
+            width: 100%;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 65px 18px 45px; }
+            .nohelia-name { font-size: 2.5rem; letter-spacing: 10px; }
+            nav { gap: 6px; margin-bottom: 35px; padding: 0 8px; }
+            nav a, .nav-item { padding: 9px 12px; font-size: 0.68rem; border-radius: 15px; }
+            .dropdown-content { min-width: 115px; padding: 6px 3px; }
+            .dropdown-content a { padding: 7px 8px; font-size: 0.6rem; }
+            .container { padding: 0 14px 55px; max-width: 100%; }
+            .timeline { padding-left: 35px; }
+            .timeline-item { margin-bottom: 60px; }
+            .timeline-item::before { left: -18px; width: 14px; height: 14px; }
+            .timeline-content { padding: 24px 20px; border-radius: 18px; }
+            .timeline-content h2 { font-size: 1.1rem; margin-bottom: 15px; }
+            .timeline-content p { font-size: 0.92rem; }
+            .timeline-date { font-size: 0.68rem; margin-bottom: 10px; }
+            .book-toggle { padding: 12px 18px; font-size: 0.78rem; letter-spacing: 0.8px; }
+            .book-toggle .chev { width: 22px; height: 22px; }
+            .message-box { padding: 20px; }
+            #mensaje { padding: 15px; font-size: 15px; }
+            #enviar { padding: 11px 35px; font-size: 0.75rem; }
+        }
+
+        @media (max-width: 580px) {
+            .container { padding: 0 12px 50px; }
+            .timeline { padding-left: 32px; }
+            .timeline-item { margin-bottom: 55px; }
+            .timeline-item::before { left: -17px; width: 13px; height: 13px; top: 6px; }
+        }
+
+        @media (max-width: 480px) {
+            header { padding: 50px 12px 30px; }
+            .nohelia-name { font-size: 1.8rem; letter-spacing: 6px; }
+            .header-sub { font-size: 0.65rem; }
+            nav { gap: 5px; margin-bottom: 28px; padding: 0 6px; }
+            nav a, .nav-item { padding: 8px 10px; font-size: 0.62rem; border-radius: 13px; }
+            .dropdown-content { min-width: 105px; padding: 5px 2px; }
+            .dropdown-content a { padding: 6px 7px; font-size: 0.55rem; }
+            .container { padding: 0 12px 50px; }
+            .timeline { padding-left: 28px; }
+            .timeline-item { margin-bottom: 50px; }
+            .timeline-item::before { left: -15px; width: 11px; height: 11px; top: 4px; }
+            .timeline::before { left: 4px; }
+            .timeline-content { padding: 18px 16px; border-radius: 16px; }
+            .timeline-content h2 { font-size: 0.95rem; margin-bottom: 12px; }
+            .timeline-content p { font-size: 0.85rem; line-height: 1.6; }
+            .timeline-date { font-size: 0.6rem; margin-bottom: 8px; letter-spacing: 2px; }
+            .book-toggle { 
+                padding: 10px 14px; 
+                font-size: 0.72rem; 
+                letter-spacing: 0.6px;
+                border-radius: 24px;
+            }
+            .book-toggle .chev { width: 20px; height: 20px; font-size: 0.9rem; }
+            .book-title { font-size: 0.7rem; }
+            .message-box { padding: 14px; margin-bottom: 40px; }
+            #mensaje { padding: 12px; font-size: 14px; margin-bottom: 15px; }
+            #enviar { padding: 9px 25px; font-size: 0.7rem; }
+        }
+
+        @media (max-width: 360px) {
+            header { padding: 45px 10px 25px; }
+            .nohelia-name { font-size: 1.5rem; letter-spacing: 4px; margin-bottom: 10px; }
+            .header-sub { font-size: 0.6rem; }
+            nav { gap: 4px; margin-bottom: 22px; padding: 0 4px; }
+            nav a, .nav-item { padding: 7px 9px; font-size: 0.58rem; }
+            .container { padding: 0 10px 40px; }
+            .timeline { padding-left: 26px; }
+            .timeline-item::before { left: -14px; width: 10px; height: 10px; top: 3px; }
+            .timeline::before { left: 3px; }
+            .timeline-content { padding: 16px 14px; }
+            .timeline-content h2 { font-size: 0.85rem; }
+            .timeline-content p { font-size: 0.8rem; }
+            .book-toggle { padding: 9px 12px; font-size: 0.65rem; }
+            .book-toggle .chev { width: 18px; height: 18px; }
+            .message-box { padding: 12px; }
+            #mensaje { padding: 10px; font-size: 13px; }
+        }
+    </style>
+    
+<body>
+
+<div class="stars"></div>
+<div class="sakura" id="sakura"></div>
+
+<div id="pageLock" class="page-lock">
+    <div class="lock-box">
+        <h2 id="lockPhrase"></h2>
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
+        <input type="password" id="pinInput" placeholder="PIN SEGURIDAD" maxlength="4" inputmode="numeric">
+        <button onclick="unlockPage()">Abrir Corazón</button>
+        <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
+    </div>
+</div>
+
+<header>
+    <span class="nohelia-name">Nohelia</span>
+    <div class="header-sub">REGISTRO DE DATOS</div>
+</header>
+
+    <nav>
+        <a href="index.html">Inicio</a>
+    </nav>
+
+<div class="container">
+    <div class="message-box">
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 15px; letter-spacing: 3px; text-transform: uppercase;">Añadir al archivo</p>
+        <textarea id="mensaje" rows="4" placeholder="Escribe algo para el archivo..."></textarea>
+        <button id="enviar">Guardar Mensaje</button>
+    </div>
+
+
+<footer>
+    <p>Footage Archive 2025-2026 · Construido con amor 💕</p>
+</footer>
+
+<script src="lock.js"></script>
+<script>
+
+    // Frases aleatorias
+    const phrases = [
+        "UN ARCHIVO SECRETO",
+        "EN CADA MOMENTO",
+        "CADA SEGUNDO CONTIGO",
+        "RECUERDOS QUE VIVEN",
+        "UN VIAJE ESPECIAL",
+        "TÚ LUGAR ESPECIAL",
+        "CORAZÓN EN LA MANO",
+        "GRAVEDAD SIN EXPLICACIÓN",
+        "COMPLETAMENTE CAUTIVADORA",
+        "ALMA NATURAL ENCONTRADA",
+        "AMOR SIN MEDIDA",
+        "UN REGALO DEL UNIVERSO",
+        "DONDE TÚ ESTÉS, IRÉ",
+        "PUNTO DE NO RETORNO",
+        "PERFECTAMENTE IMPERFECTA",
+        "UN SUEÑO HECHO REALIDAD",
+        "FORTALEZA EN TUS MANOS",
+        "ENTRE TUS BRAZOS SOY LIBRE",
+        "CADA LATIDO TE LLAMA",
+        "ERES MI DEBILIDAD MÁS HERMOSA",
+        "PARA AMARTE EN CUALQUIER MOMENTO",
+        "SUEÑO DESPIERTO CONTIGO",
+        "MI DESTINO ERES TÚ",
+        "EL TIEMPO SE DETIENE"
+    ];
+    const lockPhrase = document.getElementById('lockPhrase');
+    if (lockPhrase) {
+        lockPhrase.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    }
+
+</script>
+</body>
+</html>
