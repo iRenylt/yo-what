@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
+    <meta name="theme-color" content="#050505">
+    <meta name="description" content="Comentarios - Footage Archive">
+    <title>Footage Archive</title>
+    <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        main { padding: clamp(1rem, 5vw, 2rem); }
+        .comments-container { max-width: 700px; margin: 0 auto; }
+        .comment-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: clamp(1.5rem, 4vw, 2rem);
+            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+            transition: var(--transition-smooth);
+        }
+        .comment-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-md);
+        }
+        .comment-text {
+            font-size: clamp(0.9rem, 1.8vw, 1rem);
+            line-height: 1.7;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .comment-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .comment-time {
+            font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+            color: var(--text-dim);
+        }
+        .comment-badge {
+            display: inline-block;
+            padding: 0.3rem 0.75rem;
+            background: rgba(212, 165, 116, 0.15);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            font-size: clamp(0.65rem, 1.3vw, 0.75rem);
+            color: var(--accent-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem clamp(1rem, 5vw, 2rem);
+        }
+        .empty-state p {
+            color: var(--text-dim);
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div id="sakura" class="sakura"></div>
+
+    <header>
+        <div class="hero">
+            <h1 style="font-size: clamp(2rem, 6vw, 2.5rem); margin-bottom: 1rem;">Últimos Comentarios</h1>
+            <p class="intro">Lo que pienso en los momentos tranquilos.</p>
+        </div>
+        <nav role="navigation" aria-label="Navegación principal">
+            <a href="index.html">Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="content-wrapper">
+            <div class="comments-container" id="commentsContainer">
+                <!-- Se cargarán dinámicamente -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Footage Archive 2025-2026 · Construido con amor 💕</p>
+    </footer>
+
+    <script src="shared.js"></script>
+    <script>
+        // Comentarios de ejemplo
+        const comments = [
+            {
+                text: "Hoy miraba el cielo y pensé en ti. En cómo cambiaste mi perspectiva de todo.",
+                time: "Hoy, 1:30 PM",
+                type: "Reflexión"
+            },
+            {
+                text: "No importa cuántos días pasen, sigo sintiéndome igual. Quizá sea amor, o quizá seas tú.",
+                time: "Ayer, 9:45 PM",
+                type: "Sentimiento"
+            },
+            {
+                text: "Construí esto porque merecías saber exactamente cómo te veo. Cada detalle cuenta.",
+                time: "Hace 3 días, 2:15 PM",
+                type: "Dedicatoria"
+            }
+        ];
+
+        function loadComments() {
+            const container = document.getElementById('commentsContainer');
+            if (!container) return;
+
+            if (comments.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <p>Aún no hay comentarios. Pero pronto habrá más secretos por descubrir...</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = comments.map((comment, index) => `
+                <div class="comment-card fade-up" style="animation-delay: ${index * 100}ms;">
+                    <p class="comment-text">${comment.text}</p>
+                    <div class="comment-meta">
+                        <span class="comment-time">${comment.time}</span>
+                        <span class="comment-badge">${comment.type}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Observer para animaciones
+            const options = { root: null, rootMargin: '0px', threshold: 0.12 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, options);
+            document.querySelectorAll('.fade-up').forEach((el) => {
+                observer.observe(el);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadComments);
+    </script>
+</body>
+</html>
