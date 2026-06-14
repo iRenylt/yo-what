@@ -2,11 +2,12 @@
 <html lang="es">
 
 <head>
-    <meta name="theme-color" content="#0a0a0a">
+    <meta name="theme-color" content="#0d0d0d">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Footage Archive</title>
     <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -46,7 +47,32 @@
             line-height: 1.6;
         }
 
-        /* HERO */
+        /* EFECTO DE PANTALLA RETRO AL CARGAR */
+        @keyframes retroBootUp {
+            0% {
+                background: #000;
+                opacity: 0.1;
+            }
+            50% {
+                opacity: 0.05;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(212, 165, 116, 0.3), transparent);
+            pointer-events: none;
+            z-index: 999;
+            animation: retroBootUp 2s ease-out forwards;
+        }
         .hero {
             display: flex;
             align-items: center;
@@ -73,41 +99,77 @@
             color: var(--text-dim); 
             font-size: 0.95rem; 
             line-height: 1.5;
-            animation: fadeUp 0.8s ease-out 0.3s both;
+            animation: fadeUp 0.8s ease-out 0.3s both, pulseIntro 3s ease-in-out 1s infinite;
             background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.06), transparent);
             padding: 16px 20px;
             border-radius: 20px;
-            border: 1px solid rgba(212, 165, 116, 0.1);
+            border: 2px solid rgba(212, 165, 116, 0.25);
+            box-shadow: 
+                inset 0 1px 2px rgba(232, 223, 213, 0.1),
+                0 0 20px rgba(212, 165, 116, 0.15),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 3;
         }
-        .cta-buttons { display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap: wrap; }
+
+        @keyframes pulseIntro {
+            0%, 100% { box-shadow: inset 0 1px 2px rgba(232, 223, 213, 0.1), 0 0 15px rgba(212, 165, 116, 0.15), inset 0 -1px 2px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: inset 0 1px 2px rgba(232, 223, 213, 0.15), 0 0 25px rgba(212, 165, 116, 0.25), inset 0 -1px 2px rgba(0, 0, 0, 0.3); }
+        }
+        .cta-buttons { 
+            display:flex; 
+            gap:10px; 
+            align-items:center; 
+            justify-content:center; 
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 3;
+            animation: buttonsFadeIn 0.9s ease-out 0.5s both;
+        }
+
+        @keyframes buttonsFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .cta-buttons a, .cta-buttons button { 
-            background: linear-gradient(135deg, rgba(201,184,168,0.1), rgba(212,165,116,0.06)); 
-            border: 1.5px solid var(--border);
+            background: linear-gradient(135deg, rgba(201,184,168,0.12), rgba(212,165,116,0.08)); 
+            border: 2px solid var(--border);
             padding:12px 20px; 
-            border-radius: 999px; 
+            border-radius: 8px;
             color:var(--text-main); 
             text-decoration:none; 
             font-weight:600; 
             font-size:0.9rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
             overflow: hidden;
+            box-shadow: 
+                0 4px 12px rgba(212, 165, 116, 0.2),
+                inset 0 1px 2px rgba(232, 223, 213, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
         }
         
         .cta-buttons a::before, .cta-buttons button::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(201,184,168,0.15), rgba(212,165,116,0.1));
+            background: linear-gradient(135deg, rgba(201,184,168,0.2), rgba(212,165,116,0.15));
             opacity: 0;
             transition: opacity 0.3s ease;
         }
         
         .cta-buttons a:hover, .cta-buttons button:hover { 
-            transform: translateY(-4px);
+            transform: translateY(-5px) scale(1.05);
             border-color: var(--border-hover);
-            box-shadow: 0 12px 25px rgba(212, 165, 116, 0.25);
+            box-shadow: 
+                0 12px 28px rgba(212, 165, 116, 0.35),
+                inset 0 1px 2px rgba(232, 223, 213, 0.15),
+                0 0 20px rgba(212, 165, 116, 0.3);
+            text-shadow: 0 0 10px rgba(232, 196, 143, 0.4);
         }
         
         .cta-buttons a:hover::before, .cta-buttons button:hover::before {
@@ -163,13 +225,77 @@
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(-20px) scaleY(0.95); }
+            to { opacity: 1; transform: translateY(0) scaleY(1); }
         }
 
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes retroGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 15px rgba(212, 165, 116, 0.2)) drop-shadow(0 0 5px rgba(232, 196, 143, 0.1));
+            }
+            50% {
+                filter: drop-shadow(0 0 25px rgba(212, 165, 116, 0.4)) drop-shadow(0 0 10px rgba(232, 196, 143, 0.3));
+            }
+        }
+
+        @keyframes powerOn {
+            0% { transform: scaleY(0.05); opacity: 0; filter: brightness(0.5); }
+            20% { opacity: 1; }
+            50% { transform: scaleY(1.02); }
+            100% { transform: scaleY(1); opacity: 1; filter: brightness(1); }
+        }
+
+        @keyframes vhsFlicker {
+            0% { clip-path: polygon(0 0, 100% 0, 100% 2px, 0 2px); }
+            20% { clip-path: polygon(0 0, 100% 0, 100% 1px, 0 1px); }
+            40% { clip-path: polygon(0 0, 100% 0, 100% 3px, 0 3px); }
+            60% { clip-path: polygon(0 0, 100% 0, 100% 0.5px, 0 0.5px); }
+            80% { clip-path: polygon(0 0, 100% 0, 100% 2.5px, 0 2.5px); }
+            100% { clip-path: polygon(0 0, 100% 0, 100% 2px, 0 2px); }
+        }
+
+        @keyframes scanLines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(8px); }
+        }
+
+        /* Scan lines animadas en hero */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            animation: scanLines 12s linear infinite;
+            z-index: 2;
+            opacity: 0.4;
+        }
+
+        /* Efecto de retro border 3D */
+        .hero {
+            position: relative;
+            border-top: 3px outset rgba(212, 165, 116, 0.4);
+            border-left: 3px outset rgba(212, 165, 116, 0.3);
+            border-right: 3px inset rgba(0, 0, 0, 0.4);
+            border-bottom: 3px inset rgba(0, 0, 0, 0.5);
+            box-shadow: 
+                inset 0 1px 0 rgba(232, 223, 213, 0.15),
+                inset -1px -1px 0 rgba(0, 0, 0, 0.3),
+                0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
         @keyframes glow {
@@ -182,8 +308,8 @@
             50% { opacity: 0.8; }
         }
 
-        .hero img { animation: floatY 6s ease-in-out infinite; }
-        .header-text h1 { background-size: 200% 100%; animation: textShift 6s linear infinite; }
+        .hero img { animation: floatY 6s ease-in-out infinite; filter: drop-shadow(0 0 15px rgba(212, 165, 116, 0.4)) drop-shadow(0 8px 20px rgba(0,0,0,0.5)); }
+        .header-text h1 { background-size: 200% 100%; animation: textShift 6s linear infinite, retroGlow 3s ease-in-out infinite; }
 
         .badge { transition: transform 0.25s ease, opacity 0.25s; }
         .badge.pulse { box-shadow: 0 0 10px rgba(201,184,168,0.5); animation: pulseBadge 1.8s infinite; }
@@ -1265,7 +1391,7 @@
     </style>
 </head>
 
-<body style="background:#0a0a0a;color:#e8dfd5;">
+<body style="background:#0d0d0d;color:#f5e6d3;">
 
 <div class="stars"></div>
 
@@ -1328,10 +1454,10 @@
                     <h2>Registros escritos</h2>
                     <p>Archivo digital de nuestra historia compartida.</p>
                     <div style="margin-top: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%;">
-                        <a href="líneaA.html" style="display: inline-block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none;">Explorar Línea de tiempo</a>
-                    <a href="comentariosA.html" style="display: inline-block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none;">Explorar comentario más reciente</a>
-                    <a href="comentariosB.html" style="display: inline-block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none;">Explorar mis comentarios más recientes</a>
-                <a href="mensajesA.html" style="display: inline-block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none;">Enviar Memorias</a>
+                        <a href="líneaA.html" style="display: inline-block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); border: none; box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3);">📽️ Línea de tiempo</a>
+                    <a href="comentariosA.html" style="display: inline-block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); border: none; box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3);">💬 Comentarios</a>
+                    <a href="comentariosB.html" style="display: inline-block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); border: none; box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3);">✍️ Mis Notas</a>
+                <a href="mensajesA.html" style="display: inline-block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); border: none; box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3);">💌 Memorias</a>
                 </div>
                 </div>
             </div>
@@ -1351,7 +1477,7 @@
                             <span class="year-indicator">▼</span>
                         </button>
                         <div class="year-content" data-year="2025" style="display: none; flex-direction: column; gap: 10px; animation: slideDown 0.3s ease;">
-                            <a href="cartaA.html" style="display: block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem; border: none;">Carta A + N ❤️</a>
+                            <a href="cartaA.html" style="display: block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; text-align: center; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); font-size: 0.95rem; border: none; box-shadow: 0 4px 12px rgba(212, 165, 116, 0.25);">Carta 2025 ❤️</a>
                         </div>
 
                         <!-- Sección 2026 -->
@@ -1360,10 +1486,10 @@
                             <span class="year-indicator">▼</span>
                         </button>
                         <div class="year-content" data-year="2026" style="display: none; flex-direction: column; gap: 10px; animation: slideDown 0.3s ease;">
-                            <a href="cartaB.html" style="display: block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem; border: none;">Carta N + A ❤️</a>
-                            <a href="cartaC.html" style="display: block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem; border: none;">Carta A + N ❤️</a>
-                            <a href="cartaD.html" style="display: block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem; border: none;">Carta N + A ❤️</a>
-                            <a href="cartaE.html" style="display: block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 20px; border-radius: 16px; text-decoration: none; font-weight: 600; text-align: center; transition: all 0.3s ease; font-size: 0.95rem; border: none;">Carta A + N ❤️</a>
+                            <a href="cartaB.html" style="display: block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; text-align: center; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); font-size: 0.95rem; border: none; box-shadow: 0 4px 12px rgba(212, 165, 116, 0.25);">Carta Enero ❤️</a>
+                            <a href="cartaC.html" style="display: block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; text-align: center; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); font-size: 0.95rem; border: none; box-shadow: 0 4px 12px rgba(212, 165, 116, 0.25);">Carta Febrero ❤️</a>
+                            <a href="cartaD.html" style="display: block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; text-align: center; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); font-size: 0.95rem; border: none; box-shadow: 0 4px 12px rgba(212, 165, 116, 0.25);">Carta Marzo ❤️</a>
+                            <a href="cartaE.html" style="display: block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; text-align: center; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); font-size: 0.95rem; border: none; box-shadow: 0 4px 12px rgba(212, 165, 116, 0.25);">Carta Abril ❤️</a>
                     </div>
 
                     </div>
@@ -1378,7 +1504,7 @@
                     <h2>Registros visuales</h2>
                     <p>Cada archivo es un momento preservado, esperando ser revivido.</p>
                     <div style="margin-top: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%;">
-                        <a href="recuerdosA.html" style="display: inline-block; background: linear-gradient(135deg, #c9b8a8, #a8957f); color: #faf8f5; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none;">Explorar Archivos Visuales</a>
+                        <a href="recuerdosA.html" style="display: inline-block; background: linear-gradient(135deg, #d4a574, #e8c48f); color: #0d0d0d; padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); border: none; box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3);">📸 Ver Galería</a>
                     </div>
                 </div>
             </div>
@@ -1434,7 +1560,36 @@
 </footer>
 
 <script src="lock.js"></script>
+<script src="shared.js"></script>
+<script src="phase3-gallery.js"></script>
+<script src="pwa-init.js"></script>
 <script>
+    // 🎬 Inicializar Service Worker (PWA)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => {
+                    console.log('✅ Service Worker registrado:', reg.scope);
+                    
+                    // Detectar actualizaciones
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                console.log('🔄 Nueva versión disponible');
+                                // Notificar al usuario
+                                if (confirm('Nueva versión disponible. ¿Actualizar ahora?')) {
+                                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    });
+                })
+                .catch(err => console.log('❌ Service Worker error:', err));
+        });
+    }
+
     // Bloqueo de carta8 hasta el 9 de febrero de 2026
     document.addEventListener('DOMContentLoaded', function() {
         const carta4 = document.getElementById('nav-carta4');
