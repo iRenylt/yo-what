@@ -2,28 +2,28 @@
 <html lang="es">
 
 <head>
-    <meta name="theme-color" content="#050505">
+    <meta name="theme-color" content="#0d0d0d">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Footage Archive</title>
     <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ffffff;
-            --accent: #9a9aaa;
-            --accent-light: #d8d8e8;
-            --accent-dark: #6a6a7a;
-            --bg: #050505;
-            --card-bg: rgba(20, 20, 25, 0.7);
-            --card-bg-hover: rgba(25, 25, 35, 0.85);
-            --text-main: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.6);
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-hover: rgba(255, 255, 255, 0.08);
-            --border: rgba(150, 150, 170, 0.15);
-            --border-hover: rgba(150, 150, 170, 0.3);
+            --primary: #f5e6d3;
+            --accent: #d4a574;
+            --accent-light: #e8c48f;
+            --accent-dark: #a67c52;
+            --bg: #0d0d0d;
+            --card-bg: rgba(28, 24, 20, 0.85);
+            --card-bg-hover: rgba(35, 30, 25, 0.95);
+            --text-main: #f5e6d3;
+            --text-dim: rgba(245, 230, 211, 0.7);
+            --glass: rgba(212, 165, 116, 0.08);
+            --glass-hover: rgba(212, 165, 116, 0.12);
+            --border: rgba(212, 165, 116, 0.25);
+            --border-hover: rgba(212, 165, 116, 0.5);
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
             --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
             --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
@@ -32,7 +32,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: linear-gradient(135deg, #050505 0%, #0f0f15 100%);
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1612 100%);
             color: var(--text-main);
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto;
             min-height: 100vh;
@@ -40,7 +40,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: clamp(1rem, 5vw, 2rem);
         }
 
         .container {
@@ -55,12 +55,13 @@
 
         .header h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #ffffff, #9a9aaa);
+            font-size: clamp(2rem, 6vw, 2.5rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #f5e6d3, #e8c48f);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: 2px;
         }
 
         .header p {
@@ -117,14 +118,21 @@
 
         .comment-badge {
             display: inline-block;
-            padding: 4px 12px;
-            background: rgba(154, 154, 170, 0.2);
+            padding: clamp(0.3rem, 1vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
+            background: rgba(212, 165, 116, 0.15);
             border: 1px solid var(--accent);
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: clamp(0.65rem, 1.3vw, 0.8rem);
             color: var(--accent-light);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            transition: var(--transition-smooth, all 0.3s ease);
+        }
+        
+        .comment-badge:hover {
+            background: rgba(212, 165, 116, 0.25);
+            box-shadow: 0 0 15px rgba(212, 165, 116, 0.3);
         }
 
         .loading {
