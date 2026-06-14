@@ -1,0 +1,83 @@
+{
+  "name": "Footage Archive - Momentos Especiales",
+  "short_name": "Footage Archive",
+  "description": "Un archivo cinematográfico de momentos especiales con estética retro de película",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#0d0d0d",
+  "background_color": "#0d0d0d",
+  "categories": ["lifestyle", "photography"],
+  "icons": [
+    {
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ver Cartas",
+      "short_name": "Cartas",
+      "description": "Acceder a las cartas especiales",
+      "url": "cartaA.html",
+      "icons": [
+        {
+          "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Ver Galería",
+      "short_name": "Galería",
+      "description": "Acceder a la galería de momentos",
+      "url": "recuerdosA.html",
+      "icons": [
+        {
+          "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "prefer_related_applications": false
+}
