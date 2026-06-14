@@ -1,0 +1,565 @@
+/* ========================================
+   🎬 PHASE 3: ADVANCED FEATURES STYLESHEET
+   Galerías tipo película, Lightbox, Compartir Social
+   ======================================== */
+
+/* ═══════════════════════════════════════════════════════════
+   📸 GALERÍA TIPO PELÍCULA - EFECTO POLAROID
+   ═══════════════════════════════════════════════════════════ */
+
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    max-width: 100%;
+    perspective: 1200px;
+}
+
+.polaroid-frame {
+    background: #f5e6d3;
+    padding: clamp(0.75rem, 2vw, 1rem);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 
+                5px 10px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    animation: polaroidAppear 0.8s ease-out backwards;
+}
+
+@keyframes polaroidAppear {
+    from {
+        opacity: 0;
+        transform: translateY(40px) rotateZ(-5deg) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateZ(0) scale(1);
+    }
+}
+
+.polaroid-frame:nth-child(odd) {
+    animation-delay: 0.1s;
+    transform: rotateZ(-2deg);
+}
+
+.polaroid-frame:nth-child(even) {
+    animation-delay: 0.2s;
+    transform: rotateZ(1deg);
+}
+
+.polaroid-frame:nth-child(3n) {
+    animation-delay: 0.3s;
+    transform: rotateZ(-1.5deg);
+}
+
+.polaroid-frame:hover {
+    transform: rotateX(5deg) rotateY(-5deg) rotateZ(0) scale(1.05);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7),
+                10px 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.polaroid-image {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border-radius: 1px;
+    display: block;
+    filter: sepia(0.2) saturate(1.1);
+    transition: filter 0.4s ease;
+}
+
+.polaroid-frame:hover .polaroid-image {
+    filter: sepia(0) saturate(1.3);
+}
+
+.polaroid-label {
+    margin-top: clamp(0.5rem, 1.5vw, 0.75rem);
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(0.7rem, 1.3vw, 0.9rem);
+    color: #1a1410;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    min-height: clamp(1.5rem, 3vw, 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.polaroid-date {
+    font-size: clamp(0.6rem, 1vw, 0.7rem);
+    color: #a67c52;
+    text-align: center;
+    margin-top: 0.3rem;
+    font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🔦 LIGHTBOX - VISOR DE IMÁGENES FULLSCREEN
+   ═══════════════════════════════════════════════════════════ */
+
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9000;
+    display: none;
+    opacity: 0;
+    backdrop-filter: blur(5px);
+    transition: opacity 0.4s ease;
+}
+
+.lightbox.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 5vw, 2rem);
+}
+
+.lightbox-image {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+    animation: zoomIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.lightbox-close {
+    position: absolute;
+    top: clamp(1rem, 3vw, 2rem);
+    right: clamp(1rem, 3vw, 2rem);
+    background: rgba(212, 165, 116, 0.1);
+    border: 1.5px solid rgba(212, 165, 116, 0.3);
+    color: #f5e6d3;
+    width: clamp(44px, 8vw, 60px);
+    height: clamp(44px, 8vw, 60px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 9100;
+    backdrop-filter: blur(10px);
+    min-height: 44px;
+}
+
+.lightbox-close:hover {
+    background: rgba(245, 230, 211, 0.15);
+    border-color: var(--accent-light);
+    transform: rotate(90deg) scale(1.1);
+}
+
+.lightbox-prev, .lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(212, 165, 116, 0.1);
+    border: 1.5px solid rgba(212, 165, 116, 0.3);
+    color: #f5e6d3;
+    width: clamp(44px, 10vw, 70px);
+    height: clamp(44px, 10vw, 70px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 9100;
+    backdrop-filter: blur(10px);
+}
+
+.lightbox-prev {
+    left: clamp(0.5rem, 3vw, 1.5rem);
+}
+
+.lightbox-next {
+    right: clamp(0.5rem, 3vw, 1.5rem);
+}
+
+.lightbox-prev:hover, .lightbox-next:hover {
+    background: rgba(245, 230, 211, 0.2);
+    border-color: var(--accent-light);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 0 30px rgba(212, 165, 116, 0.3);
+}
+
+.lightbox-info {
+    position: absolute;
+    bottom: clamp(1rem, 3vw, 2rem);
+    left: 50%;
+    transform: translateX(-50%);
+    color: #f5e6d3;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.5);
+    padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem);
+    border-radius: 20px;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   📤 COMPARTIR EN REDES SOCIALES
+   ═══════════════════════════════════════════════════════════ */
+
+.share-container {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: clamp(1.5rem, 3vw, 2.5rem) 0;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    background: rgba(212, 165, 116, 0.08);
+    border: 1px solid rgba(212, 165, 116, 0.25);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.share-label {
+    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.share-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(44px, 8vw, 56px);
+    height: clamp(44px, 8vw, 56px);
+    border-radius: 50%;
+    background: rgba(212, 165, 116, 0.12);
+    border: 1.5px solid rgba(212, 165, 116, 0.3);
+    color: var(--accent-light);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    text-decoration: none;
+    min-height: 44px;
+    backdrop-filter: blur(5px);
+}
+
+.share-button:hover {
+    background: rgba(212, 165, 116, 0.25);
+    border-color: var(--accent-light);
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
+}
+
+.share-button[data-social="whatsapp"]:hover {
+    background: rgba(37, 211, 102, 0.2);
+    border-color: #25d366;
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+}
+
+.share-button[data-social="instagram"]:hover {
+    background: rgba(229, 72, 121, 0.2);
+    border-color: #e54879;
+    box-shadow: 0 8px 20px rgba(229, 72, 121, 0.3);
+}
+
+.share-button[data-social="facebook"]:hover {
+    background: rgba(59, 89, 152, 0.2);
+    border-color: #3b5998;
+    box-shadow: 0 8px 20px rgba(59, 89, 152, 0.3);
+}
+
+.share-button[data-social="twitter"]:hover {
+    background: rgba(29, 161, 242, 0.2);
+    border-color: #1da1f2;
+    box-shadow: 0 8px 20px rgba(29, 161, 242, 0.3);
+}
+
+.share-button[data-social="copy"]:hover {
+    background: rgba(212, 165, 116, 0.3);
+    border-color: #e8c48f;
+    box-shadow: 0 8px 20px rgba(212, 165, 116, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🎭 ANIMACIONES 3D AVANZADAS
+   ═══════════════════════════════════════════════════════════ */
+
+.card-3d {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.card-3d-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-style: preserve-3d;
+}
+
+.card-3d.flipped .card-3d-inner {
+    transform: rotateY(180deg);
+}
+
+.card-3d-front, .card-3d-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1.5rem, 3vw, 2rem);
+    border-radius: 12px;
+}
+
+.card-3d-front {
+    background: var(--glass);
+    border: 1.5px solid var(--border);
+    backdrop-filter: blur(10px);
+    z-index: 2;
+}
+
+.card-3d-back {
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.15), rgba(212, 165, 116, 0.05));
+    border: 1.5px solid var(--accent-dark);
+    transform: rotateY(180deg);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ EFECTO FILM STRIP - TIRA DE PELÍCULA
+   ═══════════════════════════════════════════════════════════ */
+
+.filmstrip-container {
+    position: relative;
+    margin: clamp(2rem, 5vw, 3rem) 0;
+    padding: clamp(2rem, 4vw, 2.5rem) 0;
+    background: linear-gradient(90deg, 
+        rgba(0, 0, 0, 0.3) 2%, 
+        transparent 2%, 
+        transparent 15%,
+        rgba(0, 0, 0, 0.3) 15%,
+        rgba(0, 0, 0, 0.3) 98%,
+        transparent 98%);
+    background-size: 100% 25px;
+    background-position: top, bottom;
+    background-repeat: repeat-y;
+}
+
+.filmstrip-item {
+    position: relative;
+    display: inline-block;
+    margin: 0 clamp(0.5rem, 2vw, 1rem);
+    vertical-align: middle;
+}
+
+.filmstrip-item img {
+    width: clamp(100px, 20vw, 200px);
+    height: clamp(100px, 20vw, 200px);
+    object-fit: cover;
+    border-radius: 4px;
+    filter: grayscale(0.3) contrast(1.1);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.filmstrip-item img:hover {
+    filter: grayscale(0) contrast(1.2);
+    transform: scale(1.08) rotate(2deg);
+    box-shadow: 0 15px 40px rgba(212, 165, 116, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🎬 MODO CINE - FULLSCREEN INMERSIVO
+   ═══════════════════════════════════════════════════════════ */
+
+.cinema-mode {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 8000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(10px);
+}
+
+.cinema-mode.active {
+    display: flex;
+    opacity: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.cinema-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.cinema-content img, .cinema-content video {
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+}
+
+.cinema-controls {
+    position: absolute;
+    bottom: clamp(1rem, 3vw, 2rem);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    z-index: 8100;
+}
+
+.cinema-btn {
+    width: clamp(44px, 8vw, 60px);
+    height: clamp(44px, 8vw, 60px);
+    border-radius: 50%;
+    background: rgba(212, 165, 116, 0.2);
+    border: 1.5px solid rgba(212, 165, 116, 0.4);
+    color: #f5e6d3;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.cinema-btn:hover {
+    background: rgba(212, 165, 116, 0.35);
+    border-color: #e8c48f;
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(212, 165, 116, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   📱 RESPONSIVENESS MEJORADA
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .gallery-container {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .polaroid-frame {
+        padding: 0.6rem;
+    }
+
+    .share-container {
+        gap: 0.75rem;
+    }
+
+    .filmstrip-container {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 1rem 0;
+        margin: 1.5rem 0;
+    }
+
+    .filmstrip-item {
+        margin: 0 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-container {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .lightbox-image {
+        max-width: 95vw;
+        max-height: 90vh;
+    }
+
+    .share-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .share-label {
+        margin-bottom: 0.5rem;
+    }
+
+    .filmstrip-item img {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🎨 EFECTOS ESPECIALES
+   ═══════════════════════════════════════════════════════════ */
+
+.glow-effect {
+    animation: glowAnimation 3s ease-in-out infinite;
+}
+
+@keyframes glowAnimation {
+    0%, 100% { box-shadow: 0 0 10px rgba(212, 165, 116, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(212, 165, 116, 0.4); }
+}
+
+.fade-up {
+    animation: fadeUpAnimation 0.6s ease-out backwards;
+}
+
+@keyframes fadeUpAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-up:nth-child(1) { animation-delay: 0.1s; }
+.fade-up:nth-child(2) { animation-delay: 0.2s; }
+.fade-up:nth-child(3) { animation-delay: 0.3s; }
+.fade-up:nth-child(4) { animation-delay: 0.4s; }
+.fade-up:nth-child(5) { animation-delay: 0.5s; }
