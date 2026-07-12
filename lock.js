@@ -502,12 +502,37 @@ function ensurePageLockMarkup() {
 }
 
 function revealLockedContent() {
-    document.body.classList.remove('locked');
-    document.body.classList.remove('initializing');
+    const root = document.documentElement;
+    const body = document.body;
+
+    if (body) {
+        body.classList.remove('locked');
+        body.classList.remove('initializing');
+        body.style.visibility = 'visible';
+        body.style.opacity = '1';
+        body.style.display = 'block';
+        body.style.overflow = 'auto';
+        body.style.background = '#050505';
+        body.style.minHeight = '100%';
+        body.style.height = 'auto';
+    }
+
+    if (root) {
+        root.classList.remove('initializing');
+        root.style.visibility = 'visible';
+        root.style.opacity = '1';
+        root.style.height = 'auto';
+        root.style.minHeight = '100%';
+    }
 
     const initializingStyle = document.getElementById('initializing-style');
     if (initializingStyle && initializingStyle.parentNode) {
         initializingStyle.parentNode.removeChild(initializingStyle);
+    }
+
+    const unlockOverride = document.getElementById('unlock-override');
+    if (unlockOverride && unlockOverride.parentNode) {
+        unlockOverride.parentNode.removeChild(unlockOverride);
     }
 
     const pageLock = ensurePageLockMarkup();
@@ -517,23 +542,33 @@ function revealLockedContent() {
         pageLock.style.transition = 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 500ms cubic-bezier(0.4, 0, 0.2, 1), filter 500ms ease';
         pageLock.style.opacity = '0';
         pageLock.style.filter = 'blur(10px)';
-        setTimeout(() => {
+        pageLock.style.visibility = 'hidden';
+        pageLock.style.pointerEvents = 'none';
+        pageLock.style.zIndex = '-1';
+        pageLock.style.display = 'none';
+    }
+
+    if (body) {
+        body.querySelectorAll('*').forEach((el) => {
+            if (el.id === 'pageLock' || el.id === 'devModal' || el.id.startsWith('initialSplash') || el.classList.contains('stars')) {
+                return;
+            }
+            el.style.visibility = 'visible';
+            el.style.display = '';
+        });
+    }
+
+    requestAnimationFrame(() => {
+        if (body) {
+            body.style.visibility = 'visible';
+            body.style.opacity = '1';
+        }
+        if (pageLock) {
             pageLock.style.display = 'none';
             pageLock.style.visibility = 'hidden';
             pageLock.style.pointerEvents = 'none';
-        }, 500);
-    }
-
-    document.body.querySelectorAll('*').forEach((el) => {
-        if (el.id !== 'pageLock' && el.id !== 'devModal' && !el.id.startsWith('initialSplash') && !el.classList.contains('stars')) {
-            el.style.visibility = 'visible';
-            el.style.display = '';
         }
     });
-
-    document.body.style.overflow = 'auto';
-    document.body.style.background = '#050505';
-    document.body.style.visibility = 'visible';
 
     if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
     actualizarUltimaActividad();
