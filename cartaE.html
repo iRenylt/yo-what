@@ -1004,39 +1004,58 @@
 		}
 
 		function unlockPageDirectly() {
-			// Remover clases de bloqueo de lock.js
-			document.body.classList.remove('locked');
-			document.body.classList.remove('initializing');
+			const root = document.documentElement;
+			const body = document.body;
+
+			if (body) {
+				body.classList.remove('locked');
+				body.classList.remove('initializing');
+				body.style.visibility = 'visible';
+				body.style.opacity = '1';
+				body.style.display = 'block';
+				body.style.overflow = 'auto';
+				body.style.background = '#050505';
+				body.style.minHeight = '100%';
+				body.style.height = 'auto';
+			}
+
+			if (root) {
+				root.classList.remove('initializing');
+				root.style.visibility = 'visible';
+				root.style.opacity = '1';
+				root.style.height = 'auto';
+				root.style.minHeight = '100%';
+			}
 			
-			// Remover el CSS de initializing si existe
 			const initializingStyle = document.getElementById('initializing-style');
 			if (initializingStyle && initializingStyle.parentNode) {
 				initializingStyle.parentNode.removeChild(initializingStyle);
 			}
 			
-			// Also remove if __removeInitializing function exists
+			const existingOverride = document.getElementById('unlock-override');
+			if (existingOverride && existingOverride.parentNode) {
+				existingOverride.parentNode.removeChild(existingOverride);
+			}
+			
 			if (typeof window.__removeInitializing === 'function') {
 				window.__removeInitializing();
 			}
 			
 			const pageLock = document.getElementById('pageLock');
 			if (pageLock) {
-				// Remover clases que lock.js agrega
 				pageLock.classList.remove('active');
 				pageLock.classList.remove('unlocking');
-				// Forzar display none con todos los estilos
-				pageLock.style.cssText = 'display: none !important; visibility: hidden !important; z-index: -9999 !important; pointer-events: none !important;';
+				pageLock.style.cssText = 'display: none !important; visibility: hidden !important; z-index: -9999 !important; pointer-events: none !important; opacity: 0 !important;';
 			}
 			
-			// Restaurar visibilidad de todos los elementos del body
 			const allElements = document.body.querySelectorAll('*');
 			allElements.forEach(el => {
 				if (el.id !== 'pageLock' && el.id !== 'devModal' && !el.id.startsWith('initialSplash')) {
 					el.style.visibility = 'visible';
+					el.style.display = '';
 				}
 			});
 			
-			// Mostrar elementos principales
 			const elements = {
 				'header': document.querySelector('header'),
 				'nav': document.querySelector('nav'),
@@ -1057,17 +1076,15 @@
 				elements.sakura.style.cssText = 'visibility: visible !important; z-index: 0 !important; pointer-events: none !important;';
 			}
 			
-			// Configurar body para mostrar contenido
 			document.body.style.overflow = 'auto';
 			document.body.style.background = '#050505';
 			document.body.style.visibility = 'visible';
 			
-			// Crear estilo global para override final
 			const style = document.createElement('style');
 			style.id = 'unlock-override';
 			style.innerHTML = `
 				* { visibility: visible !important; }
-				body { background: #050505 !important; overflow: auto !important; visibility: visible !important; }
+				html, body { background: #050505 !important; overflow: auto !important; visibility: visible !important; height: auto !important; min-height: 100% !important; }
 				body.locked { background: #050505 !important; }
 				body.initializing { visibility: visible !important; }
 				header { display: block !important; visibility: visible !important; z-index: 100 !important; }
@@ -1083,7 +1100,6 @@
 				document.head.appendChild(style);
 			}
 			
-			// Scroll al top
 			window.scrollTo(0, 0);
 		}
 
