@@ -377,14 +377,64 @@
             align-items: center;
             margin: 4px auto;
             position: relative;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 220ms ease;
+        }
+
+        #flowerCanvas.visible {
+            display: flex !important;
+            opacity: 1;
+            visibility: visible;
         }
         
         .card-flor button { margin-top: 2px; }
         
         #flowerCanvas svg {
+            width: 220px;
+            height: 220px;
             max-width: 100%;
             max-height: 250px;
             height: auto;
+            display: block;
+            will-change: transform, opacity;
+        }
+
+        #flowerCanvas #stem {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            transition: stroke-dashoffset 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        #flowerCanvas.visible #stem {
+            stroke-dashoffset: 0;
+        }
+
+        #flowerCanvas #leaf1,
+        #flowerCanvas #leaf2 {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        #flowerCanvas.visible #leaf1 {
+            opacity: 1;
+            transition-delay: 0.8s;
+        }
+
+        #flowerCanvas.visible #leaf2 {
+            opacity: 1;
+            transition-delay: 1.2s;
+        }
+
+        #flowerCanvas #petals {
+            transform-origin: center;
+            transform: scale(0);
+            transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        #flowerCanvas.visible #petals {
+            transform: scale(1);
+            transition-delay: 1.4s;
         }
 
         /* 🌌 Fondo Estelar Dinámico */
@@ -1515,33 +1565,22 @@
                 <h2>Un pequeño detalle</h2>
                 <p style="font-style: italic;">Presiona el botón para ver algo bonito ❤️</p>
 
-                <div id="flowerCanvas" style="display: none;">
-                    <svg viewBox="0 0 200 200" style="width: 100%; max-width: 220px; height: auto; overflow: hidden;">
-                        <!-- Stem -->
-                        <path id="stem" d="M100 200 L100 100" stroke="#2d5a27" stroke-width="4" fill="none" stroke-dasharray="100" stroke-dashoffset="100">
-                            <animate id="stemAnim" attributeName="stroke-dashoffset" from="100" to="0" dur="2s" fill="freeze" begin="indefinite" />
-                        </path>
-                        <!-- Leaves -->
-                        <path id="leaf1" d="M100 150 Q70 140 80 120 Q95 130 100 150" fill="#2d5a27" opacity="0">
-                            <animate id="leaf1Anim" attributeName="opacity" from="0" to="1" dur="1s" fill="freeze" begin="indefinite" />
-                        </path>
-                        <path id="leaf2" d="M100 170 Q130 160 120 140 Q105 150 100 170" fill="#2d5a27" opacity="0">
-                            <animate id="leaf2Anim" attributeName="opacity" from="0" to="1" dur="1s" fill="freeze" begin="indefinite" />
-                        </path>
-                        <!-- Petals (Centered exactly at the end of the stem at 100, 100) -->
-                            <g transform="translate(100 100)">
-                                <g id="petals" transform="scale(0)">
-                            <animateTransform id="petalsAnim" attributeName="transform" type="scale" from="0" to="1" dur="2s" fill="freeze" begin="indefinite" />
-                            <circle cx="0" cy="-20" r="15" fill="#ffb7d5" />
-                            <circle cx="17" cy="-10" r="15" fill="#ff80ab" />
-                            <circle cx="17" cy="10" r="15" fill="#ffb7d5" />
-                            <circle cx="0" cy="20" r="15" fill="#ff80ab" />
-                            <circle cx="-17" cy="10" r="15" fill="#ffb7d5" />
-                            <circle cx="-17" cy="-10" r="15" fill="#ff80ab" />
-                            <!-- Center -->
-                            <circle cx="0" cy="0" r="10" fill="#ffd54f" />
+                <div id="flowerCanvas" style="display: none; opacity: 0; visibility: hidden;">
+                    <svg id="flowerSvg" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                        <path id="stem" d="M100 200 L100 100" stroke="#2d5a27" stroke-width="4" fill="none" stroke-linecap="round" />
+                        <path id="leaf1" d="M100 150 Q70 140 80 120 Q95 130 100 150" fill="#2d5a27" />
+                        <path id="leaf2" d="M100 170 Q130 160 120 140 Q105 150 100 170" fill="#2d5a27" />
+                        <g transform="translate(100 100)">
+                            <g id="petals">
+                                <circle cx="0" cy="-20" r="15" fill="#ffb7d5" />
+                                <circle cx="17" cy="-10" r="15" fill="#ff80ab" />
+                                <circle cx="17" cy="10" r="15" fill="#ffb7d5" />
+                                <circle cx="0" cy="20" r="15" fill="#ff80ab" />
+                                <circle cx="-17" cy="10" r="15" fill="#ffb7d5" />
+                                <circle cx="-17" cy="-10" r="15" fill="#ff80ab" />
+                                <circle cx="0" cy="0" r="10" fill="#ffd54f" />
+                            </g>
                         </g>
-                                </g>
                     </svg>
                 </div>
 
@@ -2045,6 +2084,7 @@
 
         btn.dataset.running = 'true';
         btn.style.display = 'none';
+        canvas.classList.remove('visible');
         canvas.style.setProperty('display', 'flex', 'important');
         canvas.style.setProperty('opacity', '0', 'important');
         canvas.style.setProperty('visibility', 'hidden', 'important');
@@ -2052,18 +2092,9 @@
         requestAnimationFrame(() => {
             canvas.style.setProperty('opacity', '1', 'important');
             canvas.style.setProperty('visibility', 'visible', 'important');
-
             window.setTimeout(() => {
-                const stemAnim = document.getElementById('stemAnim');
-                const leaf1Anim = document.getElementById('leaf1Anim');
-                const leaf2Anim = document.getElementById('leaf2Anim');
-                const petalsAnim = document.getElementById('petalsAnim');
-
-                if (stemAnim) stemAnim.beginElement();
-                if (leaf1Anim) window.setTimeout(() => leaf1Anim.beginElement(), 1000);
-                if (leaf2Anim) window.setTimeout(() => leaf2Anim.beginElement(), 1500);
-                if (petalsAnim) window.setTimeout(() => petalsAnim.beginElement(), 2000);
-            }, 120);
+                canvas.classList.add('visible');
+            }, 30);
         });
     }
 
