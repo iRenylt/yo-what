@@ -1,5 +1,5 @@
 {
-  "name": "Footage Archive - Momentos Especiales",
+  "name": "Footage Archive",
   "short_name": "Footage Archive",
   "description": "Un archivo cinematográfico de momentos especiales con estética retro de película",
   "start_url": "index.html",
@@ -11,19 +11,19 @@
   "categories": ["lifestyle", "photography"],
   "icons": [
     {
-      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/fa-phnrcords-modified.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/fa-phnrcords-modified.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/fa-phnrcords-modified.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
@@ -31,13 +31,13 @@
   ],
   "screenshots": [
     {
-      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/fa-phnrcords-modified.png",
       "sizes": "540x720",
       "type": "image/png",
       "form_factor": "narrow"
     },
     {
-      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+      "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/fa-phnrcords-modified.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"
@@ -51,7 +51,7 @@
       "url": "cartaA.html",
       "icons": [
         {
-          "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+          "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/fa-phnrcords-modified.png",
           "sizes": "96x96"
         }
       ]
@@ -63,7 +63,7 @@
       "url": "recuerdosA.html",
       "icons": [
         {
-          "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png",
+          "src": "https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/fa-phnrcords-modified.png",
           "sizes": "96x96"
         }
       ]
