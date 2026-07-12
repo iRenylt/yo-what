@@ -10,16 +10,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #fff;
-            --accent: #9a9aaa;
-            --bg: #050505;
-            --card-bg: rgba(30, 20, 40, 0.7);
-            --text-main: #fff;
-            --text-dim: rgba(255,255,255,0.5);
-            --glass: rgba(255,255,255,0.06);
-            --border: rgba(150, 150, 170, 0.15);
-            --petal: #9a9aaa;
-            --petal-dark: #6a6a7a;
+            --primary: #e8dfd5;
+            --accent: #c9b8a8;
+            --accent-light: #d9a574;
+            --accent-dark: #a8937f;
+            --bg: #0a0a0a;
+            --card-bg: rgba(25, 22, 20, 0.8);
+            --card-bg-hover: rgba(35, 30, 28, 0.95);
+            --text-main: #e8dfd5;
+            --text-dim: rgba(232, 223, 213, 0.6);
+            --glass: rgba(201, 184, 168, 0.05);
+            --glass-hover: rgba(201, 184, 168, 0.1);
+            --border: rgba(201, 184, 168, 0.2);
+            --border-hover: rgba(201, 184, 168, 0.4);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.5);
+            --petal: var(--accent);
+            --petal-dark: var(--accent-dark);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -34,7 +42,7 @@
         }
         .stars {
             position: fixed; inset: 0;
-            background: radial-gradient(circle at center, #111 0%, #050505 100%);
+            background: radial-gradient(circle at center, rgba(201, 184, 168, 0.08) 0%, #0a0a0a 100%);
             z-index: 0;
         }
         .stars::after {
@@ -48,27 +56,106 @@
             from { background-position: 0 0; }
             to { background-position: 1000px 1000px; }
         }
+
+        body.locked { overflow: hidden !important; height: 100vh !important; }
+        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
+
         .page-lock {
-            position: fixed; inset: 0; background: #000; z-index: 99999;
-            display: flex; align-items: center; justify-content: center;
+            position: fixed;
+            inset: 0;
+            background: #000 !important;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             backdrop-filter: blur(20px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
+
+        .page-lock::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #000;
+            z-index: -1;
+        }
+
+        .page-lock.force-solid {
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+            background: #000 !important;
+        }
+
         .lock-box {
-            text-align: center; padding: 40px; width: 90%; max-width: 400px;
+            text-align: center;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            animation: lockFadeIn 1s ease-out;
         }
-        .lock-box h2 { font-weight: 400; margin-bottom: 30px; letter-spacing: 4px; color: #fff; }
+
+        @keyframes lockFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .lock-box h2 { 
+            font-weight: 400; 
+            margin-bottom: 30px; 
+            letter-spacing: 4px; 
+            color: #e8dfd5;
+            text-shadow: 0 0 30px rgba(212, 165, 116, 0.25);
+            font-size: 1.6rem;
+        }
+
         .lock-box input {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff;
-            padding: 15px; border-radius: 15px; outline: none; text-align: center; font-size: 1rem; margin-bottom: 20px; width: 100%;
+            background: rgba(201, 184, 168, 0.06);
+            border: 1.5px solid var(--border);
+            color: #e8dfd5;
+            padding: 15px 16px;
+            border-radius: 14px;
+            outline: none;
+            text-align: center;
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+            margin-bottom: 20px;
+            width: 100%;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
+
+        .lock-box input:focus { 
+            border-color: var(--border-hover);
+            background: rgba(201, 184, 168, 0.12);
+            box-shadow: 0 0 20px rgba(212, 165, 116, 0.2);
+        }
+
         .lock-box button {
-            background: transparent; border: 1px solid #fff; color: #fff;
-            padding: 12px 40px; border-radius: 50px; cursor: pointer; text-transform: uppercase;
-            letter-spacing: 2px; font-size: 0.8rem; transition: all 0.3s;
+            background: linear-gradient(135deg, rgba(212,165,116,0.15), rgba(201,184,168,0.1));
+            border: 1.5px solid var(--border);
+            color: #d4a574;
+            padding: 13px 42px;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .lock-box button:hover { background: #fff; color: #000; }
+
+        .lock-box button:hover { 
+            background: linear-gradient(135deg, rgba(212,165,116,0.25), rgba(201,184,168,0.18));
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
+        }
+
         .lock-error {
-            margin-top: 15px; color: #ff4444; font-size: 0.8rem; display: none;
+            margin-top: 15px;
+            color: #ff4444;
+            font-size: 0.8rem;
+            display: none;
         }
         nav {
             position: relative; z-index: 1000; display: flex; justify-content: center;
@@ -95,7 +182,7 @@
         }
         .envelope {
             position: relative; width: 100%; height: 420px;
-            background: linear-gradient(135deg, rgba(30, 30, 35, 0.8) 0%, rgba(20, 20, 25, 0.6) 100%);
+            background: linear-gradient(135deg, rgba(25, 22, 20, 0.9) 0%, rgba(35, 30, 28, 0.7) 100%);
             border: 1px solid var(--border); border-radius: 20px; cursor: pointer;
             transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -337,58 +424,14 @@
             }
         }
     </style>
-    <style>
-        /* 🌸 HOJAS DE SAKURA */
-        .sakura {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .sakura-leaf {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            opacity: 0.7;
-            animation: sakuraFall linear forwards;
-            filter: drop-shadow(0 0 2px rgba(255, 183, 213, 0.4));
-        }
-
-        .sakura-leaf::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23ffb7d5"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%23ff80ab"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23ffb7d5"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%23ff80ab"/><circle cx="50" cy="50" r="8" fill="%23ffd54f"/></svg>') center / contain no-repeat;
-        }
-
-        @keyframes sakuraFall {
-            0% {
-                top: -20px;
-                opacity: 0.8;
-                transform: translateX(0) rotateZ(0deg);
-            }
-            50% {
-                opacity: 0.8;
-            }
-            100% {
-                top: 100vh;
-                opacity: 0;
-                transform: translateX(var(--tx, 100px)) rotateZ(360deg);
-            }
-        }
-    </style>
 <body>
     <div class="stars"></div>
-    <div class="sakura" id="sakura"></div>
     <div id="pageLock" class="page-lock">
         <div class="lock-box">
-            <h2 id="lockPhrase">¡8 MESES!</h2>
-            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">¿Lista para verlo?</p>
-            <input type="text" id="minigameInput" placeholder="¿Cómo sueles llamarme?">
-            <button onclick="checkMinigame()">Desbloquear</button>
+            <h2 id="lockPhrase"></h2>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
+            <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button onclick="unlockPage()">Abrir Corazón</button>
             <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
         </div>
     </div>
@@ -468,64 +511,8 @@ Gracias por confiarme algo tan delicado como tu corazón.</p><br>
     <script src="lock.js"></script>
     <script>
         // Bloqueo total visual en móvil y escritorio
-        function lockScreen() {
-            document.body.classList.add('locked');
-            document.querySelectorAll('body > *:not(.page-lock):not(.stars)').forEach(el => {
-                el.style.display = 'none';
-            });
-            document.getElementById('pageLock').style.display = 'flex';
-        }
-        function unlockScreen() {
-            document.body.classList.remove('locked');
-            document.querySelectorAll('body > *:not(.page-lock):not(.stars)').forEach(el => {
-                el.style.display = '';
-            });
-            document.getElementById('pageLock').style.display = 'none';
-            if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
-        }
-        lockScreen();
+        // El bloqueo compartido de lock.js controla esta página.
 
-        // Minijuego 1 para desbloquear
-        function checkMinigame() {
-            const input = document.getElementById('minigameInput').value.trim().toLowerCase();
-            const correct = ['amor', 'mi amor', 'amor de mi vida', 'mi niño bello'];
-            if (correct.includes(input)) {
-                setTimeout(()=>{ showSecondMinigame(); }, 400);
-            } else {
-                document.getElementById('errorMsg').style.display = 'block';
-                setTimeout(()=>{document.getElementById('errorMsg').style.display = 'none';}, 1800);
-            }
-        }
-        // Segundo minijuego
-        function showSecondMinigame() {
-            document.querySelector('.lock-box').innerHTML = `
-                <h2>Minijuego 2</h2>
-                <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">¿Cuál es la fecha oficial de nosotros? <br><span style='color:#e75480;font-size:0.8em'>(formato: 01/02/23)</span></p>
-                <input type="text" id="minigameInput2" placeholder="Escribe la fecha aquí">
-                <button onclick="checkMinigame2()">Desbloquear</button>
-                <div id="errorMsg2" class="lock-error">INTENTA DE NUEVO</div>
-            `;
-        }
-        function checkMinigame2() {
-            const input = document.getElementById('minigameInput2').value.trim();
-            const correct = ['09/06/25'];
-            if (correct.includes(input)) {
-                unlockWithAnimation();
-            } else {
-                document.getElementById('errorMsg2').style.display = 'block';
-                setTimeout(()=>{document.getElementById('errorMsg2').style.display = 'none';}, 1800);
-            }
-        }
-        // Animación de desbloqueo
-        function unlockWithAnimation() {
-            const lock = document.getElementById('pageLock');
-            lock.style.transition = 'opacity 1.2s cubic-bezier(.7,0,.3,1)';
-            lock.style.opacity = 0;
-            setTimeout(()=>{
-                unlockScreen();
-                if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
-            }, 1200);
-        }
         // Abrir carta (sin confeti)
         function openLetter() {
             const overlay = document.getElementById('letterOverlay');
@@ -582,7 +569,6 @@ Gracias por confiarme algo tan delicado como tu corazón.</p><br>
         };
         // Secretos ocultos extra creativos
         document.addEventListener('DOMContentLoaded', ()=>{
-            // Secreto: click en la fecha de la carta
             const header = document.querySelector('.letter-header');
             if(header){
                 header.style.cursor = 'pointer';
@@ -592,7 +578,6 @@ Gracias por confiarme algo tan delicado como tu corazón.</p><br>
                     header.style.color = '#e75480';
                 };
             }
-            // Secreto: doble click en la carta
             const carta = document.querySelector('.letter-inner');
             if(carta){
                 carta.ondblclick = ()=>{
@@ -601,7 +586,6 @@ Gracias por confiarme algo tan delicado como tu corazón.</p><br>
                     carta.innerHTML += '<div style="margin-top:30px;font-size:1.1rem;">Has encontrado el secreto oculto: <b>Siempre serás mi persona favorita.</b></div>';
                 };
             }
-            // Secreto: triple click en el sobre
             const sobre = document.getElementById('envelope');
             if(sobre){
                 let clickCount = 0;
@@ -614,56 +598,8 @@ Gracias por confiarme algo tan delicado como tu corazón.</p><br>
                     }
                 });
             }
-            // Secreto: escribir "te amo" en el primer minijuego
-            const minigameInput = document.getElementById('minigameInput');
-            if(minigameInput){
-                minigameInput.addEventListener('input', function(){
-                    if(this.value.trim().toLowerCase() === 'te amo'){
-                        this.value = '';
-                        alert('¡Encontraste un secreto! Yo también te amo.');
-                    }
-                });
-            }
         });
 
-        // 🌸 SISTEMA DE HOJAS DE SAKURA CAYENDO
-        (function() {
-            const sakuraContainer = document.getElementById('sakura');
-            if (!sakuraContainer) return;
-
-            function createSakuraLeaf() {
-                const leaf = document.createElement('div');
-                leaf.className = 'sakura-leaf';
-                
-                const size = Math.random() * 10 + 15;
-                leaf.style.width = size + 'px';
-                leaf.style.height = size + 'px';
-                
-                const xPos = Math.random() * 100;
-                leaf.style.left = xPos + '%';
-                
-                const duration = Math.random() * 8 + 8;
-                leaf.style.animationDuration = duration + 's';
-                
-                const txVariation = Math.random() * 200 - 100;
-                leaf.style.setProperty('--tx', txVariation + 'px');
-                
-                const opacity = Math.random() * 0.3 + 0.5;
-                leaf.style.opacity = opacity;
-                
-                sakuraContainer.appendChild(leaf);
-                
-                setTimeout(() => leaf.remove(), duration * 1000);
-            }
-
-            setInterval(() => {
-                createSakuraLeaf();
-            }, Math.random() * 300 + 500);
-
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => createSakuraLeaf(), i * 200);
-            }
-        })();
     </script>
 </body>
 </html>
