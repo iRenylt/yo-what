@@ -193,21 +193,33 @@
 
         /* 🔒 BLOQUEO */
         body.locked { overflow: hidden !important; height: 100vh !important; }
-        body.locked > *:not(.page-lock) { display: none !important; }
+        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
 
         .page-lock {
             position: fixed;
             inset: 0;
-            background: #000;
+            background: #000 !important;
             z-index: 99999;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(20px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
 
-        .page-lock.active {
-            display: flex;
+        .page-lock::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #000;
+            z-index: -1;
+        }
+
+        .page-lock.force-solid {
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+            background: #000 !important;
         }
 
         .lock-box {
@@ -231,8 +243,8 @@
             font-weight: 400;
             margin-bottom: 30px;
             letter-spacing: 4px;
-            color: #fff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            color: #e8dfd5;
+            text-shadow: 0 0 20px rgba(232, 223, 213, 0.08);
         }
 
         .lock-box input {
@@ -242,7 +254,7 @@
             border-radius: 8px;
             border: 1.5px solid rgba(200,200,220,0.15);
             background: rgba(255,255,255,0.03);
-            color: #fff;
+            color: #e8dfd5;
             font-size: 0.9rem;
             outline: none;
             transition: all 0.3s ease;
@@ -260,7 +272,7 @@
             border-radius: 8px;
             border: 1.5px solid rgba(200,200,220,0.15);
             background: linear-gradient(135deg, rgba(200,200,220,0.08), rgba(170,170,190,0.04));
-            color: #fff;
+            color: #e8dfd5;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -359,6 +371,23 @@
             }
         }
     </style>
+    <style id="pin-styles">
+    @keyframes shake { 0%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}100%{transform:translateX(0);} }
+    .page-lock { display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: radial-gradient(circle at top, rgba(212,165,116,0.14), rgba(10,10,10,0.98)); z-index: 99999; padding: 20px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+    .page-lock.active { display: flex; }
+    .page-lock.force-solid { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 20px; padding: clamp(20px, 3.2vw, 40px); background: linear-gradient(180deg, rgba(255,244,224,0.08), rgba(212,165,116,0.04)); border: 1.5px solid rgba(212,165,116,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(212,165,116,0.12); text-align: center; transform-origin: center; }
+    .lock-box h2 { font-size: clamp(1.1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; color: #f7e7c9; text-shadow: 0 0 30px rgba(212,165,116,0.2); }
+    .lock-box p { margin: 0 0 20px; color: rgba(255,242,220,0.7); font-size: 0.85rem; letter-spacing: 2px; }
+    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1.5px solid rgba(212,165,116,0.26); background: rgba(255,248,235,0.06); color: #fff; outline: none; text-align: center; }
+    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 30px rgba(212,165,116,0.16); border-color: rgba(212,165,116,0.4); background: rgba(255,244,224,0.1); }
+    .lock-box button { margin-top: 14px; padding: 13px 36px; border-radius: 999px; border: 1.5px solid rgba(212,165,116,0.28); background: linear-gradient(135deg, rgba(212,165,116,0.22), rgba(232,196,143,0.12)); color: #fff; cursor: pointer; font-weight: 600; }
+    .lock-box button:hover { transform: translateY(-3px); }
+    .lock-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 12px; display: none; }
+    .lock-error.show { display: block; animation: shake 420ms ease; }
+    body.locked { overflow: hidden !important; height: 100vh !important; }
+    body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
+    </style>
 </head>
 
 <body>
@@ -366,12 +395,94 @@
 <div id="pageLock" class="page-lock">
     <div class="lock-box">
         <h2 id="lockPhrase"></h2>
-        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMA</p>
-        <input type="password" id="pinInput" placeholder="PIN SEGURIDAD" maxlength="4" inputmode="numeric">
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
+        <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <button onclick="unlockPage()">Abrir Corazón</button>
         <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
     </div>
 </div>
+<script>
+    // Forzar visibilidad temprana del overlay si algo bloquea la ejecución de lock.js
+    (function(){
+        try {
+            if (document.body) document.body.classList.add('locked');
+            const pl = document.getElementById('pageLock');
+            if (pl) {
+                pl.classList.add('active');
+                pl.style.display = 'flex';
+                pl.style.zIndex = '99999';
+            }
+        } catch (e) { console.warn('force pageLock show failed', e); }
+    })();
+
+    // Fallback de desbloqueo: intenta unlockPage(), si no existe, maneja localmente
+    (function(){
+        function fallbackUnlock() {
+            try {
+                const pinEl = document.getElementById('pinInput');
+                const val = pinEl ? (pinEl.value || '').trim() : '';
+                const correct = '0906';
+                const err = document.getElementById('errorMsg');
+                if (val === correct) {
+                    // Si unlockPage existe, delegar
+                    if (typeof unlockPage === 'function') return unlockPage();
+
+                    // Ocultar overlay y restaurar contenido
+                    const pl = document.getElementById('pageLock');
+                    if (pl) {
+                        pl.classList.remove('active');
+                        pl.classList.remove('force-solid');
+                        pl.style.display = 'none';
+                        pl.style.pointerEvents = 'none';
+                    }
+                    document.body.classList.remove('locked');
+                    document.body.classList.remove('initializing');
+
+                    document.body.querySelectorAll('*').forEach((el) => {
+                        if (el.id !== 'pageLock' && !el.classList.contains('stars') && !el.id.startsWith('initialSplash')) {
+                            el.style.visibility = 'visible';
+                            el.style.display = '';
+                        }
+                    });
+
+                    if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
+                    return;
+                }
+
+                if (err) {
+                    err.style.display = 'block';
+                    err.classList.add('show');
+                    setTimeout(() => { if (err) { err.classList.remove('show'); err.style.display = 'none'; } }, 800);
+                }
+                if (pinEl) {
+                    pinEl.style.borderColor = 'rgba(255,107,107,0.6)';
+                    setTimeout(() => { try { pinEl.style.borderColor = ''; } catch(e){} }, 500);
+                }
+            } catch (e) { console.error('fallbackUnlock error', e); }
+        }
+
+        // Enlazar botón
+        const btn = document.querySelector('#pageLock .lock-box button');
+        if (btn) {
+            btn.addEventListener('click', () => {
+                if (typeof unlockPage === 'function') return unlockPage();
+                fallbackUnlock();
+            });
+        }
+
+        // Enlazar Enter en el input como fallback
+        const pinInput = document.getElementById('pinInput');
+        if (pinInput) {
+            pinInput.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Enter') {
+                    ev.preventDefault();
+                    if (typeof unlockPage === 'function') return unlockPage();
+                    fallbackUnlock();
+                }
+            });
+        }
+    })();
+</script>
     <nav>
         <a href="index.html">Inicio</a>
     </nav>
@@ -518,6 +629,14 @@
 
     <script src="lock.js"></script>
     <script>
+        // Forzar inyección de estilos y enlaces de eventos del PIN
+        if (typeof injectPinStyles === 'function') {
+            try { injectPinStyles(); } catch (e) { /* ignorar */ }
+        }
+        if (typeof bindPinInputEvents === 'function') {
+            try { bindPinInputEvents(); } catch (e) { /* ignorar */ }
+        }
+
         // Asegurar que el bloqueo se inicializa después de cargar lock.js
         if (typeof verificarBloqueo === 'function') {
             if (document.readyState === 'loading') {
