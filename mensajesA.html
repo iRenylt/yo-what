@@ -11,21 +11,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #f5e6d3;
-            --accent: #d4a574;
-            --accent-light: #e8c48f;
-            --accent-dark: #a67c52;
-            --bg: #0d0d0d;
-            --card-bg: rgba(28, 24, 20, 0.85);
-            --card-bg-hover: rgba(35, 30, 25, 0.95);
-            --text-main: #f5e6d3;
-            --text-dim: rgba(245, 230, 211, 0.7);
-            --glass: rgba(212, 165, 116, 0.08);
-            --glass-hover: rgba(212, 165, 116, 0.12);
-            --border: rgba(212, 165, 116, 0.25);
-            --border-hover: rgba(212, 165, 116, 0.5);
-            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.45);
-            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
+            --primary: #e8dfd5;
+            --accent: #c9b8a8;
+            --accent-light: #d9a574;
+            --accent-dark: #a8937f;
+            --bg: #0a0a0a;
+            --card-bg: rgba(25, 22, 20, 0.8);
+            --card-bg-hover: rgba(35, 30, 28, 0.95);
+            --text-main: #e8dfd5;
+            --text-dim: rgba(232, 223, 213, 0.6);
+            --glass: rgba(201, 184, 168, 0.05);
+            --glass-hover: rgba(201, 184, 168, 0.1);
+            --border: rgba(201, 184, 168, 0.2);
+            --border-hover: rgba(201, 184, 168, 0.4);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.5);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,7 +46,7 @@
         .stars {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at center, #1a1612 0%, #0d0d0d 100%);
+            background: radial-gradient(circle at center, rgba(201, 184, 168, 0.08) 0%, #0a0a0a 100%);
             z-index: 0;
         }
 
@@ -70,12 +71,28 @@
         .page-lock {
             position: fixed;
             inset: 0;
-            background: #000;
+            background: #000 !important;
             z-index: 99999;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(20px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .page-lock::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #000;
+            z-index: -1;
+        }
+
+        .page-lock.force-solid {
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+            background: #000 !important;
         }
 
         .lock-box {
@@ -95,16 +112,16 @@
             font-weight: 400; 
             margin-bottom: 30px; 
             letter-spacing: 4px; 
-            color: #fff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            color: #e8dfd5;
+            text-shadow: 0 0 20px rgba(232, 223, 213, 0.08);
         }
 
         .lock-box input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            color: #fff;
+            background: rgba(201, 184, 168, 0.06);
+            border: 1.5px solid var(--border);
+            color: #e8dfd5;
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 14px;
             outline: none;
             text-align: center;
             font-size: 1rem;
@@ -114,9 +131,9 @@
         }
 
         .lock-box button {
-            background: transparent;
-            border: 1px solid #fff;
-            color: #fff;
+            background: linear-gradient(135deg, rgba(212,165,116,0.15), rgba(201,184,168,0.08));
+            border: 1.5px solid var(--border);
+            color: #d4a574;
             padding: 12px 40px;
             border-radius: 50px;
             cursor: pointer;
@@ -127,8 +144,9 @@
         }
 
         .lock-box button:hover { 
-            background: #fff;
-            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212,165,116,0.12);
+            border-color: var(--border-hover);
         }
 
         .lock-error {
@@ -310,7 +328,7 @@
             top: 8px;
             width: 16px;
             height: 16px;
-            background: radial-gradient(circle at 30% 30%, #fff, #d8d8e8);
+            background: radial-gradient(circle at 30% 30%, #e8dfd5, #c9b8a8);
             border-radius: 50%;
             box-shadow: 0 0 0 3px var(--card-bg);
             transition: all 0.3s ease;
@@ -323,7 +341,7 @@
 
         .timeline-date {
             font-size: 0.7rem;
-            color: #d8d8e8;
+            color: #e8dfd5;
             letter-spacing: 4px;
             text-transform: uppercase;
             margin-bottom: 12px;
@@ -333,7 +351,7 @@
         }
 
         .timeline-content {
-            background: linear-gradient(135deg, rgba(20, 20, 25, 0.8), rgba(25, 25, 35, 0.6));
+            background: linear-gradient(135deg, rgba(25, 22, 20, 0.9), rgba(35, 30, 28, 0.7));
             border: 1.5px solid var(--border);
             border-radius: 20px;
             padding: 32px;
@@ -344,7 +362,7 @@
 
         .timeline-content:hover {
             border-color: var(--border-hover);
-            background: linear-gradient(135deg, rgba(25, 25, 35, 0.9), rgba(30, 30, 40, 0.8));
+            background: linear-gradient(135deg, rgba(35, 30, 28, 0.95), rgba(25, 22, 20, 0.85));
             transform: translateY(-8px);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
         }
@@ -353,7 +371,7 @@
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 18px;
-            color: #d8d8e8;
+            color: #e8dfd5;
             letter-spacing: 0.8px;
             font-family: 'Playfair Display', serif;
         }
@@ -396,11 +414,11 @@
         }
 
         .book-toggle {
-            background: linear-gradient(135deg, rgba(200,200,220,0.12), rgba(170,170,190,0.05));
+            background: linear-gradient(135deg, rgba(201, 184, 168, 0.12), rgba(201, 184, 168, 0.05));
             border: 1.5px solid var(--border);
             padding: 14px 24px;
             border-radius: 28px;
-            color: #d8d8e8;
+            color: #e8dfd5;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -416,9 +434,9 @@
         }
 
         .book-toggle:hover {
-            background: linear-gradient(135deg, rgba(200,200,220,0.2), rgba(170,170,190,0.1));
+            background: linear-gradient(135deg, rgba(201, 184, 168, 0.2), rgba(201, 184, 168, 0.1));
             border-color: var(--border-hover);
-            color: #fff;
+            color: #f5ebdc;
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
@@ -467,11 +485,11 @@
 
         #mensaje {
             width: 100%;
-            background: rgba(255,255,255,0.02);
+            background: rgba(201, 184, 168, 0.06);
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 20px;
-            color: #fff;
+            color: #e8dfd5;
             font-family: inherit;
             font-size: 16px;
             margin-bottom: 20px;
@@ -480,12 +498,12 @@
             transition: all 0.3s;
         }
 
-        #mensaje:focus { border-color: #fff; background: rgba(255,255,255,0.05); }
+        #mensaje:focus { border-color: rgba(201, 184, 168, 0.35); background: rgba(201, 184, 168, 0.1); }
 
         #enviar {
             background: transparent;
-            border: 1px solid #fff;
-            color: #fff;
+            border: 1px solid rgba(201, 184, 168, 0.35);
+            color: #e8dfd5;
             padding: 12px 50px;
             border-radius: 50px;
             cursor: pointer;
@@ -495,7 +513,7 @@
             transition: all 0.3s;
         }
 
-        #enviar:hover { background: #fff; color: #000; }
+        #enviar:hover { background: rgba(201, 184, 168, 0.16); color: #f5ebdc; }
 
         /* 🖱️ INDICADOR DE SCROLL */
         .scroll-indicator {
@@ -513,7 +531,7 @@
         }
 
         .scroll-indicator p { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
-        .scroll-indicator .dot { width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+        .scroll-indicator .dot { width: 4px; height: 4px; background: #c9b8a8; border-radius: 50%; }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
@@ -523,7 +541,7 @@
 
         /* 🎁 SECRETOS ESTILOS */
         .secret-word { cursor: pointer; position: relative; transition: all 0.3s; }
-        .secret-word:hover { color: #d8d8e8; text-shadow: 0 0 10px rgba(200, 200, 220, 0.5); }
+        .secret-word:hover { color: #f5ebdc; text-shadow: 0 0 10px rgba(201, 184, 168, 0.35); }
 
         .secret-modal { 
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
@@ -648,7 +666,7 @@
     <div class="lock-box">
         <h2 id="lockPhrase"></h2>
         <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
-        <input type="password" id="pinInput" placeholder="PIN SEGURIDAD" maxlength="4" inputmode="numeric">
+        <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <button onclick="unlockPage()">Abrir Corazón</button>
         <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
     </div>
