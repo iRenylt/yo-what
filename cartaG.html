@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es" style="background:#0a0a0a;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0d0d0d">
+    <title>Footage Archive</title>
+    <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/fa-phnrcords-modified.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e8dfd5;
+            --accent: #c9b8a8;
+            --accent-light: #d9a574;
+            --accent-dark: #a8937f;
+            --bg: #0a0a0a;
+            --card-bg: rgba(25, 22, 20, 0.8);
+            --card-bg-hover: rgba(35, 30, 28, 0.95);
+            --text-main: #e8dfd5;
+            --text-dim: rgba(232, 223, 213, 0.6);
+            --glass: rgba(201, 184, 168, 0.05);
+            --glass-hover: rgba(201, 184, 168, 0.1);
+            --border: rgba(201, 184, 168, 0.2);
+            --border-hover: rgba(201, 184, 168, 0.4);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.5);
+            --accent-warm: #d4a574;
+            --accent-cool: #b8c5d6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Playfair Display', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        .stars {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(201, 184, 168, 0.08) 0%, #0a0a0a 100%);
+            z-index: 0;
+        }
+
+        .stars::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.15;
+            animation: starsMove 150s linear infinite;
+        }
+
+        @keyframes starsMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        body.locked { overflow: hidden !important; height: 100vh !important; }
+        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
+
+        .page-lock {
+            position: fixed;
+            inset: 0;
+            background: #000 !important;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .page-lock::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #000;
+            z-index: -1;
+        }
+
+        .page-lock.force-solid {
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+            background: #000 !important;
+        }
+
+        .lock-box {
+            text-align: center;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            animation: lockFadeIn 1s ease-out;
+        }
+
+        @keyframes lockFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .lock-box h2 { 
+            font-weight: 400; 
+            margin-bottom: 30px; 
+            letter-spacing: 4px; 
+            color: #e8dfd5;
+            text-shadow: 0 0 30px rgba(212, 165, 116, 0.25);
+            font-size: 1.6rem;
+        }
+
+        .lock-box input {
+            background: rgba(201, 184, 168, 0.06);
+            border: 1.5px solid var(--border);
+            color: #e8dfd5;
+            padding: 15px 16px;
+            border-radius: 14px;
+            outline: none;
+            text-align: center;
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+            margin-bottom: 20px;
+            width: 100%;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .lock-box input:focus { 
+            border-color: var(--border-hover);
+            background: rgba(201, 184, 168, 0.12);
+            box-shadow: 0 0 20px rgba(212, 165, 116, 0.2);
+        }
+
+        .lock-box button {
+            background: linear-gradient(135deg, rgba(212,165,116,0.15), rgba(201,184,168,0.1));
+            border: 1.5px solid var(--border);
+            color: #d4a574;
+            padding: 13px 42px;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .lock-box button:hover { 
+            background: linear-gradient(135deg, rgba(212,165,116,0.25), rgba(201,184,168,0.18));
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
+        }
+
+        .lock-error {
+            margin-top: 15px;
+            color: #ff4444;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        nav {
+            position: relative;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        nav a, .nav-item {
+            background: var(--glass);
+            border: 1.5px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 18px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                margin: 20px auto;
+                gap: 8px;
+            }
+            nav a, .nav-item {
+                padding: 8px 12px;
+                font-size: 0.6rem;
+            }
+        }
+
+        nav a:hover, .nav-item:hover { 
+            color: #fff; 
+            border-color: var(--border-hover);
+            background: var(--glass-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+            perspective: 1000px;
+            padding: 20px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(255, 183, 213, 0.08), rgba(255, 128, 171, 0.04));
+            border: 1.5px solid var(--border);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            gap: 20px;
+        }
+
+        .envelope::before {
+            content: "Para: Nohelia";
+            color: var(--text-main);
+            font-size: 1.4rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            font-weight: 400;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: translateY(-8px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, rgba(255, 183, 213, 0.12), rgba(255, 128, 171, 0.06));
+        }
+
+        .envelope .seal {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,183,213,0.08);
+            border: 1.5px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .envelope:hover .seal {
+            transform: rotate(360deg) scale(1.15);
+            background: rgba(255,183,213,0.15);
+            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.15);
+        }
+
+        .envelope:hover {
+            transform: scale(1.02);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+        }
+
+        .envelope .seal {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: 0.5s;
+        }
+
+        .envelope:hover .seal {
+            transform: rotate(360deg) scale(1.1);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .letter {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98);
+            z-index: 2000;
+            display: none;
+            padding: 40px 20px;
+            overflow-y: auto;
+            backdrop-filter: blur(30px);
+        }
+
+        .letter-inner {
+            max-width: 700px;
+            margin: 60px auto;
+            background: #fff;
+            color: #1a1a1a;
+            padding: 80px;
+            border-radius: 2px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .letter.active .letter-inner {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .letter-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            text-align: right;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #888;
+        }
+
+        .letter-body {
+            font-size: 1.15rem;
+            line-height: 2;
+            font-style: italic;
+            text-align: justify;
+        }
+
+        .letter-footer {
+            margin-top: 60px;
+            text-align: right;
+            border-top: 1px solid #eee;
+            padding-top: 30px;
+        }
+
+        .close-letter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            z-index: 2100;
+        }
+
+        .close-letter:hover { background: #fff; color: #000; }
+
+        .sections-grid {
+            margin: 60px auto 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            max-width: 900px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .section-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            transition: 0.4s;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-card:first-child {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            min-height: 400px;
+        }
+
+        .section-card:first-child iframe {
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            border-radius: 20px;
+            border: none;
+        }
+
+        .section-card:nth-child(2) {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 30px;
+        }
+
+        .section-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .section-card img {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            filter: grayscale(0.3);
+            transition: 0.5s;
+        }
+
+        .section-card:hover img { filter: grayscale(0); }
+
+        .section-title {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .section-text {
+            font-style: italic;
+            font-size: 1rem;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .sections-grid { 
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 15px;
+            }
+            .letter-inner { padding: 40px 30px; }
+            .envelope { height: 300px; }
+            .section-card:first-child {
+                min-height: 300px;
+                padding: 20px;
+            }
+            .section-card:first-child iframe {
+                height: 280px;
+                max-width: 100%;
+            }
+            .section-card:nth-child(2) {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sections-grid {
+                padding: 0 12px;
+                gap: 16px;
+            }
+            .section-card {
+                padding: 18px;
+                border-radius: 20px;
+            }
+            .section-card:first-child {
+                min-height: 280px;
+                padding: 16px;
+            }
+            .section-card:first-child iframe {
+                height: 240px;
+            }
+            .section-title {
+                font-size: 0.65rem;
+            }
+            .section-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+<body>
+    <div class="stars"></div>
+
+    <div id="pageLock" class="page-lock">
+        <div class="lock-box">
+            <h2 id="lockPhrase"></h2>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
+            <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button onclick="unlockPage()">Abrir Corazón</button>
+            <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
+        </div>
+    </div>
+
+        <nav>
+        <a href="index.html">Inicio</a>
+    </nav>
+
+    <div class="envelope-wrapper">
+        <div class="envelope" onclick="openLetter()">
+            <div class="seal">✉</div>
+            <p style="font-size: 0.6rem; letter-spacing: 4px; color: var(--text-dim); margin-top: 10px;">CLICK PARA ABRIR</p>
+        </div>
+
+        <div class="sections-grid">
+            <div class="section-card">
+                <span class="section-title" style="margin-bottom: 20px;""El saludo de las alas"</span>
+                <iframe src="https://www.youtube.com/embed/ytPL1DPa2n4" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="section-card">
+                <p style="font-size: 0.6rem; color: var(--text-dim); letter-spacing: 4px;">09 / 06 / 2026</p>
+                <p style="font-size: 0.6rem; color: var(--text-dim); letter-spacing: 4px; margin: 8px 0 20px 0;">— A & N —</p>
+                <p class="section-text" style="font-size: 1.15rem; margin-bottom: 16px;">Doce meses desde aquel 9 de junio</p>
+                <p class="section-text" style="font-size: 1.15rem; margin-bottom: 16px;">Esto ya es un poco más que apenas el comienzo (Esto tendrá un remake en el futuro)</p>
+                <p class="section-text" style="font-size: 1.15rem;">¿Teniente? 💗</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="letterOverlay" class="letter">
+        <button class="close-letter" onclick="closeLetter()">✕</button>
+        <div class="letter-inner">
+            <div class="letter-header">
+                Junio 09, 2026
+            </div>
+            <div class="letter-body">
+                <p>Mi amorchito,</p><br>
+                <p>Hoy no celebramos solo doce meses.
+
+Celebramos un año entero de risas, de llamadas interminables, de momentos que jamás imaginé vivir y de un amor que, sin darme cuenta, terminó convirtiéndose en una parte de mi vida. Un año parece una cantidad pequeña para el tiempo, pero enorme para el corazón. Porque en estos doce meses me enseñaste que una persona puede cambiarte la vida sin hacer ruido, simplemente estando ahí.
+
+Si pudiera volver al día en que todo empezó, volvería a elegirte una y otra vez. Sin pensarlo. Porque conocerte ha sido una de las decisiones más bonitas que la vida puso frente a mí.</p><br>
+                <p>Gracias por cada sonrisa que me regalaste cuando más la necesitaba. Gracias por cada palabra de apoyo, por cada momento en el que creíste en mí incluso cuando yo dudaba de mí mismo. Gracias por hacerme sentir querido de una manera que nunca había experimentado.
+
+Quiero que sepas algo que espero nunca olvides.
+
+No tienes que ser perfecta para que te ame.</p><br>
+                <p>No prometo una relación perfecta. Sería una mentira. Habrá desacuerdos, días complicados y momentos donde las cosas parezcan difíciles. Pero sí prometo algo mucho más importante: nunca dejaré de luchar por nosotros. Nunca dejaré que un problema sea más grande que el amor que siento por ti.
+
+Este año me enseñó que amar no es solo decir "te amo". Es elegirte todos los días. Es preocuparme por ti, alegrarme con tus logros, intentar hacerte sonreír cuando estás triste, imaginar un futuro donde sigamos caminando de la mano, creciendo juntos y convirtiéndonos en la mejor versión de nosotros mismos.
+
+Sueño con todas las cosas que todavía nos faltan por vivir. Los abrazos que aún no nos damos, los viajes que algún día haremos, las metas que celebraremos juntos y todos esos aniversarios que todavía nos esperan.
+
+Porque, sinceramente, un año contigo no hizo que me cansara de amarte.
+
+Hizo que quisiera vivir muchos más.
+
+Gracias por convertirte en mi lugar seguro. Gracias por enseñarme que el amor también puede sentirse como paz. Gracias por hacer que los días normales se vuelvan especiales solo porque tú estás en ellos.
+
+Hoy miro hacia atrás y no pienso en los problemas que tuvimos. Pienso en todo lo que fuimos capaces de superar juntos. Y eso me hace sentir orgulloso de nosotros, porque demuestra que nuestro amor no solo existe cuando todo va bien, sino también cuando toca ser fuertes.
+
+Quiero seguir siendo quien te saque una sonrisa en los días grises, quien celebre tus triunfos como si fueran propios y quien nunca deje de recordarte lo increíble que eres.
+
+Y si algún día la vida intenta hacerte creer que estás sola, recuerda esto.
+
+Mientras yo exista, siempre tendrás una mano dispuesta a sostener la tuya.
+
+Siempre tendrás un corazón donde refugiarte.
+
+Siempre tendrás a alguien que crea en ti incluso cuando tú no puedas hacerlo.
+
+Porque te elegí hace un año.
+
+Te elijo hoy.
+
+Y si la vida me diera la oportunidad de volver a empezar mil veces, en las mil volvería a buscarte para enamorarme de ti otra vez.
+
+Feliz primer aniversario, mi amor.
+
+Gracias por regalarme el mejor año de mi vida.
+
+Te amo con todo mi corazón, con todo lo que soy y con todo lo que todavía quiero llegar a ser.
+
+Por un año...
+
+Y por todos los que aún nos esperan.</p>
+            </div>
+            <div class="letter-footer">
+                <p>Siempre a tu lado,</p>
+                <p style="font-weight: 600; font-size: 1.5rem; margin-top: 10px;">Andrés</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="lock.js"></script>
+    <script>
+        const phrases = [
+            "UN ARCHIVO SECRETO",
+        "EN CADA MOMENTO",
+        "CADA SEGUNDO CONTIGO",
+        "RECUERDOS QUE VIVEN",
+        "UN VIAJE ESPECIAL",
+        "TÚ LUGAR ESPECIAL",
+        "CORAZÓN EN LA MANO",
+        "GRAVEDAD SIN EXPLICACIÓN",
+        "COMPLETAMENTE CAUTIVADORA",
+        "ALMA NATURAL ENCONTRADA",
+        "AMOR SIN MEDIDA",
+        "UN REGALO DEL UNIVERSO",
+        "DONDE TÚ ESTÉS, IRÉ",
+        "PUNTO DE NO RETORNO",
+        "PERFECTAMENTE IMPERFECTA",
+        "UN SUEÑO HECHO REALIDAD",
+        "FORTALEZA EN TUS MANOS",
+        "ENTRE TUS BRAZOS SOY LIBRE",
+        "CADA LATIDO TE LLAMA",
+        "ERES MI DEBILIDAD MÁS HERMOSA",
+        "PARA AMARTE EN CUALQUIER MOMENTO",
+        "SUEÑO DESPIERTO CONTIGO",
+        "MI DESTINO ERES TÚ",
+        "EL TIEMPO SE DETIENE"
+        ];
+        document.getElementById('lockPhrase').textContent = phrases[Math.floor(Math.random() * phrases.length)];
+
+        function openLetter() {
+            const overlay = document.getElementById('letterOverlay');
+            overlay.style.display = 'block';
+            setTimeout(() => overlay.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLetter() {
+            const overlay = document.getElementById('letterOverlay');
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 800);
+        }
+
+    </script>
+</body>
+</html>
