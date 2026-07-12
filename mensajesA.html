@@ -1,72 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="theme-color" content="#0d0d0d">
-    <title>Footage Archive</title>
+    <title>Footage Archive - Recuerdos</title>
     <link rel="icon" href="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="advanced.css">
+    <link rel="stylesheet" href="phase3-gallery.css">
     <style>
+        /* Theme tokens */
         :root {
-            --primary: #e8dfd5;
-            --accent: #c9b8a8;
-            --accent-light: #d9a574;
-            --accent-dark: #a8937f;
-            --bg: #0a0a0a;
-            --card-bg: rgba(25, 22, 20, 0.8);
-            --card-bg-hover: rgba(35, 30, 28, 0.95);
-            --text-main: #e8dfd5;
-            --text-dim: rgba(232, 223, 213, 0.6);
-            --glass: rgba(201, 184, 168, 0.05);
-            --glass-hover: rgba(201, 184, 168, 0.1);
-            --border: rgba(201, 184, 168, 0.2);
-            --border-hover: rgba(201, 184, 168, 0.4);
-            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.5);
+            --primary: #f5e6d3;
+            --accent: #d4a574;
+            --accent-light: #e8c48f;
+            --accent-dark: #a67c52;
+            --bg: #0d0d0d;
+            --card-bg: rgba(28, 24, 20, 0.85);
+            --card-bg-hover: rgba(35, 30, 25, 0.92);
+            --text-main: #f5e6d3;
+            --text-dim: rgba(245, 230, 211, 0.72);
+            --glass: rgba(212, 165, 116, 0.06);
+            --glass-hover: rgba(212, 165, 116, 0.12);
+            --border: rgba(212, 165, 116, 0.18);
+            --border-hover: rgba(212, 165, 116, 0.35);
+            --shadow-md: 0 10px 22px rgba(0, 0, 0, 0.28);
+            --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.45);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Reset and layout */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
+            min-height: 100vh;
             background: var(--bg);
             color: var(--text-main);
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Playfair Display', serif;
-            min-height: 100vh;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
             line-height: 1.6;
         }
 
-        /* 🌌 Fondo Estelar */
-        .stars {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(201, 184, 168, 0.08) 0%, #0a0a0a 100%);
-            z-index: 0;
+        body.locked {
+            overflow: hidden !important;
+            height: 100vh !important;
         }
 
-        .stars::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.15;
-            animation: starsMove 150s linear infinite;
+        body.locked > *:not(.page-lock):not(.stars) {
+            display: none !important;
         }
-
-        @keyframes starsMove {
-            from { background-position: 0 0; }
-            to { background-position: 1000px 1000px; }
-        }
-
-        /* 🔒 BLOQUEO */
-        body.locked { overflow: hidden !important; height: 100vh !important; }
-        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
 
         .page-lock {
             position: fixed;
@@ -108,45 +101,55 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        .lock-box h2 { 
-            font-weight: 400; 
-            margin-bottom: 30px; 
-            letter-spacing: 4px; 
+        .lock-box h2 {
+            font-weight: 400;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
             color: #e8dfd5;
-            text-shadow: 0 0 20px rgba(232, 223, 213, 0.08);
+            text-shadow: 0 0 30px rgba(212, 165, 116, 0.25);
+            font-size: 1.6rem;
         }
 
         .lock-box input {
             background: rgba(201, 184, 168, 0.06);
             border: 1.5px solid var(--border);
             color: #e8dfd5;
-            padding: 15px;
+            padding: 15px 16px;
             border-radius: 14px;
             outline: none;
             text-align: center;
-            font-size: 1rem;
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
             margin-bottom: 20px;
             width: 100%;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .lock-box input:focus {
+            border-color: var(--border-hover);
+            background: rgba(201, 184, 168, 0.12);
+            box-shadow: 0 0 20px rgba(212, 165, 116, 0.2);
         }
 
         .lock-box button {
-            background: linear-gradient(135deg, rgba(212,165,116,0.15), rgba(201,184,168,0.08));
+            background: linear-gradient(135deg, rgba(212,165,116,0.15), rgba(201,184,168,0.1));
             border: 1.5px solid var(--border);
             color: #d4a574;
-            padding: 12px 40px;
+            padding: 13px 42px;
             border-radius: 50px;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-size: 0.8rem;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .lock-box button:hover { 
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(212,165,116,0.12);
+        .lock-box button:hover {
+            background: linear-gradient(135deg, rgba(212,165,116,0.25), rgba(201,184,168,0.18));
             border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
         }
 
         .lock-error {
@@ -157,412 +160,318 @@
             letter-spacing: 1px;
         }
 
-        /* ✨ HEADER */
-        header {
+        main {
+            flex: 1;
+        }
+
+        .stars {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #14110e 0%, #0d0d0d 100%);
+            z-index: 0;
+        }
+
+        .stars::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.08;
+            animation: starsMove 150s linear infinite;
+        }
+
+        @keyframes starsMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        /* Header and intro */
+        .page-intro {
             position: relative;
             z-index: 10;
-            padding: 80px 20px 45px;
+            padding: 80px 20px 10px;
             text-align: center;
         }
 
-        .nohelia-name {
-            font-size: clamp(3rem, 10vw, 6rem);
-            font-weight: 700;
-            letter-spacing: 15px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            background: linear-gradient(to bottom, #fff 30%, rgba(255,255,255,0.2) 100%);
-            background-clip: text;
+        .page-intro img {
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid var(--border);
+            padding: 5px;
+            margin-bottom: 18px;
+            transition: transform 0.4s ease, border-color 0.4s ease;
+            animation: floatY 6s ease-in-out infinite;
+        }
+
+        .page-intro img:hover {
+            transform: scale(1.04);
+            border-color: var(--border-hover);
+            box-shadow: 0 8px 25px rgba(255, 183, 213, 0.14);
+        }
+
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .page-intro h1 {
+            font-size: clamp(2rem, 6vw, 2.8rem);
+            font-weight: 400;
+            margin-bottom: 0.85rem;
+            background: linear-gradient(135deg, #d4a574 0%, #f5e6d3 50%, #e8c48f 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
-            display: block;
+            background-clip: text;
         }
 
-        .header-sub {
-            font-size: 0.7rem;
+        .page-intro p {
+            font-size: 1rem;
             color: var(--text-dim);
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            margin-top: 10px;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
 
-        /* 📱 Navegación */
-        nav {
-            position: relative;
-            z-index: 1000;
+        .navbar {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            max-width: 100%;
-            margin: 0 auto 50px;
-            padding: 0 12px;
             justify-content: center;
-            align-items: center;
-        }
-
-        nav a, .nav-item {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--glass);
-            border: 1.5px solid var(--border);
-            padding: 12px 16px;
-            border-radius: 22px;
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            backdrop-filter: blur(10px);
-            cursor: pointer;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        nav a:hover, .nav-item:hover { 
-            color: #fff; 
-            border-color: var(--border-hover);
-            background: var(--glass-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
-        }
-
-        .dropdown { position: relative; width: auto; display: inline-block; }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            top: calc(100% + 5px);
-            left: 50%;
-            transform: translateX(-50%);
-            width: max-content;
-            min-width: 120px;
-            background: rgba(5, 5, 5, 0.98);
-            border: 1.5px solid var(--border);
-            border-radius: 18px;
-            padding: 8px 4px;
-            z-index: 2001;
-            flex-direction: column;
-            gap: 2px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            backdrop-filter: blur(20px);
-        }
-        .dropdown:hover .dropdown-content { display: flex; }
-        .dropdown-content a { 
-            display: block; 
-            padding: 10px 14px; 
-            border: none; 
-            background: transparent; 
-            white-space: nowrap; 
-            color: var(--text-dim); 
-            text-decoration: none; 
-            font-size: 0.65rem; 
-            text-transform: uppercase; 
-            letter-spacing: 0.3px; 
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); 
-            border-radius: 10px; 
-            cursor: pointer; 
-        }
-        .dropdown-content a:hover { 
-            background: rgba(200,200,220,0.1); 
-            color: #fff;
-        }
-
-        /* 🆕 Badge de Notificación */
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 8px;
-            height: 8px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            display: none;
-        }
-
-        .has-update .badge { display: block; }
-
-        /* ⏳ LINEA DE TIEMPO */
-        .container {
+            gap: 20px;
+            padding: 18px 20px;
             position: relative;
             z-index: 10;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 16px 70px;
+            background: rgba(13, 13, 13, 0.22);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
         }
 
-        .timeline {
-            position: relative;
-            padding-left: 40px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 7px;
-            top: 0;
-            height: 100%;
-            width: 2px;
-            background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 70px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
-        }
-
-        .timeline-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -20px;
-            top: 8px;
-            width: 16px;
-            height: 16px;
-            background: radial-gradient(circle at 30% 30%, #e8dfd5, #c9b8a8);
-            border-radius: 50%;
-            box-shadow: 0 0 0 3px var(--card-bg);
-            transition: all 0.3s ease;
-            z-index: 2;
-        }
-
-        .timeline-item:hover::before {
-            box-shadow: 0 0 0 3px var(--card-bg);
-        }
-
-        .timeline-date {
-            font-size: 0.7rem;
-            color: #e8dfd5;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            display: block;
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(200, 200, 220, 0.2);
-        }
-
-        .timeline-content {
-            background: linear-gradient(135deg, rgba(25, 22, 20, 0.9), rgba(35, 30, 28, 0.7));
-            border: 1.5px solid var(--border);
-            border-radius: 20px;
-            padding: 32px;
-            backdrop-filter: blur(20px);
-            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .timeline-content:hover {
-            border-color: var(--border-hover);
-            background: linear-gradient(135deg, rgba(35, 30, 28, 0.95), rgba(25, 22, 20, 0.85));
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .timeline-content h2 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 18px;
-            color: #e8dfd5;
-            letter-spacing: 0.8px;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .timeline-content p {
-            color: var(--text-dim);
+        .navbar a {
+            color: var(--text-main);
+            text-decoration: none;
             font-size: 0.95rem;
-            line-height: 1.85;
-            font-style: italic;
-            animation: typewriter 3s steps(60, end) forwards;
-            overflow: hidden;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.25s ease, border-color 0.25s ease;
+            border: 1px solid transparent;
         }
 
-        @keyframes typewriter {
-            from { max-height: 0; opacity: 0; }
-            to { max-height: 400px; opacity: 1; }
-        }
-
-        /* � Books collapsible (accordion) */
-        .book { 
-            margin-bottom: 20px;
-            opacity: 0;
-            transform: translateY(12px);
-            transition: all 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
-        }
-
-        .book.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .book-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin: 0 0 0 0;
-            padding-bottom: 10px;
-        }
-
-        .book-toggle {
-            background: linear-gradient(135deg, rgba(201, 184, 168, 0.12), rgba(201, 184, 168, 0.05));
-            border: 1.5px solid var(--border);
-            padding: 14px 24px;
-            border-radius: 28px;
-            color: #e8dfd5;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.82rem;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            font-weight: 700;
-            width: 100%;
-            justify-content: space-between;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .book-toggle:hover {
-            background: linear-gradient(135deg, rgba(201, 184, 168, 0.2), rgba(201, 184, 168, 0.1));
+        .navbar a:hover {
+            background: var(--glass-hover);
             border-color: var(--border-hover);
-            color: #f5ebdc;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .book-title { flex: 1; text-align: left; }
-        .book-toggle .chev { 
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .book.open .chev { transform: rotate(90deg); }
-
-        .book-body { 
-            overflow: hidden; 
-            max-height: 0; 
-            transition: max-height 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease; 
-            opacity: 0;
-        }
-
-        .book.open .book-body { 
-            opacity: 1;
-        }
-
-        .book .book-body .timeline-item { pointer-events: auto; }
-
-        /* �💬 AREA DE MENSAJES */
-        .message-box {
-            margin-bottom: 50px;
-            text-align: center;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 25px;
-            border-radius: 25px;
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
-        }
-
-        .message-box:hover {
-            border-color: rgba(255,255,255,0.2);
-        }
-
-        #mensaje {
+        .container {
+            position: relative;
+            z-index: 5;
+            flex: 1;
+            padding: 0 20px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
             width: 100%;
-            background: rgba(201, 184, 168, 0.06);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 20px;
-            color: #e8dfd5;
-            font-family: inherit;
-            font-size: 16px;
-            margin-bottom: 20px;
-            resize: none;
-            outline: none;
-            transition: all 0.3s;
         }
 
-        #mensaje:focus { border-color: rgba(201, 184, 168, 0.35); background: rgba(201, 184, 168, 0.1); }
-
-        #enviar {
-            background: transparent;
-            border: 1px solid rgba(201, 184, 168, 0.35);
-            color: #e8dfd5;
-            padding: 12px 50px;
-            border-radius: 50px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            transition: all 0.3s;
+        .filter-section {
+            margin-top: 40px;
         }
 
-        #enviar:hover { background: rgba(201, 184, 168, 0.16); color: #f5ebdc; }
-
-        /* 🖱️ INDICADOR DE SCROLL */
-        .scroll-indicator {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
+        .gallery-controls {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 18px;
+            margin-bottom: 36px;
+            padding: 20px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            background: var(--card-bg-hover);
+            border-color: var(--border-hover);
+            box-shadow: 0 0 14px rgba(212, 165, 116, 0.18);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            z-index: 5;
-            opacity: 0.6;
-            animation: bounce 2s infinite;
+            justify-content: center;
         }
 
-        .scroll-indicator p { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); }
-        .scroll-indicator .dot { width: 4px; height: 4px; background: #c9b8a8; border-radius: 50%; }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
-            40% {transform: translateX(-50%) translateY(-10px);}
-            60% {transform: translateX(-50%) translateY(-5px);}
+        .filter-tag {
+            padding: 8px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease, border-color 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
         }
 
-        /* 🎁 SECRETOS ESTILOS */
-        .secret-word { cursor: pointer; position: relative; transition: all 0.3s; }
-        .secret-word:hover { color: #f5ebdc; text-shadow: 0 0 10px rgba(201, 184, 168, 0.35); }
-
-        .secret-modal { 
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
-            z-index: 10001; align-items: center; justify-content: center; 
-            backdrop-filter: blur(20px); padding: 20px; animation: fadeIn 0.4s ease;
+        .filter-tag:hover {
+            background: var(--glass-hover);
+            border-color: var(--border-hover);
         }
 
-        .secret-modal.active { display: flex; }
-
-        .secret-content { 
-            background: var(--card-bg); border: 1px solid var(--border); padding: 40px; 
-            border-radius: 30px; text-align: center; max-width: 500px; animation: popIn 0.5s ease;
+        .filter-tag.active {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            border-color: var(--accent-dark);
+            color: var(--bg);
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 20vw, 300px), 1fr));
+            gap: clamp(1rem, 3vw, 1.5rem);
+            margin-bottom: 60px;
+        }
 
-        .secret-image { max-width: 100%; border-radius: 20px; margin: 20px 0; max-height: 400px; }
-        .secret-text { color: var(--text-dim); font-style: italic; margin: 15px 0; line-height: 1.6; }
-        .secret-button { background: transparent; border: 1px solid #fff; color: #fff; padding: 10px 30px; border-radius: 30px; cursor: pointer; margin-top: 20px; transition: all 0.3s; }
-        .secret-button:hover { background: #fff; color: #000; }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: transform 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+            opacity: 0;
+            transform: translateY(16px);
+            cursor: pointer;
+            display: block;
+        }
+
+        .card.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            background: var(--card-bg-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-content {
+            padding: 18px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-category {
+            display: inline-block;
+            padding: 5px 12px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .gallery-section {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .gallery-title {
+            text-align: center;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 20vw, 250px), 1fr));
+            gap: clamp(1rem, 3vw, 1.5rem);
+            padding: clamp(1rem, 3vw, 1.5rem);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            cursor: pointer;
+            perspective: 900px;
+        }
+
+        .polaroid-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
+            overflow: hidden;
+            transition: transform 0.45s ease, box-shadow 0.45s ease;
+            transform: rotateZ(-1deg);
+        }
+
+        .polaroid-card:nth-child(even) {
+            transform: rotateZ(1deg);
+        }
+
+        .polaroid-card:hover {
+            transform: rotateZ(0deg) translateY(-10px);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.22);
+        }
+
+        .polaroid-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .polaroid-card:hover .polaroid-image {
+            transform: scale(1.03);
+        }
+
+        .polaroid-caption {
+            padding: clamp(0.75rem, 2vw, 1.2rem);
+            background: #f5e6d3;
+            text-align: center;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            color: #a67c52;
+            font-weight: 500;
+            letter-spacing: 0.6px;
+            min-height: clamp(3rem, 8vw, 4rem);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+        }
 
         footer {
             position: relative;
@@ -570,164 +479,442 @@
             padding: 40px 20px;
             text-align: center;
             color: var(--text-dim);
-            font-size: 0.6rem;
-            letter-spacing: 3px;
-            background: linear-gradient(to bottom, transparent, rgba(5, 5, 5, 0.8));
-            margin-top: auto;
-            width: 100%;
+            font-size: 0.9rem;
             border-top: 1px solid var(--border);
+            background: rgba(13, 13, 13, 0.5);
+            backdrop-filter: blur(10px);
         }
 
         @media (max-width: 768px) {
-            header { padding: 65px 18px 45px; }
-            .nohelia-name { font-size: 2.5rem; letter-spacing: 10px; }
-            nav { gap: 6px; margin-bottom: 35px; padding: 0 8px; }
-            nav a, .nav-item { padding: 9px 12px; font-size: 0.68rem; border-radius: 15px; }
-            .dropdown-content { min-width: 115px; padding: 6px 3px; }
-            .dropdown-content a { padding: 7px 8px; font-size: 0.6rem; }
-            .container { padding: 0 14px 55px; max-width: 100%; }
-            .timeline { padding-left: 35px; }
-            .timeline-item { margin-bottom: 60px; }
-            .timeline-item::before { left: -18px; width: 14px; height: 14px; }
-            .timeline-content { padding: 24px 20px; border-radius: 18px; }
-            .timeline-content h2 { font-size: 1.1rem; margin-bottom: 15px; }
-            .timeline-content p { font-size: 0.92rem; }
-            .timeline-date { font-size: 0.68rem; margin-bottom: 10px; }
-            .book-toggle { padding: 12px 18px; font-size: 0.78rem; letter-spacing: 0.8px; }
-            .book-toggle .chev { width: 22px; height: 22px; }
-            .message-box { padding: 20px; }
-            #mensaje { padding: 15px; font-size: 15px; }
-            #enviar { padding: 11px 35px; font-size: 0.75rem; }
-        }
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 45vw, 250px), 1fr));
+            }
 
-        @media (max-width: 580px) {
-            .container { padding: 0 12px 50px; }
-            .timeline { padding-left: 32px; }
-            .timeline-item { margin-bottom: 55px; }
-            .timeline-item::before { left: -17px; width: 13px; height: 13px; top: 6px; }
+            .gallery-controls {
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .filter-tags {
+                gap: 8px;
+            }
+
+            .filter-tag {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 480px) {
-            header { padding: 50px 12px 30px; }
-            .nohelia-name { font-size: 1.8rem; letter-spacing: 6px; }
-            .header-sub { font-size: 0.65rem; }
-            nav { gap: 5px; margin-bottom: 28px; padding: 0 6px; }
-            nav a, .nav-item { padding: 8px 10px; font-size: 0.62rem; border-radius: 13px; }
-            .dropdown-content { min-width: 105px; padding: 5px 2px; }
-            .dropdown-content a { padding: 6px 7px; font-size: 0.55rem; }
-            .container { padding: 0 12px 50px; }
-            .timeline { padding-left: 28px; }
-            .timeline-item { margin-bottom: 50px; }
-            .timeline-item::before { left: -15px; width: 11px; height: 11px; top: 4px; }
-            .timeline::before { left: 4px; }
-            .timeline-content { padding: 18px 16px; border-radius: 16px; }
-            .timeline-content h2 { font-size: 0.95rem; margin-bottom: 12px; }
-            .timeline-content p { font-size: 0.85rem; line-height: 1.6; }
-            .timeline-date { font-size: 0.6rem; margin-bottom: 8px; letter-spacing: 2px; }
-            .book-toggle { 
-                padding: 10px 14px; 
-                font-size: 0.72rem; 
-                letter-spacing: 0.6px;
-                border-radius: 24px;
+            .page-intro { padding: 50px 12px 30px; }
+            .page-intro img { width: 85px; height: 85px; }
+            .page-intro h1 { font-size: 1.8rem; }
+            .container { padding: 0 12px 40px; }
+            .gallery-controls { padding: 12px; }
+            .filter-tags { gap: 6px; }
+            .filter-tag { padding: 6px 12px; font-size: 0.7rem; }
+            .cards-grid {
+                grid-template-columns: 1fr;
             }
-            .book-toggle .chev { width: 20px; height: 20px; font-size: 0.9rem; }
-            .book-title { font-size: 0.7rem; }
-            .message-box { padding: 14px; margin-bottom: 40px; }
-            #mensaje { padding: 12px; font-size: 14px; margin-bottom: 15px; }
-            #enviar { padding: 9px 25px; font-size: 0.7rem; }
-        }
-
-        @media (max-width: 360px) {
-            header { padding: 45px 10px 25px; }
-            .nohelia-name { font-size: 1.5rem; letter-spacing: 4px; margin-bottom: 10px; }
-            .header-sub { font-size: 0.6rem; }
-            nav { gap: 4px; margin-bottom: 22px; padding: 0 4px; }
-            nav a, .nav-item { padding: 7px 9px; font-size: 0.58rem; }
-            .container { padding: 0 10px 40px; }
-            .timeline { padding-left: 26px; }
-            .timeline-item::before { left: -14px; width: 10px; height: 10px; top: 3px; }
-            .timeline::before { left: 3px; }
-            .timeline-content { padding: 16px 14px; }
-            .timeline-content h2 { font-size: 0.85rem; }
-            .timeline-content p { font-size: 0.8rem; }
-            .book-toggle { padding: 9px 12px; font-size: 0.65rem; }
-            .book-toggle .chev { width: 18px; height: 18px; }
-            .message-box { padding: 12px; }
-            #mensaje { padding: 10px; font-size: 13px; }
         }
     </style>
-    
-<body>
-
-<div class="stars"></div>
-<div class="sakura" id="sakura"></div>
-
-<div id="pageLock" class="page-lock">
-    <div class="lock-box">
-        <h2 id="lockPhrase"></h2>
-        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
-        <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        <button onclick="unlockPage()">Abrir Corazón</button>
-        <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
-    </div>
-</div>
-
-<header>
-    <span class="nohelia-name">Nohelia</span>
-    <div class="header-sub">REGISTRO DE DATOS</div>
-</header>
-
-    <nav>
-        <a href="index.html">Inicio</a>
-    </nav>
-
-<div class="container">
-    <div class="message-box">
-        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 15px; letter-spacing: 3px; text-transform: uppercase;">Añadir al archivo</p>
-        <textarea id="mensaje" rows="4" placeholder="Escribe algo para el archivo..."></textarea>
-        <button id="enviar">Guardar Mensaje</button>
+</head>
+<body class="locked">
+    <div id="pageLock" class="page-lock">
+        <div class="lock-box">
+            <h2 id="lockPhrase"></h2>
+            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
+            <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button onclick="unlockPage()">Abrir Corazón</button>
+            <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
+        </div>
     </div>
 
+    <div class="stars"></div>
 
-<footer>
-    <p>Footage Archive 2025-2026 · Construido con amor 💕</p>
-</footer>
+    <main class="main-content">
+        <section class="page-intro">
+            <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png" alt="Avatar">
+            <h1>Archivo de Imágenes</h1>
+            <p>Una colección de momentos especiales</p>
+        </section>
 
-<script src="lock.js"></script>
-<script>
+        <nav class="navbar" role="navigation">
+            <a href="index.html">Inicio</a>
+        </nav>
 
-    // Frases aleatorias
-    const phrases = [
-        "UN ARCHIVO SECRETO",
-        "EN CADA MOMENTO",
-        "CADA SEGUNDO CONTIGO",
-        "RECUERDOS QUE VIVEN",
-        "UN VIAJE ESPECIAL",
-        "TÚ LUGAR ESPECIAL",
-        "CORAZÓN EN LA MANO",
-        "GRAVEDAD SIN EXPLICACIÓN",
-        "COMPLETAMENTE CAUTIVADORA",
-        "ALMA NATURAL ENCONTRADA",
-        "AMOR SIN MEDIDA",
-        "UN REGALO DEL UNIVERSO",
-        "DONDE TÚ ESTÉS, IRÉ",
-        "PUNTO DE NO RETORNO",
-        "PERFECTAMENTE IMPERFECTA",
-        "UN SUEÑO HECHO REALIDAD",
-        "FORTALEZA EN TUS MANOS",
-        "ENTRE TUS BRAZOS SOY LIBRE",
-        "CADA LATIDO TE LLAMA",
-        "ERES MI DEBILIDAD MÁS HERMOSA",
-        "PARA AMARTE EN CUALQUIER MOMENTO",
-        "SUEÑO DESPIERTO CONTIGO",
-        "MI DESTINO ERES TÚ",
-        "EL TIEMPO SE DETIENE"
-    ];
-    const lockPhrase = document.getElementById('lockPhrase');
-    if (lockPhrase) {
-        lockPhrase.textContent = phrases[Math.floor(Math.random() * phrases.length)];
-    }
+        <section class="container">
+            <section class="filter-section">
+                <div class="gallery-controls">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="🔍 Buscar momentos..." aria-label="Buscar momentos">
+                    </div>
+                    <div class="filter-tags">
+                        <div class="filter-tag active" data-filter="all">Todo</div>
+                        <div class="filter-tag" data-filter="momentos">Momentos</div>
+                        <div class="filter-tag" data-filter="cartas">Cartas</div>
+                        <div class="filter-tag" data-filter="amor">Amor</div>
+                        <div class="filter-tag" data-filter="juegos">Juegos</div>
+                    </div>
+                </div>
 
-</script>
+                <div class="cards-grid" id="cardsGrid">
+                    <div class="card filterable" data-category="momentos" data-search="primera foto inicio">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/undefined%20-%20Imgur.jpg" alt="Primera foto">
+                        <div class="card-content">
+                            <div class="card-title">Nuestra Primera Foto</div>
+                            <div class="card-category">Momentos</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="momentos" data-search="foto">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0225.JPEG" alt="foto">
+                        <div class="card-content">
+                            <div class="card-title">Fotos Juntos</div>
+                            <div class="card-category">Momentos</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="momentos" data-search="foto">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0376.jpg" alt="foto">
+                        <div class="card-content">
+                            <div class="card-title">Fotos Juntos</div>
+                            <div class="card-category">Momentos</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="momentos" data-search="foto">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0214.JPEG" alt="foto">
+                        <div class="card-content">
+                            <div class="card-title">Fotos Juntos</div>
+                            <div class="card-category">Momentos</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="amor" data-search="amor">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0834.jpg" alt="amor">
+                        <div class="card-content">
+                            <div class="card-title">Tus detallitos</div>
+                            <div class="card-category">Amor</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="juegos" data-search="foto">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/Captura%20de%20pantalla%202026-04-23%20004427.png" alt="foto">
+                        <div class="card-content">
+                            <div class="card-title">Foto Jugando</div>
+                            <div class="card-category">Juegos</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="juegos" data-search="foto">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/WhatsApp%20Image%202026-07-06%20at%206.32.55%20PM.jpeg" alt="Cámara">
+                        <div class="card-content">
+                            <div class="card-title">Foto Jugando</div>
+                            <div class="card-category">Juegos</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="amor" data-search="amor">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0081.jpg" alt="amor">
+                        <div class="card-content">
+                            <div class="card-title">Canción dedicada</div>
+                            <div class="card-category">Amor</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="amor" data-search="amor">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0082.jpg" alt="amor">
+                        <div class="card-content">
+                            <div class="card-title">Canción dedicada</div>
+                            <div class="card-category">Amor</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="amor" data-search="amor">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0083.jpg" alt="amor">
+                        <div class="card-content">
+                            <div class="card-title">Canción dedicada</div>
+                            <div class="card-category">Amor</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0085.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Primera carta de nuestro primer mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0086.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Primera carta de nuestro primer mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0089.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer cuarto mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="amor" data-search="amor">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0090.jpg" alt="amor">
+                        <div class="card-content">
+                            <div class="card-title">Tus mensajitos</div>
+                            <div class="card-category">Amor</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0091.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer séptimo mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0094.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer séptimo mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0095.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer séptimo mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0837.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer octavo mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0838.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer octavo mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0839.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer 9,10,11 mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0840.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer 9,10,11 mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0841.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer 9,10,11 mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0842.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer 9,10,11 mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0844.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer 9,10,11 mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="cartas" data-search="carta">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0845.jpg" alt="carta">
+                        <div class="card-content">
+                            <div class="card-title">Carta de nuestro primer 9,10,11 mes</div>
+                            <div class="card-category">Cartas</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="amor" data-search="amor">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0835.jpg" alt="amor">
+                        <div class="card-content">
+                            <div class="card-title">Tus dibujitos</div>
+                            <div class="card-category">Amor</div>
+                        </div>
+                    </div>
+                    <div class="card filterable" data-category="amor" data-search="amor">
+                        <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0836.jpg" alt="amor">
+                        <div class="card-content">
+                            <div class="card-title">Solamente tú</div>
+                            <div class="card-category">Amor</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="gallery-section" aria-labelledby="galleryTitle">
+                <h2 id="galleryTitle" class="gallery-title">🎬 Galería Polaroid</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-polaroid="true">
+                        <div class="polaroid-card">
+                            <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0846%20(1).jpg" alt="cajita" class="polaroid-image" data-caption="Esconde un sin fin de emociones y recuerdos">
+                            <div class="polaroid-caption">Cajita de Secretos</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-polaroid="true">
+                        <div class="polaroid-card">
+                            <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0848.jpg" alt="Pulpito especial" class="polaroid-image" data-caption="Vaya, a veces está feliz y otras veces está enfadado, pero siempre es especial">
+                            <div class="polaroid-caption">Pulpito Especial</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-polaroid="true">
+                        <div class="polaroid-card">
+                            <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0850.jpg" alt="f-16" class="polaroid-image" data-caption="¿Quieres dar un paseo?">
+                            <div class="polaroid-caption">Lockheed Martin F-16 Fighting Falcon</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-polaroid="true">
+                        <div class="polaroid-card">
+                            <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0851.jpg" alt="me-262" class="polaroid-image" data-caption="El primer avión a reacción de la historia, desarrollado por Alemania durante la Segunda Guerra Mundial. Pero a quién le importa eso, lo importante es que es un avión que lo hiciste especialmente pensado para mi y yo realmente lo cuidaré y lo amaré por siempre, gracias a ti, te amo ❤️">
+                            <div class="polaroid-caption">Messerschmitt Me 262</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-polaroid="true">
+                        <div class="polaroid-card">
+                            <img src="https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/IMG_0853.jpg" alt="Accesorio muy especial" class="polaroid-image" data-caption="Es una cadena que yo llevaré siempre conmigo, y que me recuerda a ti, a tu amor y a tu cariño. Gracias por darme este accesorio tan especial, te amo muchote 💗">
+                            <div class="polaroid-caption">Accesorio muy Especial</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <p>Footage Archive 2025-2026 · Construido con amor 💕</p>
+    </footer>
+
+    <script src="pwa-init.js"></script>
+    <script src="phase3-gallery.js"></script>
+    <script src="shared.js"></script>
+    <script src="lock.js"></script>
+
+    <script>
+        const phrases = [
+            "ARCHIVO ESPECIAL",
+            "MOMENTOS GUARDADOS",
+            "EN CADA RECUERDO",
+            "FOTOS CONFIDENCIALES",
+            "GALERÍA SECRETARIA",
+            "MEMORIAS COMPARTIDAS",
+            "INSTANTÁNEAS DEL ALMA",
+            "FRAGMENTOS DEL CORAZÓN",
+            "DONDE VIVEN LOS RECUERDOS",
+            "HISTORIAS VISUALES",
+            "INSTANTES ETERNOS",
+            "GEOGRAFÍA DEL AMOR",
+            "DOCUMENTALES DEL CORAZÓN",
+            "ARCHIVO DE EMOCIONES",
+            "FRAMES DE LA VIDA",
+            "PELÍCULA DE NOSOTROS",
+            "TOMAS QUE IMPORTAN",
+            "RETRATOS DE SENTIMIENTOS",
+            "FOTOGRAMAS ESPECIALES",
+            "REGISTROS DEL ALMA"
+        ];
+
+        function setRandomLockPhrase() {
+            const lockPhrase = document.getElementById('lockPhrase');
+            if (lockPhrase) {
+                lockPhrase.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+            }
+        }
+
+        function attachPinInputListener() {
+            const pinInput = document.getElementById('pinInput');
+            if (!pinInput) return;
+            pinInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') unlockPage();
+            });
+        }
+
+        function initializeFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const filterTags = document.querySelectorAll('.filter-tag');
+            const cards = document.querySelectorAll('.card.filterable');
+            if (!searchInput || !filterTags.length || !cards.length) return;
+
+            let activeFilter = 'all';
+
+            function filterCards() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                cards.forEach(card => {
+                    const category = card.dataset.category || '';
+                    const searchText = (card.dataset.search || '').toLowerCase();
+                    const categoryMatch = activeFilter === 'all' || category === activeFilter;
+                    const searchMatch = !searchTerm || searchText.includes(searchTerm);
+                    if (categoryMatch && searchMatch) {
+                        card.style.display = 'block';
+                        setTimeout(() => card.classList.add('in-view'), 10);
+                    } else {
+                        card.style.display = 'none';
+                        card.classList.remove('in-view');
+                    }
+                });
+            }
+
+            searchInput.addEventListener('input', filterCards);
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', () => {
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    activeFilter = tag.dataset.filter || 'all';
+                    filterCards();
+                });
+            });
+            filterCards();
+        }
+
+        function initializeObserver() {
+            const cards = document.querySelectorAll('.card.filterable');
+            if (!cards.length) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            cards.forEach(card => {
+                card.classList.add('in-view');
+                observer.observe(card);
+            });
+        }
+
+        function initializeGallery() {
+            if (typeof PolaroidGallery === 'function') {
+                try {
+                    window.polaroidGallery = new PolaroidGallery('.gallery-grid');
+                } catch (error) {
+                    console.warn('Gallery init error:', error);
+                }
+            }
+        }
+
+        function initializePage() {
+            setRandomLockPhrase();
+            attachPinInputListener();
+            initializeFilters();
+            initializeObserver();
+            initializeGallery();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+    </script>
 </body>
 </html>
