@@ -10,25 +10,27 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600,700&display=swap" rel="stylesheet">
 	<style>
 		:root{
-			--bg:#050505;
-			--card-bg:rgba(20,20,25,0.7);
-			--card-bg-hover:rgba(25,25,35,0.85);
-			--border:rgba(150,150,170,0.15);
-			--border-hover:rgba(150,150,170,0.3);
-			--text:#fff;
-			--muted:rgba(255,255,255,0.6);
-			--accent:#9a9aaa;
-			--accent-light:#d8d8e8;
-			--text-dim:rgba(255,255,255,0.6);
-			--glass:rgba(255,255,255,0.05);
-			--glass-hover:rgba(255,255,255,0.08);
+			--bg:#0a0a0a;
+			--card-bg:rgba(25,22,20,0.8);
+			--card-bg-hover:rgba(35,30,28,0.95);
+			--border:rgba(201,184,168,0.2);
+			--border-hover:rgba(201,184,168,0.4);
+			--text:#e8dfd5;
+			--muted:rgba(232,223,213,0.6);
+			--accent:#c9b8a8;
+			--accent-light:#d9a574;
+			--accent-dark:#a8937f;
+			--text-dim:rgba(232,223,213,0.6);
+			--glass:rgba(201,184,168,0.05);
+			--glass-hover:rgba(201,184,168,0.1);
 			--shadow-sm:0 4px 12px rgba(0,0,0,0.3);
-			--shadow-md:0 12px 30px rgba(0,0,0,0.45);
-			--shadow-lg:0 30px 60px rgba(0,0,0,0.6)
+			--shadow-md:0 12px 30px rgba(0,0,0,0.4);
+			--shadow-lg:0 30px 60px rgba(0,0,0,0.5)
 		}
 		*{box-sizing:border-box;margin:0;padding:0}
 		body{font-family:'Inter',system-ui,Segoe UI,Roboto,'Playfair Display',serif;background:var(--bg);color:var(--text);min-height:100vh}
-		.stars{position:fixed;inset:0;background:radial-gradient(circle at center,#111111 0%, #050505 100%);z-index:0}
+		#avatarInput{display:none !important;visibility:hidden !important;width:0;height:0;overflow:hidden;position:absolute !important;}
+		.stars{position:fixed;inset:0;background:radial-gradient(circle at center,rgba(201,184,168,0.08) 0%, #0a0a0a 100%);z-index:0}
 
 		.stars::after {
 			content: "";
@@ -50,15 +52,35 @@
 			50% { transform: translateY(-6px); }
 			100% { transform: translateY(0); }
 		}
+
+		body.locked { overflow: hidden !important; height: 100vh !important; }
+		body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
+
 		.page-lock {
 			position: fixed;
 			inset: 0;
-			background: #000;
+			background: #000 !important;
 			z-index: 99999;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			backdrop-filter: blur(20px);
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+		}
+
+		.page-lock::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: #000;
+			z-index: -1;
+		}
+
+		.page-lock.force-solid {
+			-webkit-backdrop-filter: none !important;
+			backdrop-filter: none !important;
+			background: #000 !important;
 		}
 
 		.lock-box {
@@ -78,20 +100,20 @@
 			font-weight: 400; 
 			margin-bottom: 30px; 
 			letter-spacing: 4px; 
-			color: #fff;
-			text-shadow: 0 0 30px rgba(255, 183, 213, 0.2);
-			font-size: 1.4rem;
+			color: #e8dfd5;
+			text-shadow: 0 0 30px rgba(212, 165, 116, 0.25);
+			font-size: 1.6rem;
 		}
 
 		.lock-box input {
-			background: rgba(255, 255, 255, 0.05);
+			background: rgba(201, 184, 168, 0.06);
 			border: 1.5px solid var(--border);
-			color: #fff;
+			color: #e8dfd5;
 			padding: 15px 16px;
 			border-radius: 14px;
 			outline: none;
 			text-align: center;
-			font-size: 1rem;
+			font-size: 16px;
 			margin-bottom: 20px;
 			width: 100%;
 			transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -99,14 +121,14 @@
 
 		.lock-box input:focus { 
 			border-color: var(--border-hover);
-			background: rgba(255, 255, 255, 0.08);
-			box-shadow: 0 0 20px rgba(255, 183, 213, 0.1);
+			background: rgba(201, 184, 168, 0.12);
+			box-shadow: 0 0 20px rgba(212, 165, 116, 0.2);
 		}
 
 		.lock-box button {
-			background: linear-gradient(135deg, rgba(255,183,213,0.15), rgba(255,128,171,0.08));
+			background: linear-gradient(135deg, rgba(212,165,116,0.15), rgba(201,184,168,0.1));
 			border: 1.5px solid var(--border);
-			color: #fff;
+			color: #d4a574;
 			padding: 13px 42px;
 			border-radius: 50px;
 			cursor: pointer;
@@ -118,15 +140,15 @@
 		}
 
 		.lock-box button:hover { 
-			background: linear-gradient(135deg, rgba(255,183,213,0.25), rgba(255,128,171,0.15));
+			background: linear-gradient(135deg, rgba(212,165,116,0.25), rgba(201,184,168,0.18));
 			border-color: var(--border-hover);
 			transform: translateY(-3px);
-			box-shadow: 0 8px 20px rgba(255, 183, 213, 0.15);
+			box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
 		}
 
 		.lock-error {
 			margin-top: 15px;
-			color: #ff6b6b;
+			color: #ff4444;
 			font-size: 0.8rem;
 			display: none;
 			letter-spacing: 1px;
@@ -134,7 +156,7 @@
 
 		header{position:relative;z-index:10;padding:36px 18px 8px;text-align:center}
 		header img{width:92px;height:92px;border-radius:50%;object-fit:cover;border:1px solid var(--border); animation: floatY 6s ease-in-out infinite; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 200ms ease; }
-		header img:hover { transform: scale(1.05); border-color: #fff; }
+		header img:hover { transform: scale(1.05); border-color: var(--accent-light); }
 		.title{font-family:'Playfair Display',serif;font-size:2rem;margin-top:12px}
 		.subtitle{color:var(--muted);letter-spacing:3px;font-size:0.75rem;margin-bottom:18px}
 
@@ -167,11 +189,11 @@
 			}
 
 			nav a:hover { 
-				color: #fff; 
+				color: var(--text);
 				border-color: var(--border-hover);
 				background: var(--glass-hover);
 				transform: translateY(-3px);
-				box-shadow: 0 8px 20px rgba(255, 183, 213, 0.1);
+				box-shadow: 0 8px 20px rgba(212, 165, 116, 0.14);
 			}
 
 		.container{max-width:980px;margin:0 auto;padding:18px;position:relative;z-index:10}
@@ -198,126 +220,51 @@
 		.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 		.btn{
 			padding:10px 14px;border-radius:12px;border:1.5px solid var(--border);
-			background:rgba(255,255,255,0.03);color:var(--text);cursor:pointer;
+			background:rgba(201,184,168,0.06);color:var(--text);cursor:pointer;
 			transition:all 0.3s cubic-bezier(0.23,1,0.32,1);font-weight:600;font-size:0.85rem
 		}
 		.btn:hover{
-			background:rgba(255,183,213,0.08);border-color:var(--border-hover);
-			transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,183,213,0.1)
+			background:rgba(201,184,168,0.12);border-color:var(--border-hover);
+			transform:translateY(-2px);box-shadow:0 8px 20px rgba(212,165,116,0.12)
 		}
 
 		/* Mini-juego */
 		#gameArea{
 			position:relative;height:240px;
-			background:linear-gradient(180deg,rgba(255,128,171,0.05),transparent);
+			background:linear-gradient(180deg,rgba(212,165,116,0.08),transparent);
 			overflow:hidden;border-radius:16px;border:1px solid var(--border);
 			transition:all 0.3s ease
 		}
-		#gameArea:hover{border-color:var(--border-hover);background:linear-gradient(180deg,rgba(255,128,171,0.08),transparent)}
+		#gameArea:hover{border-color:var(--border-hover);background:linear-gradient(180deg,rgba(212,165,116,0.12),transparent)}
 		.heart{
 			position:absolute;width:44px;height:44px;
-			background:linear-gradient(135deg,#ffb7d5,#ff80ab);border-radius:50%;
+			background:linear-gradient(135deg,#d9a574,#c9b8a8);border-radius:50%;
 			display:flex;align-items:center;justify-content:center;cursor:pointer;
 			transform:scale(0.95);transition:all 0.13s cubic-bezier(0.23,1,0.32,1);
-			box-shadow:0 4px 12px rgba(255,128,171,0.3)
+			box-shadow:0 4px 12px rgba(212,165,116,0.24)
 		}
-		.heart:hover{transform:scale(1.15);box-shadow:0 8px 20px rgba(255,128,171,0.5)}
+		.heart:hover{transform:scale(1.15);box-shadow:0 8px 20px rgba(212,165,116,0.35)}
 		.heart:active{transform:scale(1.05)}
 
 		/* secret modal */
-		.secret-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:10001;align-items:center;justify-content:center}
+		.secret-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:10001;align-items:center;justify-content:center;backdrop-filter:blur(12px)}
 		.secret-modal.active{display:flex}
-		.secret-content{background:var(--card-bg);padding:20px;border-radius:14px;max-width:520px;color:var(--text)}
+		.secret-content{background:var(--card-bg);padding:20px;border-radius:14px;max-width:520px;color:var(--text);border:1px solid var(--border);box-shadow:var(--shadow-md)}
 
 		footer{padding:28px;text-align:center;color:var(--muted);font-size:0.8rem}
 
-		/* 🌸 HOJAS DE SAKURA */
-		.sakura {
-			position: fixed;
-			inset: 0;
-			z-index: 1;
-			pointer-events: none;
-			overflow: hidden;
-		}
-
-		.sakura-leaf {
-			position: absolute;
-			width: 20px;
-			height: 20px;
-			opacity: 0.7;
-			animation: sakuraFall linear forwards;
-			filter: drop-shadow(0 0 2px rgba(255, 183, 213, 0.4));
-		}
-
-		.sakura-leaf::before {
-			content: '';
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23ffb7d5"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%23ff80ab"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23ffb7d5"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%23ff80ab"/><circle cx="50" cy="50" r="8" fill="%23ffd54f"/></svg>') center / contain no-repeat;
-		}
-
-		@keyframes sakuraFall {
-			0% {
-				top: -20px;
-				opacity: 0.8;
-				transform: translateX(0) rotateZ(0deg);
-			}
-			50% {
-				opacity: 0.8;
-			}
-			100% {
-				top: 100vh;
-				opacity: 0;
-				transform: translateX(var(--tx, 100px)) rotateZ(360deg);
-			}
-		}
 	</style>
 </head>
-<body style="background:#050505;color:#fff">
+<body style="background:#0a0a0a;color:#e8dfd5">
 	<div class="stars"></div>
-	<div class="sakura" id="sakura"></div>
 
-	<div id="pageLock" class="page-lock" style="display:flex">
+	<div id="pageLock" class="page-lock">
 		<div class="lock-box">
-			<h2 id="lockPhrase">ESPECIAL</h2>
+			<h2 id="lockPhrase"></h2>
 			<p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
-			
-			<!-- MINIJUEGO 1: Pregunta romántica -->
-			<div id="minigame1" style="display:flex;flex-direction:column;gap:12px">
-				<p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:8px">¿Qué fecha celebramos hoy? 📅</p>
-				<input id="dateInput" type="text" placeholder="DD/MM/YYYY" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;padding:12px;border-radius:12px;outline:none;text-align:center">
-				<button onclick="checkDate()" style="background:linear-gradient(135deg,rgba(255,183,213,0.15),rgba(255,128,171,0.08));border:1.5px solid var(--border);color:#fff;padding:10px;border-radius:10px;cursor:pointer;transition:all 0.3s;font-size:0.9rem">Responder</button>
-				<div id="game1Error" style="color:#ff6b6b;font-size:0.8rem;display:none;margin-top:4px"></div>
-			</div>
-
-			<!-- MINIJUEGO 2: Secuencia de botones (oculto hasta terminar 1) -->
-			<div id="minigame2" style="display:none;flex-direction:column;gap:12px">
-				<p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:8px">Memoriza la secuencia 🎮</p>
-				<div id="buttonSequence" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-					<button class="seq-btn" data-color="pink" style="padding:12px;border-radius:10px;border:1px solid rgba(255,183,213,0.3);background:rgba(255,183,213,0.1);color:#ffb7d5;cursor:pointer;transition:all 0.2s;font-weight:600">💗</button>
-					<button class="seq-btn" data-color="purple" style="padding:12px;border-radius:10px;border:1px solid rgba(200,150,255,0.3);background:rgba(200,150,255,0.1);color:#d8a5ff;cursor:pointer;transition:all 0.2s;font-weight:600">✨</button>
-					<button class="seq-btn" data-color="cyan" style="padding:12px;border-radius:10px;border:1px solid rgba(150,200,255,0.3);background:rgba(150,200,255,0.1);color:#96c8ff;cursor:pointer;transition:all 0.2s;font-weight:600">🌙</button>
-					<button class="seq-btn" data-color="gold" style="padding:12px;border-radius:10px;border:1px solid rgba(255,215,0,0.3);background:rgba(255,215,0,0.1);color:#ffd700;cursor:pointer;transition:all 0.2s;font-weight:600">⭐</button>
-				</div>
-				<div id="game2Status" style="color:var(--text-dim);font-size:0.8rem;text-align:center;margin-top:4px"></div>
-			</div>
-
-			<!-- MINIJUEGO 3: Escribir palabra mágica (oculto hasta terminar 2) -->
-			<div id="minigame3" style="display:none;flex-direction:column;gap:12px">
-				<p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:8px">Escribe la palabra secreta ❤️</p>
-				<input id="secretWordInput" type="text" placeholder="Una palabra que me represente" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;padding:12px;border-radius:12px;outline:none;text-align:center">
-				<button onclick="checkSecretWord()" style="background:linear-gradient(135deg,rgba(255,183,213,0.15),rgba(255,128,171,0.08));border:1.5px solid var(--border);color:#fff;padding:10px;border-radius:10px;cursor:pointer;transition:all 0.3s;font-size:0.9rem">Desbloquear</button>
-				<div id="game3Error" style="color:#ff6b6b;font-size:0.8rem;display:none;margin-top:4px"></div>
-			</div>
-
-			<!-- PIN tradicional (oculto hasta terminar minijuegos) -->
-			<div id="pinSection" style="display:none;flex-direction:column;gap:12px;border-top:1px solid var(--border);padding-top:16px;margin-top:12px">
-				<p style="color:var(--muted);font-size:0.8rem">Ingresa el PIN</p>
-				<input id="pinInput" type="password" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" autocomplete="off" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:#fff;padding:12px;border-radius:12px;outline:none;text-align:center">
-				<button onclick="unlockPage()" style="background:linear-gradient(135deg,rgba(255,183,213,0.15),rgba(255,128,171,0.08));border:1.5px solid var(--border);color:#fff;padding:10px;border-radius:10px;cursor:pointer;transition:all 0.3s;font-size:0.9rem">Abrir</button>
-				<div id="errorMsg" style="color:#ff6b6b;margin-top:4px;display:none;font-size:0.8rem"></div>
-			</div>
+			<input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+			<button onclick="unlockPage()">Abrir Corazón</button>
+			<div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
 		</div>
 	</div>
 
@@ -363,16 +310,6 @@
 			<div style="margin-top:8px;color:var(--muted)">Es un audio extraído que te grabé exclusivamente con mi voz para ti aunque la caliad sea muy baja 😓</div>
 			<div style="margin-top:12px;display:flex;gap:12px;flex-direction:column">
 				<audio controls src="audios/mensaje1.mp3"></audio>
-			</div>
-		</div>
-
-		<div class="card">
-			<strong>Minijuego: Atrapa el corazón</strong>
-			<div style="margin-top:8px;color:var(--muted)">Haz clic en corazones para sumar puntos en 20 segundos.</div>
-			<div id="gameArea" style="margin-top:12px"></div>
-			<div style="margin-top:12px;display:flex;gap:12px;align-items:center">
-				<button id="startGame" class="btn">Iniciar</button>
-				<div style="color:var(--muted)">Puntuación: <span id="score">0</span></div>
 			</div>
 		</div>
 
@@ -439,142 +376,7 @@ Y también quiero que sepas algo importante: estoy aprendiendo contigo. A ser m�
 			phraseElement.textContent = phrases[Math.floor(Math.random() * phrases.length)];
 		}
 
-		// ===== MINIJUEGOS DE DESBLOQUEO =====
-		
-		// MINIJUEGO 1: Fecha romántica
-		window.checkDate = function() {
-			const input = document.getElementById('dateInput').value.trim();
-			const correctDate = "0903"; // 09/03 - La fecha especial
-			const errorDiv = document.getElementById('game1Error');
-			
-			// Acepta varios formatos
-			const isCorrect = input === correctDate || input === "09/03/26" || input === "09032026" || input === "0903/2026" || input === "09/03/2026";
-			
-			if (isCorrect) {
-				errorDiv.style.display = 'none';
-				document.getElementById('minigame1').style.display = 'none';
-				document.getElementById('minigame2').style.display = 'flex';
-				const allBtns = document.querySelectorAll('.seq-btn');
-				allBtns.forEach(btn => btn.style.opacity = '0.5');
-				setTimeout(setupSequenceGame, 200);
-			} else {
-				errorDiv.style.display = 'block';
-				errorDiv.textContent = '❌ Esa no es la fecha... piensa en hoy.';
-				document.getElementById('dateInput').value = '';
-				setTimeout(() => {
-					document.getElementById('dateInput').focus();
-				}, 100);
-			}
-		};
-
-		// MINIJUEGO 2: Secuencia de botones
-		let sequenceToMemorize = ['pink', 'cyan', 'gold', 'cyan', 'purple', 'purple', 'purple', 'gold', 'pink', 'cyan', 'gold', 'pink'];
-		let playerSequence = [];
-		let gameRound = 1;
-		let isPlayingSequence = false;
-
-		function playSequence() {
-			isPlayingSequence = true;
-			playerSequence = [];
-			document.getElementById('game2Status').textContent = '🎮 Observa la secuencia...';
-			
-			let delay = 0;
-			sequenceToMemorize.forEach((color, index) => {
-				setTimeout(() => {
-					const btn = document.querySelector(`.seq-btn[data-color="${color}"]`);
-					btn.style.opacity = '1';
-					btn.style.transform = 'scale(1.1)';
-					setTimeout(() => {
-						btn.style.opacity = '0.5';
-						btn.style.transform = 'scale(1)';
-					}, 400);
-				}, delay);
-				delay += 600;
-			});
-			
-			setTimeout(() => {
-				isPlayingSequence = false;
-				document.getElementById('game2Status').textContent = '¡Ahora tu turno! Repite la secuencia';
-			}, delay);
-		}
-
-		function setupSequenceGame() {
-			const buttons = document.querySelectorAll('.seq-btn');
-			buttons.forEach(btn => {
-				btn.style.opacity = '0.5';
-				btn.addEventListener('click', function() {
-					if (isPlayingSequence) return;
-					
-					playerSequence.push(this.dataset.color);
-					this.style.opacity = '1';
-					this.style.transform = 'scale(1.1)';
-					
-					setTimeout(() => {
-						this.style.opacity = '0.5';
-						this.style.transform = 'scale(1)';
-					}, 200);
-					
-					// Verificar si es correcto
-					const correctIndex = playerSequence.length - 1;
-					if (playerSequence[correctIndex] !== sequenceToMemorize[correctIndex]) {
-						document.getElementById('game2Status').textContent = '❌ ¡Fallaste! Intentemos de nuevo...';
-						playerSequence = [];
-						setTimeout(playSequence, 1200);
-						return;
-					}
-					
-					// Verificar si completó la secuencia
-					if (playerSequence.length === sequenceToMemorize.length) {
-						document.getElementById('game2Status').textContent = '✅ ¡Lo lograste! Ahora la palabra mágica...';
-						document.getElementById('minigame2').style.display = 'none';
-						document.getElementById('minigame3').style.display = 'flex';
-						setTimeout(() => {
-							document.getElementById('secretWordInput').focus();
-						}, 200);
-					}
-				});
-			});
-			
-			playSequence();
-		}
-
-		// MINIJUEGO 3: Palabra secreta
-		window.checkSecretWord = function() {
-			const input = document.getElementById('secretWordInput').value.trim().toLowerCase();
-			// Acepta varias respuestas válidas
-			const correctWords = ['aviones', 'andresito', 'jets', 'engreido', 'delicado', 'amoroso', 'te amo', 'dieguito', 'mi niño bello', 'precioso', 'corazón', 'volar'];
-			const errorDiv = document.getElementById('game3Error');
-			
-			if (correctWords.includes(input)) {
-				errorDiv.style.display = 'none';
-				document.getElementById('minigame3').style.display = 'none';
-				document.getElementById('pinSection').style.display = 'flex';
-				document.getElementById('pinInput').focus();
-			} else {
-				errorDiv.style.display = 'block';
-				errorDiv.textContent = '❌ Esa palabra no resuena... intenta una que me defina o que represente.';
-				document.getElementById('secretWordInput').value = '';
-				setTimeout(() => {
-					document.getElementById('secretWordInput').focus();
-				}, 100);
-			}
-		};
-
-		// Event listeners para Enter en inputs
-		document.getElementById('dateInput')?.addEventListener('keypress', (e) => {
-			if (e.key === 'Enter') window.checkDate();
-		});
-		document.getElementById('secretWordInput')?.addEventListener('keypress', (e) => {
-			if (e.key === 'Enter') window.checkSecretWord();
-		});
-		document.getElementById('pinInput')?.addEventListener('keypress', (e) => {
-			if (e.key === 'Enter') window.unlockPage();
-		});
-
-		// Inicializar el primer minijuego cuando carga la página
-		setTimeout(() => {
-			document.getElementById('dateInput')?.focus();
-		}, 300);
+		// El bloqueo compartido de lock.js controla esta página.
 
 		// Preparar secretos: envolver palabras clave en la carta cuando termine la escritura
 		function finalizeLetter() {
@@ -590,11 +392,6 @@ Y también quiero que sepas algo importante: estoy aprendiendo contigo. A ser m�
 				});
 			});
 		}
-
-		// Minijuego: corazones aleatorios
-		const gameArea = document.getElementById('gameArea'); const startGame = document.getElementById('startGame'); const scoreEl = document.getElementById('score');
-		let gameInterval = null; let score = 0; function spawnHeart(){ const h = document.createElement('div'); h.className='heart'; h.innerHTML='❤'; const x = Math.random()*(gameArea.clientWidth-44); const y = Math.random()*(gameArea.clientHeight-44); h.style.left = x+'px'; h.style.top = y+'px'; gameArea.appendChild(h); h.addEventListener('click', ()=>{ score+=1; scoreEl.textContent=score; h.remove(); }); setTimeout(()=>{ if(h.parentNode) h.remove(); },2200); }
-		startGame.addEventListener('click', ()=>{ if(gameInterval) return; score=0; scoreEl.textContent=score; let ticks=0; gameInterval = setInterval(()=>{ spawnHeart(); ticks++; if(ticks>20){ clearInterval(gameInterval); gameInterval=null } }, 750); });
 
 		// Secret words
 		function showSecret(title, text){ const modal = document.getElementById('secretModal'); const content = document.getElementById('secretContent'); content.innerHTML = `<h3 style="margin-bottom:8px">${title}</h3><div style="color:var(--muted)">${text}</div><div style="margin-top:12px;text-align:right"><button class="btn" onclick="document.getElementById('secretModal').classList.remove('active')">Cerrar</button></div>`; modal.classList.add('active'); modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.classList.remove('active'); }); }
@@ -622,44 +419,6 @@ Y también quiero que sepas algo importante: estoy aprendiendo contigo. A ser m�
 		// Small compatibility: ensure dynamicAvatar + avatarInput exist for lock.js features
 		(function ensureAvatarInput(){ if(!document.getElementById('avatarInput')){ const inp = document.createElement('input'); inp.type='file'; inp.id='avatarInput'; inp.accept='image/*'; inp.style.display='none'; document.body.appendChild(inp); }})();
 
-		// 🌸 SISTEMA DE HOJAS DE SAKURA CAYENDO
-		(function() {
-			const sakuraContainer = document.getElementById('sakura');
-			if (!sakuraContainer) return;
-
-			function createSakuraLeaf() {
-				const leaf = document.createElement('div');
-				leaf.className = 'sakura-leaf';
-				
-				const size = Math.random() * 10 + 15;
-				leaf.style.width = size + 'px';
-				leaf.style.height = size + 'px';
-				
-				const xPos = Math.random() * 100;
-				leaf.style.left = xPos + '%';
-				
-				const duration = Math.random() * 8 + 8;
-				leaf.style.animationDuration = duration + 's';
-				
-				const txVariation = Math.random() * 200 - 100;
-				leaf.style.setProperty('--tx', txVariation + 'px');
-				
-				const opacity = Math.random() * 0.3 + 0.5;
-				leaf.style.opacity = opacity;
-				
-				sakuraContainer.appendChild(leaf);
-				
-				setTimeout(() => leaf.remove(), duration * 1000);
-			}
-
-			setInterval(() => {
-				createSakuraLeaf();
-			}, Math.random() * 300 + 500);
-
-			for (let i = 0; i < 5; i++) {
-				setTimeout(() => createSakuraLeaf(), i * 200);
-			}
-		})();
 	</script>
 </body>
 </html>
