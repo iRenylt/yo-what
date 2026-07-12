@@ -86,6 +86,9 @@
         body.locked { overflow: hidden !important; height: 100dvh !important; }
         body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
 
+        body.locked { overflow: hidden !important; height: 100vh !important; }
+        body.locked > *:not(.page-lock):not(.stars) { display: none !important; }
+
         .page-lock {
             position: fixed;
             inset: 0;
@@ -319,6 +322,12 @@
             transition: var(--transition-smooth);
         }
 
+        /* Ocultar el sello decorativo cuando el overlay PIN está activo */
+        body.locked .envelope .seal { display: none !important; }
+
+        /* Ocultar la línea decorativa superior dentro de .lock-box cuando el overlay está activo */
+        body.locked .lock-box::before { display: none !important; height: 0 !important; background: none !important; }
+
         .envelope:hover .seal {
             transform: rotate(360deg) scale(1.2);
             background: rgba(212, 165, 116, 0.2);
@@ -525,61 +534,16 @@
             .sections-grid { gap: 1rem; margin-top: 1.5rem; }
         }
     </style>
-    <style>
-        /* 🌸 HOJAS DE SAKURA */
-        .sakura {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .sakura-leaf {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            opacity: 0.7;
-            animation: sakuraFall linear forwards;
-            filter: drop-shadow(0 0 2px rgba(255, 183, 213, 0.4));
-        }
-
-        .sakura-leaf::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q60 25 65 40 Q70 50 65 60 Q80 55 85 40 Q82 28 70 20 Q65 15 50 10" fill="%23d4a574"/><path d="M50 50 Q40 65 35 80 Q30 90 35 100 Q20 95 15 80 Q18 68 30 60 Q35 55 50 50" fill="%23b8976e"/><path d="M50 30 Q65 35 75 45 Q85 55 80 65 Q65 58 50 50 L50 30" fill="%23e8c48f"/><path d="M50 50 Q35 55 25 65 Q15 75 20 85 Q35 78 50 70 L50 50" fill="%23a67c52"/><circle cx="50" cy="50" r="8" fill="%23f5e6d3"/></svg>') center / contain no-repeat;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        @keyframes sakuraFall {
-            0% {
-                top: -20px;
-                opacity: 0.8;
-                transform: translateX(0) rotateZ(0deg);
-            }
-            50% {
-                opacity: 0.8;
-            }
-            100% {
-                top: 100vh;
-                opacity: 0;
-                transform: translateX(var(--tx, 100px)) rotateZ(360deg);
-            }
-        }
-    </style>
 <body>
     <div class="stars"></div>
-    <div class="sakura" id="sakura"></div>
 
     <div id="pageLock" class="page-lock">
         <div class="lock-box">
-            <h2 id="lockPhrase">ESPERANDO POR TI</h2>
-            <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
-            <input type="password" id="pinInput" placeholder="PIN SEGURIDAD" maxlength="4" inputmode="numeric" autocomplete="off">
-            <button onclick="unlockPage()">Abrir Corazón</button>
-            <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
+        <h2 id="lockPhrase"></h2>
+        <p style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 25px; letter-spacing: 3px;">REGISTROS FANTASMAS</p>
+        <input type="password" id="pinInput" name="pin" placeholder="PIN SEGURIDAD" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <button onclick="unlockPage()">Abrir Corazón</button>
+        <div id="errorMsg" class="lock-error">INTENTA DE NUEVO</div>
         </div>
     </div>
 
@@ -676,44 +640,6 @@
             }, 800);
         }
 
-        // 🌸 SISTEMA DE HOJAS DE SAKURA CAYENDO
-        (function() {
-            const sakuraContainer = document.getElementById('sakura');
-            if (!sakuraContainer) return;
-
-            function createSakuraLeaf() {
-                const leaf = document.createElement('div');
-                leaf.className = 'sakura-leaf';
-                
-                const size = Math.random() * 10 + 15;
-                leaf.style.width = size + 'px';
-                leaf.style.height = size + 'px';
-                
-                const xPos = Math.random() * 100;
-                leaf.style.left = xPos + '%';
-                
-                const duration = Math.random() * 8 + 8;
-                leaf.style.animationDuration = duration + 's';
-                
-                const txVariation = Math.random() * 200 - 100;
-                leaf.style.setProperty('--tx', txVariation + 'px');
-                
-                const opacity = Math.random() * 0.3 + 0.5;
-                leaf.style.opacity = opacity;
-                
-                sakuraContainer.appendChild(leaf);
-                
-                setTimeout(() => leaf.remove(), duration * 1000);
-            }
-
-            setInterval(() => {
-                createSakuraLeaf();
-            }, Math.random() * 300 + 500);
-
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => createSakuraLeaf(), i * 200);
-            }
-        })();
     </script>
 </body>
 </html>
