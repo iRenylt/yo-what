@@ -185,7 +185,7 @@ function showInitialLogoSplash() {
         });
 
         // Intentamos obtener el favicon de la página; si no existe, usamos la URL por defecto
-        const iconHref = (document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]'))?.href || 'https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/avatars/avatar.png';
+        const iconHref = (document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]'))?.href || 'https://xcjzydmprmbpbqkacjwb.supabase.co/storage/v1/object/public/audios/fa-phnrcords-modified.png';
 
         const img = document.createElement('img');
         img.src = iconHref;
