@@ -2003,6 +2003,20 @@
     document.addEventListener('DOMContentLoaded', () => {
         updateGreeting();
         startGreetingUpdates();
+
+        const flowerBtn = document.getElementById('runFlower');
+        if (flowerBtn) {
+            const handleFlowerStart = (event) => {
+                if (event.type === 'touchstart' || event.type === 'pointerdown') {
+                    event.preventDefault();
+                }
+                startFlower();
+            };
+
+            flowerBtn.addEventListener('click', handleFlowerStart);
+            flowerBtn.addEventListener('touchstart', handleFlowerStart, { passive: false });
+            flowerBtn.addEventListener('pointerdown', handleFlowerStart);
+        }
     });
 
     // Pausar updates cuando la página está inactiva
@@ -2028,15 +2042,31 @@
     function startFlower() {
         const canvas = document.getElementById('flowerCanvas');
         const btn = document.getElementById('runFlower');
-        canvas.style.setProperty('display', 'flex', 'important');
-        btn.style.display = 'none';
+        if (!canvas || !btn) return;
+        if (btn.dataset.running === 'true') return;
 
-        setTimeout(() => {
-            document.getElementById('stemAnim').beginElement();
-            setTimeout(() => document.getElementById('leaf1Anim').beginElement(), 1000);
-            setTimeout(() => document.getElementById('leaf2Anim').beginElement(), 1500);
-            setTimeout(() => document.getElementById('petalsAnim').beginElement(), 2000);
-        }, 100);
+        btn.dataset.running = 'true';
+        btn.style.display = 'none';
+        canvas.style.setProperty('display', 'flex', 'important');
+        canvas.style.setProperty('opacity', '0', 'important');
+        canvas.style.setProperty('visibility', 'hidden', 'important');
+
+        requestAnimationFrame(() => {
+            canvas.style.setProperty('opacity', '1', 'important');
+            canvas.style.setProperty('visibility', 'visible', 'important');
+
+            window.setTimeout(() => {
+                const stemAnim = document.getElementById('stemAnim');
+                const leaf1Anim = document.getElementById('leaf1Anim');
+                const leaf2Anim = document.getElementById('leaf2Anim');
+                const petalsAnim = document.getElementById('petalsAnim');
+
+                if (stemAnim) stemAnim.beginElement();
+                if (leaf1Anim) window.setTimeout(() => leaf1Anim.beginElement(), 1000);
+                if (leaf2Anim) window.setTimeout(() => leaf2Anim.beginElement(), 1500);
+                if (petalsAnim) window.setTimeout(() => petalsAnim.beginElement(), 2000);
+            }, 120);
+        });
     }
 
     // IntersectionObserver para animar elementos cuando salen en pantalla
