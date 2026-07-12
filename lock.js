@@ -1,4 +1,30 @@
 const PIN_CORRECTO = "0906";
+const LOCK_PHRASES = [
+    "REGISTROS FANTASMAS",
+    "UN ARCHIVO SECRETO",
+    "EN CADA MOMENTO",
+    "CADA SEGUNDO CONTIGO",
+    "RECUERDOS QUE VIVEN",
+    "UN VIAJE ESPECIAL",
+    "TÚ LUGAR ESPECIAL",
+    "CORAZÓN EN LA MANO",
+    "AMOR SIN MEDIDA",
+    "MI DESTINO ERES TÚ",
+    "EL TIEMPO SE DETIENE",
+    "PARA TI, SIEMPRE"
+];
+
+function aplicarFraseAleatoriaDelBloqueo() {
+    try {
+        const phraseTarget = document.getElementById('lockPhrase') || document.querySelector('.lock-box h2') || document.querySelector('.page-lock h2');
+        if (phraseTarget) {
+            const phrase = LOCK_PHRASES[Math.floor(Math.random() * LOCK_PHRASES.length)];
+            phraseTarget.textContent = phrase;
+        }
+    } catch (e) {
+        console.warn('No se pudo aplicar la frase aleatoria del bloqueo:', e);
+    }
+}
 
 // Priorizar la animación inicial: ocultar todo excepto el splash y el overlay
 // hasta que se complete el proceso de bloqueo/desbloqueo. Esto evita
@@ -55,14 +81,14 @@ function injectPinStyles() {
     @keyframes borderGlow { 0%, 100% { border-color: rgba(200,200,220,0.15); } 50% { border-color: rgba(200,200,220,0.3); } }
     .page-lock { display: none; align-items: center; justify-content: center; }
     .page-lock.active { display: flex; }
-    .page-lock { position: fixed; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,0.99), rgba(0,0,0,0.99)); z-index: 99999; padding: 20px; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
+    .page-lock { position: fixed; inset: 0; background: radial-gradient(circle at top, rgba(212,165,116,0.14), rgba(10,10,10,0.98)); z-index: 99999; padding: 20px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
     .page-lock.force-solid { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 18px; padding: clamp(20px, 3.2vw, 40px); background: linear-gradient(180deg, rgba(200,200,220,0.03), rgba(170,170,190,0.01)); border: 1.5px solid rgba(200,200,220,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(200,200,220,0.05); text-align: center; transform-origin: center; animation: glow 3s ease-in-out infinite, floatUp 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
-    .lock-box h2 { font-size: clamp(1.1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; color: #fff; text-shadow: 0 0 30px rgba(200,200,220,0.15); animation: pulseGlow 2.5s ease-in-out infinite; }
-    .lock-box p { margin: 0 0 20px; color: rgba(255,255,255,0.65); font-size: 0.85rem; letter-spacing: 2px; animation: slideInFade 0.8s ease-out 0.2s both; }
-    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1.5px solid rgba(200,200,220,0.15); background: rgba(255,255,255,0.03); color: #fff; outline: none; transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), transform 280ms cubic-bezier(0.4, 0, 0.2, 1), border-color 280ms cubic-bezier(0.4, 0, 0.2, 1), background 280ms cubic-bezier(0.4, 0, 0.2, 1); text-align: center; animation: slideInFade 0.8s ease-out 0.3s both; }
-    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 30px rgba(200,200,220,0.2), inset 0 0 15px rgba(200,200,220,0.08); border-color: rgba(200,200,220,0.4); background: rgba(200,200,220,0.08); transform: translateY(-2px); }
-    .lock-box button { margin-top: 14px; padding: 13px 36px; border-radius: 999px; border: 1.5px solid rgba(200,200,220,0.15); background: linear-gradient(135deg, rgba(200,200,220,0.08), rgba(170,170,190,0.04)); color: #fff; cursor: pointer; font-weight: 600; transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 260ms cubic-bezier(0.4, 0, 0.2, 1), all 260ms cubic-bezier(0.4, 0, 0.2, 1); animation: slideInFade 0.8s ease-out 0.4s both; position: relative; overflow: hidden; }
+    .lock-box { width: min(92%, 420px); max-width: 92vw; border-radius: 20px; padding: clamp(20px, 3.2vw, 40px); background: linear-gradient(180deg, rgba(255,244,224,0.08), rgba(212,165,116,0.04)); border: 1.5px solid rgba(212,165,116,0.28); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(212,165,116,0.12); text-align: center; transform-origin: center; animation: glow 3s ease-in-out infinite, floatUp 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
+    .lock-box h2 { font-size: clamp(1.1rem, 3.4vw, 1.6rem); margin-bottom: 8px; letter-spacing: 4px; color: #f7e7c9; text-shadow: 0 0 30px rgba(212,165,116,0.2); animation: pulseGlow 2.5s ease-in-out infinite; }
+    .lock-box p { margin: 0 0 20px; color: rgba(255,242,220,0.7); font-size: 0.85rem; letter-spacing: 2px; animation: slideInFade 0.8s ease-out 0.2s both; }
+    .lock-box input { width: 100%; padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1.5px solid rgba(212,165,116,0.26); background: rgba(255,248,235,0.06); color: #fff; outline: none; transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), transform 280ms cubic-bezier(0.4, 0, 0.2, 1), border-color 280ms cubic-bezier(0.4, 0, 0.2, 1), background 280ms cubic-bezier(0.4, 0, 0.2, 1); text-align: center; animation: slideInFade 0.8s ease-out 0.3s both; }
+    .lock-box input:focus { box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 30px rgba(212,165,116,0.16), inset 0 0 15px rgba(212,165,116,0.08); border-color: rgba(212,165,116,0.4); background: rgba(255,244,224,0.1); transform: translateY(-2px); }
+    .lock-box button { margin-top: 14px; padding: 13px 36px; border-radius: 999px; border: 1.5px solid rgba(212,165,116,0.28); background: linear-gradient(135deg, rgba(212,165,116,0.22), rgba(232,196,143,0.12)); color: #fff; cursor: pointer; font-weight: 600; transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 260ms cubic-bezier(0.4, 0, 0.2, 1), all 260ms cubic-bezier(0.4, 0, 0.2, 1); animation: slideInFade 0.8s ease-out 0.4s both; position: relative; overflow: hidden; }
     .lock-box button::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transform: translateX(-100%); transition: transform 400ms ease; }
     .lock-box button:hover::before { transform: translateX(100%); }
     .lock-box button:hover { background: linear-gradient(135deg, rgba(200,200,220,0.18), rgba(170,170,190,0.1)); border-color: rgba(200,200,220,0.35); box-shadow: 0 12px 35px rgba(200,200,220,0.15); transform: translateY(-3px); }
@@ -241,6 +267,19 @@ function showInitialLogoSplash() {
     }
 }
 
+function bindPinInputEvents() {
+    const pinInput = document.getElementById('pinInput');
+    if (!pinInput || pinInput.dataset.pinBound === 'true') return;
+
+    pinInput.dataset.pinBound = 'true';
+    pinInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            unlockPage();
+        }
+    });
+}
+
 function verificarBloqueo() {
     document.body.classList.add("locked");
     const pageLock = document.getElementById("pageLock");
@@ -249,6 +288,7 @@ function verificarBloqueo() {
         return;
     }
     if (pageLock) {
+        aplicarFraseAleatoriaDelBloqueo();
         // Asegurar que el overlay cubre todo y evita que se vea contenido detrás
         pageLock.style.display = '';
         pageLock.classList.add('active');
@@ -265,6 +305,7 @@ function verificarBloqueo() {
             pin.setAttribute('autocomplete', 'off');
             pin.setAttribute('inputmode', 'numeric');
             pin.style.fontSize = pin.style.fontSize || '16px';
+            bindPinInputEvents();
             setTimeout(() => { try { pin.focus(); } catch(e){} }, 60);
         }
     }
@@ -438,6 +479,67 @@ function showWelcomeAnimation() {
     }, 800);
 }
 
+function ensurePageLockMarkup() {
+    let pageLock = document.getElementById('pageLock');
+    if (pageLock) return pageLock;
+
+    pageLock = document.createElement('div');
+    pageLock.id = 'pageLock';
+    pageLock.className = 'page-lock';
+    pageLock.setAttribute('aria-modal', 'true');
+    pageLock.setAttribute('role', 'dialog');
+    pageLock.innerHTML = `
+        <div class="lock-box">
+            <h2 id="lockPhrase">ARCHIVO SECRETO</h2>
+            <p>INGRESA EL PIN PARA CONTINUAR</p>
+            <input id="pinInput" type="password" placeholder="PIN SEGURIDAD" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+            <button type="button" id="unlockButton">ABRIR</button>
+            <div id="errorMsg" class="lock-error"></div>
+        </div>`;
+
+    document.body.prepend(pageLock);
+    return pageLock;
+}
+
+function revealLockedContent() {
+    document.body.classList.remove('locked');
+    document.body.classList.remove('initializing');
+
+    const initializingStyle = document.getElementById('initializing-style');
+    if (initializingStyle && initializingStyle.parentNode) {
+        initializingStyle.parentNode.removeChild(initializingStyle);
+    }
+
+    const pageLock = ensurePageLockMarkup();
+    if (pageLock) {
+        pageLock.classList.remove('active');
+        pageLock.classList.remove('unlocking');
+        pageLock.style.transition = 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 500ms cubic-bezier(0.4, 0, 0.2, 1), filter 500ms ease';
+        pageLock.style.opacity = '0';
+        pageLock.style.filter = 'blur(10px)';
+        setTimeout(() => {
+            pageLock.style.display = 'none';
+            pageLock.style.visibility = 'hidden';
+            pageLock.style.pointerEvents = 'none';
+        }, 500);
+    }
+
+    document.body.querySelectorAll('*').forEach((el) => {
+        if (el.id !== 'pageLock' && el.id !== 'devModal' && !el.id.startsWith('initialSplash') && !el.classList.contains('stars')) {
+            el.style.visibility = 'visible';
+            el.style.display = '';
+        }
+    });
+
+    document.body.style.overflow = 'auto';
+    document.body.style.background = '#050505';
+    document.body.style.visibility = 'visible';
+
+    if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
+    actualizarUltimaActividad();
+    if (typeof loadAvatarFromDB === 'function') loadAvatarFromDB();
+}
+
 function unlockPage() {
     const inputElement = document.getElementById("pinInput");
     if (!inputElement) {
@@ -458,62 +560,21 @@ function unlockPage() {
         if (isIndex) {
             showWelcomeAnimation();
         } else {
-            // Añadir efecto de éxito antes de desbloquear
             inputElement.style.borderColor = 'rgba(100, 200, 100, 0.6)';
             inputElement.style.boxShadow = '0 0 30px rgba(100, 200, 100, 0.3), inset 0 0 15px rgba(100, 200, 100, 0.1)';
-            
-            // Remover clases de bloqueo
-            document.body.classList.remove('locked');
-            document.body.classList.remove('initializing');
-            
-            // Remover el CSS de initializing si existe
-            const initializingStyle = document.getElementById('initializing-style');
-            if (initializingStyle && initializingStyle.parentNode) {
-                initializingStyle.parentNode.removeChild(initializingStyle);
-            }
-            
-            // Restaurar visibilidad de todos los elementos
-            const allElements = document.body.querySelectorAll('*');
-            allElements.forEach(el => {
-                if (el.id !== 'pageLock' && el.id !== 'devModal' && !el.id.startsWith('initialSplash')) {
-                    el.style.visibility = 'visible';
-                }
-            });
-            
-            const pageLock = document.getElementById("pageLock");
-            if (pageLock) {
-                // animación de salida suave mejorada
-                pageLock.classList.add('unlocking');
-                pageLock.style.transition = 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 500ms cubic-bezier(0.4, 0, 0.2, 1), filter 500ms ease';
-                pageLock.style.opacity = '0';
-                pageLock.style.filter = 'blur(10px)';
-                setTimeout(() => {
-                    pageLock.classList.remove('active');
-                    pageLock.classList.remove('unlocking');
-                    pageLock.style.display = 'none';
-                    pageLock.style.visibility = 'hidden';
-                    pageLock.style.pointerEvents = 'none';
-                }, 500);
-            }
-            document.body.classList.remove("locked");
-            if (typeof window.__removeInitializing === 'function') window.__removeInitializing();
-            actualizarUltimaActividad();
-            if (typeof loadAvatarFromDB === 'function') loadAvatarFromDB(); // 👈 AQUI
+            revealLockedContent();
         }
     } else {
-        // Animación de error mejorada
         if (error) {
             error.style.display = "block";
             error.style.animation = 'none';
-            // Forzar reflow para reiniciar animación
             void error.offsetWidth;
             error.style.animation = 'shake 420ms cubic-bezier(0.36, 0, 0.66, -0.56)';
         }
-        
-        // Efecto visual en el input
+
         inputElement.style.borderColor = 'rgba(255, 107, 107, 0.6)';
         inputElement.style.boxShadow = '0 0 25px rgba(255, 107, 107, 0.3), inset 0 0 10px rgba(255, 107, 107, 0.05)';
-        
+
         setTimeout(() => {
             inputElement.style.borderColor = 'rgba(200,200,220,0.15)';
             inputElement.style.boxShadow = '';
@@ -526,18 +587,18 @@ function unlockPage() {
 /* ============================= */
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Mostrar splash del logo solamente al abrir el index.
-        // En otras páginas mostramos el bloqueo inmediatamente para evitar esperas.
+        // Forzar bloqueo visual inmediato en todas las páginas.
+        document.body.classList.add('locked');
+
+        // En el index aún mostramos el splash, pero el overlay del PIN ya está activo.
         const isIndex =
             window.location.pathname.endsWith('index.html') ||
             window.location.pathname === '/' ||
             window.location.pathname.endsWith('/');
 
         if (isIndex) {
-            // Animación de entrada y luego bloqueo
             showInitialLogoSplash();
         } else {
-            // Evitar splash en páginas internas: mostrar bloqueo directamente
             verificarBloqueo();
         }
     });
